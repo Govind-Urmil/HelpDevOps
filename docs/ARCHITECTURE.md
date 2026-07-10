@@ -1,14 +1,10 @@
-# HelpDevOps Architecture
+# Architecture
 
-Principles:
-- Static-first
-- Browser-first
-- Privacy-first
-- Reusable modules
-- Minimal dependencies
+## Default
+Static HTML/CSS/JavaScript with local browser processing.
 
-Structure:
-src/
-docs/
-tests/
-config/
+## Principles
+Single source of truth; reusable modules; shared validation; progressive enhancement; safe failure; minimal dependencies; transparent validation limits.
+
+## Boundary
+Backend, database, authentication, required remote APIs and paid runtime dependencies require explicit Product Owner approval.
