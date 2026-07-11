@@ -1,0 +1,6 @@
+[
+  {"id":"json-service","label":"JSON service","kind":"json","input":"{\n  \"service\": \"api\",\n  \"replicas\": 2,\n  \"enabled\": true\n}"},
+  {"id":"yaml-service","label":"YAML service","kind":"yaml","input":"service: api\nreplicas: 2\nenabled: true"},
+  {"id":"compose-like","label":"Compose-like YAML","kind":"yaml","input":"services:\n  web:\n    image: nginx:1.27"},
+  {"id":"kubernetes-like","label":"Kubernetes-like YAML","kind":"yaml","input":"apiVersion: v1\nkind: ConfigMap\nmetadata:\n  name: example\ndata:\n  mode: safe"}
+]

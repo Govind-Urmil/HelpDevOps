@@ -6,10 +6,10 @@ Governance, strategy, architecture, design, testing, SEO, security/privacy, mone
 ## EP-002 — Production Platform Shell
 Real runnable homepage, approved design system, responsive navigation, shared components/page shells, metadata system, test harness and quality checks.
 
-Implementation status: Candidate complete in v0.2.0; pending audit and Product Owner approval.
+Implementation status: Completed and approved in v0.2.0.
 
-## EP-003 — Core Tool Platform
-Shared editor/result patterns, tool registry, discovery/search, validation architecture and first thoroughly tested production utilities.
+## EP-003 — Deterministic Core Tool Platform
+Status: implementation candidate for v0.3.0. Centralized tool registry, resource validation, active Universal Input, production Cron and JSON/YAML utilities, transparent Result Contracts, and classification-only Compose/Kubernetes signals.
 
 ## EP-004 — Developer Essentials
 High-value configuration, encoding, Linux, Git and networking utilities; stronger search/categories, local favorites/recent usage and regression coverage.

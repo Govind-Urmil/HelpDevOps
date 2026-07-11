@@ -25,3 +25,8 @@ The authoritative component contract is `EP-002-SPEC.md`. Components are separat
 - `TrustGrid`: the trust content remains homepage-local because it has no second consumer.
 
 These are disclosed consolidations, not claims that every proposed filename exists. They preserve the specification’s responsibilities without creating unused one-line wrappers.
+
+
+## EP-003 additions
+
+`AnalysisResult.astro` is the shared production Result Contract. `ToolCard.astro` renders registry entries. Cron and structured-data pages own their input actions while reusing the shared result surface.

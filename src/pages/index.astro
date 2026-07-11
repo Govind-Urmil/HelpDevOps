@@ -5,8 +5,10 @@ import PrivacyPulse from '../components/PrivacyPulse.astro';
 import ResultPreview from '../components/ResultPreview.astro';
 import { pageMetadata as meta } from '../config/pages.js';
 const quick = [
-  ['INSPECT','Configuration','YAML, JSON, environment files'],['TROUBLESHOOT','Git & shell','Commands, errors, recovery paths'],
-  ['VALIDATE','Containers','Docker and Kubernetes workflows'],['CALCULATE','Network & time','CIDR, timestamps, cron schedules']
+  ['INSPECT','JSON & YAML','Parse, inspect, and format locally','/tools/structured-data/'],
+  ['VALIDATE','Cron schedules','Explain common five-field expressions','/tools/cron/'],
+  ['PLANNED','Containers','Compose and Kubernetes classification','/tools/'],
+  ['PLANNED','More DevOps tools','Git, Bash, Jenkins, Terraform, and more','/tools/']
 ];
 ---
 <BaseLayout {...meta.home}>
@@ -14,8 +16,8 @@ const quick = [
     <div class="hero-copy"><span class="eyebrow">DEVOPS COMMAND CENTER</span><h1>Stay in the flow.<br/><span>Understand every step.</span></h1><p>One private workspace for DevOps tasks, guidance, references, and clear next actions—built to reduce context switching without hiding the reasoning.</p></div>
     <UniversalInput /><PrivacyPulse />
   </div></section>
-  <section class="section"><div class="container"><div class="section-heading"><div><span class="eyebrow">QUICK ACCESS</span><h2>Start from the work in front of you</h2></div><a href="/tools/">View platform status →</a></div>
-    <div class="quick-grid">{quick.map(([cap,title,desc]) => <a class="card quick-card" href="/tools/"><span class="capability">{cap}</span><h3>{title}</h3><p>{desc}</p><span class="card-arrow" aria-hidden="true">→</span></a>)}</div>
+  <section class="section"><div class="container"><div class="section-heading"><div><span class="eyebrow">QUICK ACCESS</span><h2>Start from the work in front of you</h2></div><a href="/tools/">View all tools →</a></div>
+    <div class="quick-grid">{quick.map(([cap,title,desc,path]) => <a class="card quick-card" href={path}><span class="capability">{cap}</span><h3>{title}</h3><p>{desc}</p><span class="card-arrow" aria-hidden="true">→</span></a>)}</div>
   </div></section>
   <section class="section"><div class="container two-col">
     <article class="preflight-card"><div><span class="eyebrow">FLAGSHIP WORKFLOW · PREVIEW</span><span class="badge warning">IN DEVELOPMENT</span></div><h2>Will your DevOps files work together?</h2><p>Preflight is planned to inspect relationships across selected Docker, Compose, environment, and Kubernetes files—locally, with every check and limitation visible.</p><ol class="flow"><li><span>1</span>Add files locally</li><li><span>2</span>Inspect relationships</li><li><span>3</span>Explain findings</li></ol><a class="button secondary" href="/preflight/">See the Preflight plan →</a></article>

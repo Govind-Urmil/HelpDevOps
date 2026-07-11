@@ -1,7 +1,17 @@
-<section class="universal-card" aria-labelledby="universal-title">
-  <div class="universal-top"><div><span class="eyebrow">UNIVERSAL INPUT · FOUNDATION</span><h2 id="universal-title">What are you working on?</h2></div><span class="badge">LOCAL-FIRST</span></div>
-  <label class="sr-only" for="universal-input">Paste a command, config, error, or describe a task</label>
-  <textarea id="universal-input" rows="5" placeholder="Paste a command, config, error, or describe a task…" data-universal-input></textarea>
-  <div class="input-footer"><p><span class="pulse" aria-hidden="true"></span> Nothing is uploaded. Detection is not active in this release.</p><button class="button primary" type="button" data-universal-action>Explore available paths <span aria-hidden="true">→</span></button></div>
-  <div class="input-notice" data-input-notice hidden tabindex="-1"><strong>Foundation ready; analysis is not.</strong> EP-002 establishes the safe input and decision contracts. No claim or validation has been performed. <a href="/tools/">View tool status</a>.</div>
+---
+import AnalysisResult from './results/AnalysisResult.astro';
+---
+<section class="universal-card" aria-labelledby="universal-title" data-analyzer-root>
+  <div class="universal-top"><div><span class="eyebrow">UNIVERSAL INPUT · DETERMINISTIC</span><h2 id="universal-title">What are you working on?</h2></div><span class="badge">LOCAL-ONLY</span></div>
+  <label class="sr-only" for="universal-input">Paste JSON, YAML, or a common cron expression</label>
+  <textarea id="universal-input" rows="6" placeholder="Paste JSON, YAML, or a common cron expression…" data-analysis-input></textarea>
+  <div class="input-footer"><p><span class="pulse" aria-hidden="true"></span> Nothing is uploaded or stored. Supported analysis runs in this browser.</p><button class="button primary" type="button" data-analyze>Analyze input <span aria-hidden="true">→</span></button></div>
+  <div class="example-row"><button type="button" data-example="*/5 * * * *">Cron example</button><button type="button" data-example='{"service":"api","replicas":2}'>JSON example</button><button type="button" data-example={'services:\n  web:\n    image: nginx:1.27'}>YAML example</button></div>
+  <AnalysisResult />
 </section>
+<script>
+  // @ts-nocheck
+  import {analyzeInput} from '../core/analyze-input.js';
+  const fill=(root,result)=>{const q=s=>root.querySelector(s);const list=(s,items)=>{q(s).replaceChildren(...(items?.length?items:['None for this result.']).map(item=>{const li=document.createElement('li');li.textContent=typeof item==='string'?item:item.label;return li;}))};q('[data-result-kind]').textContent=(result.kind||'unknown').toUpperCase();q('[data-result-title]').textContent=result.title;q('[data-result-status]').textContent=result.status.toUpperCase();q('[data-result-summary]').textContent=result.summary;list('[data-result-evidence]',[...(result.evidence||[]).map(e=>`${e.signal}: ${e.excerpt}`),...(result.findings||[])]);list('[data-result-actions]',result.actions);list('[data-result-checked]',result.checked);list('[data-result-not-checked]',result.notChecked);list('[data-result-next]',result.nextActions);const wrap=q('[data-formatted-wrap]');wrap.hidden=!result.formatted;if(result.formatted)q('[data-formatted-output]').textContent=result.formatted;const panel=q('[data-analysis-result]');panel.hidden=false;panel.focus();};
+  document.querySelectorAll('[data-analyzer-root]').forEach(root=>{const input=root.querySelector('[data-analysis-input]');root.querySelector('[data-analyze]')?.addEventListener('click',()=>fill(root,analyzeInput(input.value)));root.querySelectorAll('[data-example]').forEach(button=>button.addEventListener('click',()=>{input.value=button.dataset.example;input.focus()}));root.querySelector('[data-copy-output]')?.addEventListener('click',async()=>navigator.clipboard.writeText(root.querySelector('[data-formatted-output]').textContent));});
+</script>
