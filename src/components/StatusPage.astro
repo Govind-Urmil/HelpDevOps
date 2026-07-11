@@ -1,0 +1,9 @@
+---
+import DirectoryLayout from '../layouts/DirectoryLayout.astro';import ProductLayout from '../layouts/ProductLayout.astro';import PolicyLayout from '../layouts/PolicyLayout.astro';
+interface SectionItem { label: string; title: string; text: string; link?: { href: string; label: string } }
+const { meta, eyebrow, title, description, status, sections = [], kind: requestedKind } = Astro.props as { meta: any; eyebrow: string; title: string; description: string; status?: string; sections: SectionItem[]; kind?: 'directory'|'product'|'policy' };
+const crumbs = [{label:'Home',href:'/'},{label:title,href:meta.path}];
+const kind=requestedKind??(['/workspace/','/preflight/'].includes(meta.path)?'product':['/privacy/','/terms/'].includes(meta.path)?'policy':'directory');
+const Layout={directory:DirectoryLayout,product:ProductLayout,policy:PolicyLayout}[kind];
+---
+<Layout {meta} {crumbs} {eyebrow} {title} {description} {status}><div class="status-content">{sections.map(section => <article class="card"><span class="eyebrow">{section.label}</span><h2>{section.title}</h2><p>{section.text}</p>{section.link && <a href={section.link.href}>{section.link.label} →</a>}</article>)}</div></Layout>

@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import UniversalInput from '../components/UniversalInput.astro';
+import PrivacyPulse from '../components/PrivacyPulse.astro';
+import ResultPreview from '../components/ResultPreview.astro';
+import { pageMetadata as meta } from '../config/pages.js';
+const quick = [
+  ['INSPECT','Configuration','YAML, JSON, environment files'],['TROUBLESHOOT','Git & shell','Commands, errors, recovery paths'],
+  ['VALIDATE','Containers','Docker and Kubernetes workflows'],['CALCULATE','Network & time','CIDR, timestamps, cron schedules']
+];
+---
+<BaseLayout {...meta.home}>
+  <section class="hero"><div class="container">
+    <div class="hero-copy"><span class="eyebrow">DEVOPS COMMAND CENTER</span><h1>Stay in the flow.<br/><span>Understand every step.</span></h1><p>One private workspace for DevOps tasks, guidance, references, and clear next actions—built to reduce context switching without hiding the reasoning.</p></div>
+    <UniversalInput /><PrivacyPulse />
+  </div></section>
+  <section class="section"><div class="container"><div class="section-heading"><div><span class="eyebrow">QUICK ACCESS</span><h2>Start from the work in front of you</h2></div><a href="/tools/">View platform status →</a></div>
+    <div class="quick-grid">{quick.map(([cap,title,desc]) => <a class="card quick-card" href="/tools/"><span class="capability">{cap}</span><h3>{title}</h3><p>{desc}</p><span class="card-arrow" aria-hidden="true">→</span></a>)}</div>
+  </div></section>
+  <section class="section"><div class="container two-col">
+    <article class="preflight-card"><div><span class="eyebrow">FLAGSHIP WORKFLOW · PREVIEW</span><span class="badge warning">IN DEVELOPMENT</span></div><h2>Will your DevOps files work together?</h2><p>Preflight is planned to inspect relationships across selected Docker, Compose, environment, and Kubernetes files—locally, with every check and limitation visible.</p><ol class="flow"><li><span>1</span>Add files locally</li><li><span>2</span>Inspect relationships</li><li><span>3</span>Explain findings</li></ol><a class="button secondary" href="/preflight/">See the Preflight plan →</a></article>
+    <article class="workspace-card"><span class="eyebrow">WORKFLOW CONTINUITY · PREVIEW</span><h2>Keep useful context close</h2><p>The Session Dock contract lets future tools hand work to the next relevant action while preserving your input in the browser.</p><div class="dock-mock"><span>SESSION DOCK</span><div><b>Truthful empty state</b><small>No items are stored in EP-002</small></div></div><button class="button ghost" type="button" data-session-open>Open Session Dock preview</button></article>
+  </div></section>
+  <section class="section"><div class="container"><ResultPreview /></div></section>
+  <section class="section trust"><div class="container"><div class="section-heading"><div><span class="eyebrow">BUILT FOR TRUST</span><h2>Engineering help without the black box</h2></div></div><div class="trust-grid"><article><b>01</b><h3>Local where practical</h3><p>Future processing defaults to your browser. Transfers require an approved need and clear disclosure.</p></article><article><b>02</b><h3>Evidence over scores</h3><p>Deterministic signals explain suggestions; arbitrary confidence percentages do not.</p></article><article><b>03</b><h3>Limits stay visible</h3><p>Results name what was checked, what was not, and where independent verification matters.</p></article></div></div></section>
+  <section class="section final-cta"><div class="container"><span class="eyebrow">KNOWLEDGE, CONNECTED</span><h2>Understand the command.<br/>Keep the reference nearby.</h2><p>Guides and references will connect to the task at hand—without turning the platform into a content farm.</p><div><a class="button secondary" href="/guides/">Explore Guides</a><a class="button ghost" href="/references/">Browse References</a></div></div></section>
+</BaseLayout>

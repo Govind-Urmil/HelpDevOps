@@ -1,10 +1,12 @@
 # HelpDevOps Roadmap
 
 ## EP-001 — Consolidated Foundation Baseline
-Governance, strategy, architecture, design, testing, SEO, security/privacy, monetization guardrails, Website Factory standards, Codex workflow and release discipline.
+Governance, strategy, architecture, design, testing, SEO, security/privacy, monetization guardrails, Website Factory standards, ChatGPT Work workflow and release discipline.
 
 ## EP-002 — Production Platform Shell
 Real runnable homepage, approved design system, responsive navigation, shared components/page shells, metadata system, test harness and quality checks.
+
+Implementation status: Candidate complete in v0.2.0; pending audit and Product Owner approval.
 
 ## EP-003 — Core Tool Platform
 Shared editor/result patterns, tool registry, discovery/search, validation architecture and first thoroughly tested production utilities.

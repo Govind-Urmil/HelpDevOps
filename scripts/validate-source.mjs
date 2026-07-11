@@ -1,0 +1,14 @@
+import fs from 'node:fs';
+import path from 'node:path';
+const root=process.cwd();
+const pkg=JSON.parse(fs.readFileSync(path.join(root,'package.json')));
+const release=JSON.parse(fs.readFileSync(path.join(root,'release-meta.json')));
+if(pkg.version!==release.version||release.version!=='0.2.0'||release.ep!=='EP-002') throw new Error('Release version metadata is inconsistent.');
+const forbidden=['react','vue','svelte','angular','tailwind','analytics'];
+const dependencies=Object.keys({...pkg.dependencies,...pkg.devDependencies}).join(' ').toLowerCase();
+for(const item of forbidden) if(dependencies.includes(item)) throw new Error(`Forbidden dependency: ${item}`);
+if(pkg.dependencies.astro!=='7.0.7')throw new Error('Astro must remain pinned to the reviewed patched version 7.0.7.');
+const spec=fs.readFileSync(path.join(root,'docs','EP-002-SPEC.md'),'utf8');if(spec.length<10000||!spec.includes('## Acceptance Criteria'))throw new Error('Complete authoritative EP-002 specification is not preserved.');
+const required=['src/layouts/BaseLayout.astro','src/layouts/DirectoryLayout.astro','src/layouts/ProductLayout.astro','src/layouts/PolicyLayout.astro','src/components/DesktopNav.astro','src/components/MobileNav.astro','src/config/security.js','.gitignore'];for(const file of required)if(!fs.existsSync(path.join(root,file)))throw new Error(`Required architecture file missing: ${file}`);
+const siteSource=fs.readFileSync(path.join(root,'src','config','site.js'),'utf8');if(process.env.RELEASE_CHANNEL==='production'&&siteSource.includes('.example'))throw new Error('Production release blocked: placeholder .example canonical domain remains.');
+console.log('Source and release checks passed.');

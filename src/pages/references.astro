@@ -1,0 +1,5 @@
+---
+import StatusPage from '../components/StatusPage.astro'; import {pageMetadata as m} from '../config/pages.js';
+const sections=[{label:'LIBRARY STATUS',title:'Reference publishing has not started',text:'The platform does not claim a reference library before reliable material exists.'},{label:'REFERENCE CONTRACT',title:'Concise, connected, and source-aware',text:'Future references will prioritize scanability, task context, accurate syntax, important caveats, and connections to related tools or guides.'}];
+---
+<StatusPage meta={m.references} eyebrow="REFERENCES" title="References" description="Compact DevOps references designed to stay close to the work—not another disconnected documentation index." status="Library pending" sections={sections}/>

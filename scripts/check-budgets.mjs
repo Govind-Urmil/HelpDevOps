@@ -1,0 +1,6 @@
+import fs from 'node:fs'; import path from 'node:path'; import zlib from 'node:zlib';
+const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(d,e.name)):path.join(d,e.name));const files=walk('dist');
+const compressed=ext=>files.filter(f=>f.endsWith(ext)).reduce((n,f)=>n+zlib.gzipSync(fs.readFileSync(f)).length,0);
+const js=compressed('.js'),css=compressed('.css');const home=fs.statSync('dist/index.html').size+js+css;const html=fs.readFileSync('dist/index.html','utf8');const resources=[...html.matchAll(/<(?:script|img)[^>]+src="([^"]+)"|<link[^>]+rel="stylesheet"[^>]+href="([^"]+)"/g)].map(m=>m[1]||m[2]);const requests=1+resources.length;
+const failures=[];if(js>40*1024)failures.push(`JS ${js} > 40KB`);if(css>35*1024)failures.push(`CSS ${css} > 35KB`);if(home>250*1024)failures.push(`Homepage ${home} > 250KB`);if(requests>15)failures.push(`Homepage requests ${requests} > 15`);if(resources.some(url=>/^https?:\/\//.test(url)&&!url.startsWith('https://helpdevops.example')))failures.push('Third-party script, image, or stylesheet found');
+if(failures.length)throw new Error(failures.join('\n'));console.log(`Budgets passed: JS ${(js/1024).toFixed(1)}KB gzip; CSS ${(css/1024).toFixed(1)}KB gzip; homepage ${(home/1024).toFixed(1)}KB; requests ${requests}.`);

@@ -1,0 +1,5 @@
+---
+import StatusPage from '../components/StatusPage.astro'; import {pageMetadata as m} from '../config/pages.js';
+const sections=[{label:'USE',title:'Engineering assistance, not a substitute for review',text:'HelpDevOps is provided for informational and workflow assistance. Verify outputs before applying them to systems, especially production environments.'},{label:'AVAILABILITY',title:'Capabilities may change',text:'Preview and in-development areas are not operational commitments. Current status is stated on each relevant page.'},{label:'RESPONSIBILITY',title:'You control execution',text:'HelpDevOps does not execute pasted commands in EP-002. You remain responsible for commands and changes you choose to run.'}];
+---
+<StatusPage meta={m.terms} eyebrow="TERMS" title="Terms of use" description="Use HelpDevOps as an engineering aid with appropriate independent review." sections={sections}/>

@@ -1,0 +1,5 @@
+---
+import StatusPage from '../components/StatusPage.astro'; import {pageMetadata as m} from '../config/pages.js';
+const sections=[{label:'CURRENT RELEASE',title:'Platform foundation, not production tools',text:'EP-002 establishes the registry, input, decision, result, and send-to contracts. No production validator, formatter, calculator, or troubleshooter is available yet.'},{label:'FUTURE DOMAINS',title:'Designed for real DevOps work',text:'The architecture is ready to support carefully researched Git, Bash, Jenkins, Docker, Kubernetes, Terraform, configuration, networking, time, and CI/CD capabilities.'},{label:'TRUST GATE',title:'A tool ships only when its result is defensible',text:'Future tools must handle invalid input safely, explain evidence, state coverage and limitations, and pass positive, negative, boundary, regression, and mutation-style tests.'}];
+---
+<StatusPage meta={m.tools} eyebrow="TOOLS" title="Tools" description="A shared foundation for accurate DevOps utilities. Production tools arrive in later releases after their rules and evidence are tested." sections={sections}/>

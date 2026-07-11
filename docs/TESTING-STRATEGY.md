@@ -4,4 +4,4 @@ Every feature requires positive, negative, boundary and regression tests plus mu
 
 Every release requires appropriate automated checks and manual desktop, mobile, keyboard, accessibility and cross-browser testing, plus broken-link, metadata and performance review.
 
-Codex provides evidence-based results and explicitly identifies untested behavior.
+ChatGPT Work provides evidence-based results and explicitly identifies untested behavior.

@@ -1,0 +1,5 @@
+---
+import StatusPage from '../components/StatusPage.astro'; import {pageMetadata as m} from '../config/pages.js';
+const sections=[{label:'EP-002 BEHAVIOR',title:'No input is uploaded or analyzed',text:'The Universal Input in this release is a user-interface foundation. Its content remains in the current page and is not saved, sent, classified, or executed.'},{label:'FUTURE DEFAULT',title:'Process locally where practical',text:'Future browser capabilities must clearly disclose any storage or network behavior. Remote processing requires an approved need and explicit disclosure.'},{label:'YOUR INPUT',title:'Treat secrets as secrets',text:'Do not paste credentials or production secrets into any tool unless its behavior and limits are understood. HelpDevOps will never execute pasted code merely because it was entered.'}];
+---
+<StatusPage meta={m.privacy} eyebrow="PRIVACY" title="Private by design, precise in wording" description="Privacy claims must always match the behavior users can verify." sections={sections}/>

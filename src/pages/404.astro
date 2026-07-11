@@ -1,0 +1,4 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'; import {pageMetadata as m} from '../config/pages.js';
+---
+<BaseLayout {...m.notFound}><section class="not-found"><div class="container reading"><span class="eyebrow">404 · ROUTE NOT FOUND</span><h1>This path led nowhere.</h1><p>The page may have moved, or the address may be incomplete. Your work has not been changed.</p><div><a class="button primary" href="/">Return to Command Center</a><button class="button ghost" type="button" data-search-open>Search HelpDevOps</button></div></div></section></BaseLayout>
