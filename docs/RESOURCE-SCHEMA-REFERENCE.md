@@ -25,7 +25,7 @@
 
 ## Validation rules
 
-`npm run validate:resources` checks resource versions, tool ownership, required references and limitations, example structure, and duplicate IDs. Available tools are additionally covered by registry and route tests.
+`npm run validate:resources` checks resource versions, tool ownership, known capability/input enums, valid status, required and uniquely identified references, limitations, example structure, duplicate IDs, related-tool references, available routes/analyzers, and planned-tool integrity.
 
 ## Security rule
 
