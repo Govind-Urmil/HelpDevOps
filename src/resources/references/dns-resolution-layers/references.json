@@ -1,0 +1,14 @@
+[
+  {
+    "id": "dns-resolution-layers-source-1",
+    "title": "RFC 1034",
+    "url": "https://www.rfc-editor.org/rfc/rfc1034",
+    "official": true
+  },
+  {
+    "id": "dns-resolution-layers-source-2",
+    "title": "dig manual",
+    "url": "https://manpages.debian.org/dig",
+    "official": true
+  }
+]

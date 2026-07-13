@@ -1,0 +1,47 @@
+{
+  "id": "common-operational-ports",
+  "title": "Common operational ports with security context",
+  "domain": "networking",
+  "summary": "Use common defaults as investigation hints, never as proof that a service is trusted or safely exposed.",
+  "status": "reviewed",
+  "reviewedAt": "2026-07-13",
+  "reviewDue": "2027-07-13",
+  "stability": "slow-changing",
+  "aliases": [
+    "port 22",
+    "port 53",
+    "port 80",
+    "port 443",
+    "port 8080",
+    "port 6443",
+    "port 5432"
+  ],
+  "concepts": [
+    {
+      "title": "Common defaults",
+      "explanation": "SSH 22, DNS 53, HTTP 80, HTTPS 443, Jenkins commonly 8080, Kubernetes API commonly 6443 and PostgreSQL commonly 5432."
+    },
+    {
+      "title": "Exposure context",
+      "explanation": "Services can use non-default ports, proxies, Unix sockets or private network bindings."
+    },
+    {
+      "title": "Security boundary",
+      "explanation": "Opening a port broadens reachability and should follow an explicit need, least-privilege scope and verification."
+    }
+  ],
+  "limitations": [
+    "A listening port does not prove the service identity, authentication, encryption or health.",
+    "Default-port lists must not be used to justify broad firewall changes."
+  ],
+  "relatedJourneyIds": [
+    "journey-networking-connection-refused",
+    "journey-jenkins-agent-offline",
+    "journey-networking-dns-resolution"
+  ],
+  "relatedInterpreterIds": [],
+  "relatedToolIds": [
+    "ipv4-cidr"
+  ],
+  "path": "/reference/common-operational-ports/"
+}

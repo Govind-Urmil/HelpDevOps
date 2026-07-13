@@ -1,0 +1,6 @@
+[
+  {
+    "title": "Use this reference when",
+    "text": "You need to distinguish terraform state and locking concepts before choosing a troubleshooting action."
+  }
+]

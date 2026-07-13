@@ -31,3 +31,7 @@ Five bounded, browser-local evidence interpreters connect supported command outp
 
 ## EP-010 operational coverage
 The diagnostic platform now covers Git push rejection, Jenkins agents, DNS, refused connections, cron execution, and shell execution failures.
+
+
+## EP-011 discovery foundation
+HelpDevOps now exposes reviewed concepts through a resource-driven reference library and connects user wording to tools, interpreters and diagnostics with deterministic local search.

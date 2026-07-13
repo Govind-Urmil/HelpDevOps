@@ -1,0 +1,47 @@
+{
+  "id": "shell-execution-context",
+  "title": "Shell execution context",
+  "domain": "bash",
+  "summary": "Understand PATH, shebang, permissions, working directory and non-interactive execution differences.",
+  "status": "reviewed",
+  "reviewedAt": "2026-07-13",
+  "reviewDue": "2027-07-13",
+  "stability": "slow-changing",
+  "aliases": [
+    "PATH",
+    "shebang",
+    "permission denied",
+    "command not found",
+    "bad interpreter",
+    "working directory"
+  ],
+  "concepts": [
+    {
+      "title": "Command lookup",
+      "explanation": "Shells use builtins, functions and PATH lookup according to the current process environment."
+    },
+    {
+      "title": "Script execution",
+      "explanation": "Direct execution also depends on filesystem execute permission, path traversal, mount policy and the shebang interpreter."
+    },
+    {
+      "title": "Automation context",
+      "explanation": "Cron, Jenkins and systemd frequently run with a different user, PATH, shell and working directory."
+    }
+  ],
+  "limitations": [
+    "A command working interactively does not prove it works under automation.",
+    "Permission denied should not be \u201cfixed\u201d with broad permissions without identifying the blocked boundary."
+  ],
+  "relatedJourneyIds": [
+    "journey-bash-execution-failure",
+    "journey-cron-job-not-running",
+    "journey-jenkins-agent-offline"
+  ],
+  "relatedInterpreterIds": [],
+  "relatedToolIds": [
+    "cron",
+    "linux-permissions"
+  ],
+  "path": "/reference/shell-execution-context/"
+}

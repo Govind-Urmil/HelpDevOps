@@ -1,0 +1,46 @@
+{
+  "id": "dns-resolution-layers",
+  "title": "DNS resolution layers and outcomes",
+  "domain": "networking",
+  "summary": "Separate application lookup, local resolver, recursive resolution and authoritative DNS outcomes.",
+  "status": "reviewed",
+  "reviewedAt": "2026-07-13",
+  "reviewDue": "2027-07-13",
+  "stability": "slow-changing",
+  "aliases": [
+    "NXDOMAIN",
+    "SERVFAIL",
+    "DNS timeout",
+    "Could not resolve host",
+    "getent hosts",
+    "dig"
+  ],
+  "concepts": [
+    {
+      "title": "Execution context",
+      "explanation": "Applications may use OS resolver libraries, custom resolvers, proxies or container-specific configuration."
+    },
+    {
+      "title": "Response outcomes",
+      "explanation": "NXDOMAIN, SERVFAIL, timeout, refusal and an empty or wrong answer represent different evidence."
+    },
+    {
+      "title": "Authority path",
+      "explanation": "Recursive resolution follows delegation toward authoritative data and can fail at several layers."
+    }
+  ],
+  "limitations": [
+    "A successful lookup from one host does not prove the application execution context can resolve the name.",
+    "Switching resolvers can mask rather than correct an authoritative or local-policy problem."
+  ],
+  "relatedJourneyIds": [
+    "journey-networking-dns-resolution",
+    "journey-networking-connection-refused",
+    "journey-http-502"
+  ],
+  "relatedInterpreterIds": [],
+  "relatedToolIds": [
+    "ipv4-cidr"
+  ],
+  "path": "/reference/dns-resolution-layers/"
+}

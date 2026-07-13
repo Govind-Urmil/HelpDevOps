@@ -84,3 +84,7 @@ Five bounded, browser-local evidence interpreters connect supported command outp
 
 ## EP-010 — Operational Coverage Completion
 Adds six reviewed journeys across Git, Jenkins, networking, cron, and Bash.
+
+
+## EP-011 delivered
+Reference, Discovery and Topic Clusters: 14 references, generated error index, unified discovery and deterministic linking. Next: EP-012 product cohesion and production hardening.

@@ -1,0 +1,52 @@
+{
+  "id": "kubernetes-pod-container-states",
+  "title": "Kubernetes Pod and container states",
+  "domain": "kubernetes",
+  "summary": "Distinguish Pod phase, container state, readiness and backoff conditions.",
+  "status": "reviewed",
+  "reviewedAt": "2026-07-13",
+  "reviewDue": "2027-01-13",
+  "stability": "version-sensitive",
+  "aliases": [
+    "Pending",
+    "Running",
+    "Succeeded",
+    "Failed",
+    "CrashLoopBackOff",
+    "container state",
+    "readiness"
+  ],
+  "concepts": [
+    {
+      "title": "Pod phase",
+      "explanation": "Pending, Running, Succeeded, Failed and Unknown are broad lifecycle summaries."
+    },
+    {
+      "title": "Container state",
+      "explanation": "Waiting, Running and Terminated describe individual containers."
+    },
+    {
+      "title": "Readiness",
+      "explanation": "A Running Pod can still be unready; readiness is separate from phase."
+    },
+    {
+      "title": "Backoff condition",
+      "explanation": "CrashLoopBackOff reports repeated restart backoff, not the underlying cause."
+    }
+  ],
+  "limitations": [
+    "Phase is not a complete application-health signal.",
+    "Managed platforms and custom controllers can add context beyond standard fields."
+  ],
+  "relatedJourneyIds": [
+    "journey-kubernetes-pod-pending",
+    "journey-kubernetes-crashloopbackoff"
+  ],
+  "relatedInterpreterIds": [
+    "kubernetes-pod"
+  ],
+  "relatedToolIds": [
+    "kubernetes-manifest"
+  ],
+  "path": "/reference/kubernetes-pod-container-states/"
+}

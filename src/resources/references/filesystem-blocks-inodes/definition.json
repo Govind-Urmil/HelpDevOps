@@ -1,0 +1,46 @@
+{
+  "id": "filesystem-blocks-inodes",
+  "title": "Filesystem blocks versus inodes",
+  "domain": "linux",
+  "summary": "Understand why a filesystem can reject writes when capacity or inode availability is exhausted.",
+  "status": "reviewed",
+  "reviewedAt": "2026-07-13",
+  "reviewDue": "2027-07-13",
+  "stability": "slow-changing",
+  "aliases": [
+    "df -h",
+    "df -i",
+    "inode",
+    "filesystem full",
+    "no space left on device"
+  ],
+  "concepts": [
+    {
+      "title": "Block capacity",
+      "explanation": "File contents and filesystem metadata consume allocated storage blocks."
+    },
+    {
+      "title": "Inode capacity",
+      "explanation": "Many files can exhaust inode-like metadata even when block capacity remains."
+    },
+    {
+      "title": "Open deleted files",
+      "explanation": "A removed pathname can continue consuming storage while a process keeps the file open."
+    }
+  ],
+  "limitations": [
+    "High usage does not identify which files or process caused growth.",
+    "Filesystem reporting and reserved capacity vary by filesystem and privilege."
+  ],
+  "relatedJourneyIds": [
+    "journey-linux-disk-full",
+    "journey-docker-disk-usage"
+  ],
+  "relatedInterpreterIds": [
+    "df-usage"
+  ],
+  "relatedToolIds": [
+    "linux-permissions"
+  ],
+  "path": "/reference/filesystem-blocks-inodes/"
+}

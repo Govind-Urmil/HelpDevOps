@@ -1,0 +1,49 @@
+{
+  "id": "git-local-remote-state",
+  "title": "Git local, remote and push state",
+  "domain": "git",
+  "summary": "Understand branch, upstream, remote-tracking and divergence before integrating or rewriting history.",
+  "status": "reviewed",
+  "reviewedAt": "2026-07-13",
+  "reviewDue": "2027-07-13",
+  "stability": "slow-changing",
+  "aliases": [
+    "ahead",
+    "behind",
+    "diverged",
+    "upstream",
+    "remote-tracking",
+    "non-fast-forward",
+    "force-with-lease"
+  ],
+  "concepts": [
+    {
+      "title": "Local branch",
+      "explanation": "A movable ref in the local repository."
+    },
+    {
+      "title": "Remote-tracking ref",
+      "explanation": "The locally recorded view of a remote ref after fetch."
+    },
+    {
+      "title": "Upstream",
+      "explanation": "The branch used by status and pull-related defaults when configured."
+    },
+    {
+      "title": "Fast-forward",
+      "explanation": "An update that advances a ref without discarding commits reachable from its current tip."
+    }
+  ],
+  "limitations": [
+    "A non-fast-forward rejection does not by itself say whether merge, rebase or guarded history rewrite is appropriate.",
+    "Remote-tracking refs can be stale until fetch completes."
+  ],
+  "relatedJourneyIds": [
+    "journey-git-push-rejected"
+  ],
+  "relatedInterpreterIds": [],
+  "relatedToolIds": [
+    "git-reference"
+  ],
+  "path": "/reference/git-local-remote-state/"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "systemd-service-states",
+  "title": "systemd service state model",
+  "domain": "linux",
+  "summary": "Read load, active, sub-state and result evidence without confusing recorded state with root cause.",
+  "status": "reviewed",
+  "reviewedAt": "2026-07-13",
+  "reviewDue": "2027-07-13",
+  "stability": "slow-changing",
+  "aliases": [
+    "systemctl show",
+    "LoadState",
+    "ActiveState",
+    "SubState",
+    "Result",
+    "failed"
+  ],
+  "concepts": [
+    {
+      "title": "Load state",
+      "explanation": "Shows whether the unit definition was loaded and whether a load error occurred."
+    },
+    {
+      "title": "Active and sub-state",
+      "explanation": "Describe lifecycle state at different levels of detail."
+    },
+    {
+      "title": "Result",
+      "explanation": "Records the service manager result for a completed or failed operation."
+    }
+  ],
+  "limitations": [
+    "Active does not prove application-level health.",
+    "reset-failed clears recorded failure state and counters; it does not repair the cause."
+  ],
+  "relatedJourneyIds": [
+    "journey-linux-systemd-service-start",
+    "journey-jenkins-agent-offline"
+  ],
+  "relatedInterpreterIds": [
+    "systemd-unit"
+  ],
+  "relatedToolIds": [],
+  "path": "/reference/systemd-service-states/"
+}

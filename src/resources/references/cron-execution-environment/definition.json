@@ -1,0 +1,44 @@
+{
+  "id": "cron-execution-environment",
+  "title": "Cron execution environment",
+  "domain": "cron",
+  "summary": "Compare user and system crontabs, scheduler context, PATH, output handling and timing assumptions.",
+  "status": "reviewed",
+  "reviewedAt": "2026-07-13",
+  "reviewDue": "2027-07-13",
+  "stability": "slow-changing",
+  "aliases": [
+    "crontab",
+    "cron PATH",
+    "cron environment",
+    "system crontab",
+    "CRON_TZ"
+  ],
+  "concepts": [
+    {
+      "title": "Crontab type",
+      "explanation": "User crontabs and system crontabs differ, including whether a user field is present."
+    },
+    {
+      "title": "Minimal context",
+      "explanation": "Scheduled jobs commonly inherit a smaller environment than interactive shells."
+    },
+    {
+      "title": "Evidence capture",
+      "explanation": "Scheduler logs and controlled job output help distinguish \u201cnot launched\u201d from \u201claunched and failed\u201d."
+    }
+  ],
+  "limitations": [
+    "Service names and logging locations vary by platform and cron implementation.",
+    "Full environment dumps may disclose secrets and should not be the default diagnostic method."
+  ],
+  "relatedJourneyIds": [
+    "journey-cron-job-not-running",
+    "journey-bash-execution-failure"
+  ],
+  "relatedInterpreterIds": [],
+  "relatedToolIds": [
+    "cron"
+  ],
+  "path": "/reference/cron-execution-environment/"
+}

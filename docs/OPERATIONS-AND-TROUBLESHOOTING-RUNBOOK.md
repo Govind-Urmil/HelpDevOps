@@ -244,3 +244,7 @@ Five bounded, browser-local evidence interpreters connect supported command outp
 
 ## EP-010 resource incidents
 If an operational journey gives a misleading result, preserve the input/path, disable or roll back the affected reviewed resource, add a regression fixture, rerun diagnostic validation, tests, build, and browser verification.
+
+
+## Reference or discovery issue
+If a reference is missing, a search result is wrong, or a link is broken: run reference and discovery validation, confirm the stable IDs and routes, rebuild, and verify the generated `/reference/` and `/errors/` pages before release.

@@ -1,7 +1,19 @@
 ---
 // @ts-nocheck
-import BaseLayout from '../../../layouts/BaseLayout.astro';import PageHeader from '../../../components/PageHeader.astro';import {publishedJourneys,diagnosticDomains} from '../../../diagnostics/registry.js';
-export function getStaticPaths(){return diagnosticDomains.map(domain=>({params:{domain},props:{domain,journeys:publishedJourneys.filter(j=>j.domain===domain)}}))}
-const {domain,journeys}=Astro.props;const label=domain[0].toUpperCase()+domain.slice(1);const meta={path:`/troubleshoot/${domain}/`,title:`${label} Troubleshooting | HelpDevOps`,description:`Reviewed ${label} diagnostic journeys with evidence-first next steps.`};
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import PageHeader from '../../../components/PageHeader.astro';
+import {publishedJourneys,diagnosticDomains} from '../../../diagnostics/registry.js';
+import {publishedReferences} from '../../../references/registry.js';
+import {tools} from '../../../config/tools.js';
+import {evidenceDefinitions} from '../../../core/evidence/registry.js';
+export function getStaticPaths(){return diagnosticDomains.map(domain=>({params:{domain},props:{domain,journeys:publishedJourneys.filter(j=>j.domain===domain),references:publishedReferences.filter(r=>r.domain===domain),domainTools:tools.filter(t=>t.status==='available'&&(t.category===domain||t.id.includes(domain))),interpreters:evidenceDefinitions.filter(e=>(e.domain||e.source)===domain&&e.reviewStatus==='reviewed')}}))}
+const {domain,journeys,references,domainTools,interpreters}=Astro.props;const label=domain[0].toUpperCase()+domain.slice(1);const meta={path:`/troubleshoot/${domain}/`,title:`${label} Troubleshooting | HelpDevOps`,description:`Reviewed ${label} diagnostic journeys, evidence interpreters, tools, and operational references.`};
 ---
-<BaseLayout {...meta} breadcrumbs={[{label:'Home',href:'/'},{label:'Troubleshoot',href:'/troubleshoot/'},{label,href:`/troubleshoot/${domain}/`}]}> <PageHeader eyebrow="TROUBLESHOOTING HUB" title={`${label} troubleshooting`} description="Reviewed symptom-first journeys with read-only checks first, explicit risks, and recovery verification."/><section class="section"><div class="container tool-grid">{journeys.map(journey=><article class="tool-card"><span class="eyebrow">{journey.status === 'reviewed' ? 'REVIEWED' : 'TECHNICAL REVIEW'}</span><h2><a href={journey.path}>{journey.title}</a></h2><p>{journey.summary}</p><a class="button secondary" href={journey.path}>Start diagnosis</a></article>)}</div></section></BaseLayout>
+<BaseLayout {...meta} breadcrumbs={[{label:'Home',href:'/'},{label:'Troubleshoot',href:'/troubleshoot/'},{label,href:`/troubleshoot/${domain}/`}]}> 
+<PageHeader eyebrow="TROUBLESHOOTING HUB" title={`${label} troubleshooting`} description="Choose a reviewed diagnostic, interpret bounded evidence, use a deterministic tool, or understand the operational concept first."/>
+<section class="section"><div class="container">
+<h2>Reviewed diagnostics</h2><div class="tool-grid">{journeys.map(journey=><article class="tool-card"><span class="eyebrow">REVIEWED DIAGNOSTIC</span><h3><a href={journey.path}>{journey.title}</a></h3><p>{journey.summary}</p><a class="button secondary" href={journey.path}>Start diagnosis</a></article>)}</div>
+{interpreters.length>0&&<><h2>Interpret evidence</h2><div class="tool-grid">{interpreters.map(item=><article class="tool-card"><span class="eyebrow">INTERPRETER</span><h3><a href={`/interpret/${item.slug}/`}>{item.title}</a></h3><p>{item.summary}</p></article>)}</div></>}
+{domainTools.length>0&&<><h2>Use a tool</h2><div class="tool-grid">{domainTools.map(tool=><article class="tool-card"><span class="eyebrow">TOOL</span><h3><a href={tool.path}>{tool.title}</a></h3><p>{tool.description}</p></article>)}</div></>}
+{references.length>0&&<><h2>Understand the evidence</h2><div class="tool-grid">{references.map(ref=><article class="tool-card"><span class="eyebrow">REFERENCE</span><h3><a href={ref.path}>{ref.title}</a></h3><p>{ref.summary}</p></article>)}</div></>}
+</div></section></BaseLayout>

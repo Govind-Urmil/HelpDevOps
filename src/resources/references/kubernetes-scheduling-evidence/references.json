@@ -1,0 +1,14 @@
+[
+  {
+    "id": "kubernetes-scheduling-evidence-source-1",
+    "title": "Kubernetes scheduler",
+    "url": "https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/",
+    "official": true
+  },
+  {
+    "id": "kubernetes-scheduling-evidence-source-2",
+    "title": "Assign Pods to Nodes",
+    "url": "https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/",
+    "official": true
+  }
+]

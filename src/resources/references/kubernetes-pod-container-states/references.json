@@ -1,0 +1,8 @@
+[
+  {
+    "id": "kubernetes-pod-container-states-source-1",
+    "title": "Pod lifecycle",
+    "url": "https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/",
+    "official": true
+  }
+]

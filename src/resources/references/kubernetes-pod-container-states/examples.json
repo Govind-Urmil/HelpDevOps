@@ -1,0 +1,6 @@
+[
+  {
+    "title": "Use this reference when",
+    "text": "You need to distinguish kubernetes pod and container states before choosing a troubleshooting action."
+  }
+]

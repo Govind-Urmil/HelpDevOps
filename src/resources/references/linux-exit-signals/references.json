@@ -1,0 +1,14 @@
+[
+  {
+    "id": "linux-exit-signals-source-1",
+    "title": "GNU Bash Exit Status",
+    "url": "https://www.gnu.org/software/bash/manual/html_node/Exit-Status.html",
+    "official": true
+  },
+  {
+    "id": "linux-exit-signals-source-2",
+    "title": "signal(7)",
+    "url": "https://man7.org/linux/man-pages/man7/signal.7.html",
+    "official": true
+  }
+]

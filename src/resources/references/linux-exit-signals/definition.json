@@ -1,0 +1,47 @@
+{
+  "id": "linux-exit-signals",
+  "title": "Linux process exit codes and signals",
+  "domain": "linux",
+  "summary": "Distinguish normal exit status from signal termination without treating one number as a root cause.",
+  "status": "reviewed",
+  "reviewedAt": "2026-07-13",
+  "reviewDue": "2027-07-13",
+  "stability": "slow-changing",
+  "aliases": [
+    "exit code",
+    "exit status",
+    "signal",
+    "SIGTERM",
+    "SIGKILL",
+    "137"
+  ],
+  "concepts": [
+    {
+      "title": "Exit status",
+      "explanation": "A process can return a numeric status when it finishes. The value is evidence about the termination path, not a complete diagnosis."
+    },
+    {
+      "title": "Signal termination",
+      "explanation": "A shell may report 128 plus a signal number, but runtimes and wrappers can present termination differently."
+    },
+    {
+      "title": "Context matters",
+      "explanation": "Container, systemd, Kubernetes and shell layers can preserve or transform exit evidence."
+    }
+  ],
+  "limitations": [
+    "An exit code alone does not identify the failing line, configuration, dependency or safe fix.",
+    "Signal-derived values should be confirmed with the originating runtime or service manager."
+  ],
+  "relatedJourneyIds": [
+    "journey-docker-container-exits",
+    "journey-linux-systemd-service-start",
+    "journey-bash-execution-failure"
+  ],
+  "relatedInterpreterIds": [
+    "docker-state",
+    "systemd-unit"
+  ],
+  "relatedToolIds": [],
+  "path": "/reference/linux-exit-signals/"
+}

@@ -1,0 +1,45 @@
+{
+  "id": "connection-refused-timeout",
+  "title": "Connection refused versus timeout",
+  "domain": "networking",
+  "summary": "Use the observed connection outcome to choose the next network or service check.",
+  "status": "reviewed",
+  "reviewedAt": "2026-07-13",
+  "reviewDue": "2027-07-13",
+  "stability": "slow-changing",
+  "aliases": [
+    "connection refused",
+    "ECONNREFUSED",
+    "timeout",
+    "no route to host",
+    "listener"
+  ],
+  "concepts": [
+    {
+      "title": "Refusal",
+      "explanation": "Usually indicates the destination path produced an active refusal, commonly because no service is listening or a policy rejects the connection."
+    },
+    {
+      "title": "Timeout",
+      "explanation": "Indicates the expected response did not arrive within the client timeout; dropping, routing, reachability and overload remain possible."
+    },
+    {
+      "title": "Application health",
+      "explanation": "A successful TCP connection does not prove the application protocol or business function is healthy."
+    }
+  ],
+  "limitations": [
+    "DNS, TLS, proxy and application errors are separate layers.",
+    "Firewall behavior can reject or silently drop traffic depending on policy."
+  ],
+  "relatedJourneyIds": [
+    "journey-networking-connection-refused",
+    "journey-networking-dns-resolution",
+    "journey-http-502"
+  ],
+  "relatedInterpreterIds": [],
+  "relatedToolIds": [
+    "ipv4-cidr"
+  ],
+  "path": "/reference/connection-refused-timeout/"
+}

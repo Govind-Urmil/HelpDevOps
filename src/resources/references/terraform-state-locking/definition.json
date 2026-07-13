@@ -1,0 +1,48 @@
+{
+  "id": "terraform-state-locking",
+  "title": "Terraform state and locking concepts",
+  "domain": "terraform",
+  "summary": "Separate state, backend, workspace, operation locking and provider dependency locking.",
+  "status": "reviewed",
+  "reviewedAt": "2026-07-13",
+  "reviewDue": "2027-01-13",
+  "stability": "version-sensitive",
+  "aliases": [
+    "Terraform state",
+    "backend",
+    "workspace",
+    "state lock",
+    "force-unlock",
+    ".terraform.lock.hcl"
+  ],
+  "concepts": [
+    {
+      "title": "State",
+      "explanation": "Maps configuration objects to remote objects and stores operational metadata."
+    },
+    {
+      "title": "Backend",
+      "explanation": "Determines where state is stored and which locking behavior is supported."
+    },
+    {
+      "title": "Operation lock",
+      "explanation": "Protects state from concurrent supported operations."
+    },
+    {
+      "title": "Dependency lock file",
+      "explanation": ".terraform.lock.hcl records provider selections; it is not the runtime state lock."
+    }
+  ],
+  "limitations": [
+    "Lock age alone does not prove an operation is stale.",
+    "Unlock behavior is backend-specific, and some backends do not support force-unlock."
+  ],
+  "relatedJourneyIds": [
+    "journey-terraform-state-lock"
+  ],
+  "relatedInterpreterIds": [
+    "terraform-lock"
+  ],
+  "relatedToolIds": [],
+  "path": "/reference/terraform-state-locking/"
+}

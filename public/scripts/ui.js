@@ -35,7 +35,7 @@ const openSearch = trigger => {
   priorFocus = trigger || document.activeElement;
   dialog.showModal();
   searchInput.value = '';
-  results.innerHTML = '<p class="muted">Search available tools, pages, and planned platform areas.</p>';
+  results.innerHTML = '<p class="muted">Search tools, diagnostics, interpreters, references, errors, and hubs.</p>';
   searchInput.focus();
 };
 const closeSearch = () => {
@@ -50,8 +50,14 @@ dialog?.addEventListener('close', () => setTimeout(() => priorFocus?.focus?.(), 
 searchInput?.addEventListener('input', () => {
   const query = searchInput.value.trim().toLowerCase();
   if (!query) { results.innerHTML = '<p class="muted">Enter a page, domain, or task. Your query stays in this tab.</p>'; return; }
-  const matches = searchIndex.filter(item => item.slice(0,2).join(' ').toLowerCase().includes(query));
-  results.innerHTML = matches.length ? matches.map(([name,description,path]) => `<a href="${path}"><strong>${name}</strong><span>${description}</span></a>`).join('') : '<p><strong>No matching tool or page.</strong><br><span class="muted">Try cron, JSON, YAML, tools, guides, or privacy.</span></p>';
+  const normalize = value => String(value || '').toLowerCase().replace(/[^a-z0-9.+#/-]+/g, ' ').trim();
+  const tokens = normalize(query).split(/\s+/).filter(Boolean);
+  const matches = searchIndex.map(item => {
+    const title = normalize(item.title); const aliases=(item.aliases||[]).map(normalize); const errors=(item.exactErrors||[]).map(normalize); const hay=normalize(item.search||[item.title,item.domain,item.summary,...(item.aliases||[]),...(item.exactErrors||[])].join(' '));
+    let score=0,why=''; if(title===normalize(query)){score=item.type==='ERROR'?88:100;why='exact title';}else if(errors.includes(normalize(query))){score=96;why='exact reviewed error';}else if(aliases.includes(normalize(query))){score=({DIAGNOSTIC:94,INTERPRETER:93,TOOL:92,REFERENCE:85,ERROR:86,HUB:84}[item.type]||90);why='alias';}else if(item.type==='DIAGNOSTIC'&&title.split(/\s+/).includes(normalize(query))){score=89;why='title token';}else if(title.startsWith(normalize(query))){score=80;why='title prefix';}else if(tokens.every(t=>hay.includes(t))){score=60+tokens.length;why='matching terms';}else if(tokens.some(t=>hay.includes(t))){score=20;why='partial term';} return {...item,score,why};
+  }).filter(item=>item.score>0).sort((a,b)=>b.score-a.score||a.title.localeCompare(b.title)).slice(0,12);
+  const escape=value=>String(value).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+  results.innerHTML = matches.length ? matches.map(item => `<a href="${escape(item.route)}"><span class="eyebrow">${escape(item.type)} · ${escape(item.domain || 'platform')}</span><strong>${escape(item.title)}</strong><span>${escape(item.summary)}</span><small>Matched: ${escape(item.why)}</small></a>`).join('') : '<p><strong>No reviewed destination matched.</strong><br><span class="muted">Try Universal Input, Troubleshoot, or browse supported domains. No approximate result was fabricated.</span></p>';
 });
 document.addEventListener('keydown', event => {
   if (event.key === 'Escape' && dialog?.open) {

@@ -1,0 +1,14 @@
+[
+  {
+    "id": "git-local-remote-state-source-1",
+    "title": "git push",
+    "url": "https://git-scm.com/docs/git-push",
+    "official": true
+  },
+  {
+    "id": "git-local-remote-state-source-2",
+    "title": "git branch",
+    "url": "https://git-scm.com/docs/git-branch",
+    "official": true
+  }
+]

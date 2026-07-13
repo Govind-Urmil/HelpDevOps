@@ -1,0 +1,14 @@
+[
+  {
+    "id": "docker-container-states-source-1",
+    "title": "Docker container inspect",
+    "url": "https://docs.docker.com/reference/cli/docker/inspect/",
+    "official": true
+  },
+  {
+    "id": "docker-container-states-source-2",
+    "title": "Docker ps",
+    "url": "https://docs.docker.com/reference/cli/docker/container/ls/",
+    "official": true
+  }
+]

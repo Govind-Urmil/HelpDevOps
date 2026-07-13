@@ -1,0 +1,14 @@
+[
+  {
+    "id": "shell-execution-context-source-1",
+    "title": "Bash Command Search",
+    "url": "https://www.gnu.org/software/bash/manual/html_node/Command-Search-and-Execution.html",
+    "official": true
+  },
+  {
+    "id": "shell-execution-context-source-2",
+    "title": "execve(2)",
+    "url": "https://man7.org/linux/man-pages/man2/execve.2.html",
+    "official": true
+  }
+]

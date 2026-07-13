@@ -1,0 +1,14 @@
+[
+  {
+    "id": "systemd-service-states-source-1",
+    "title": "systemctl",
+    "url": "https://www.freedesktop.org/software/systemd/man/latest/systemctl.html",
+    "official": true
+  },
+  {
+    "id": "systemd-service-states-source-2",
+    "title": "systemd.service",
+    "url": "https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html",
+    "official": true
+  }
+]

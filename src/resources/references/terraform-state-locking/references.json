@@ -1,0 +1,14 @@
+[
+  {
+    "id": "terraform-state-locking-source-1",
+    "title": "Terraform state locking",
+    "url": "https://developer.hashicorp.com/terraform/language/state/locking",
+    "official": true
+  },
+  {
+    "id": "terraform-state-locking-source-2",
+    "title": "Dependency lock file",
+    "url": "https://developer.hashicorp.com/terraform/language/files/dependency-lock",
+    "official": true
+  }
+]

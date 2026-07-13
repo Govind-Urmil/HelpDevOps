@@ -90,3 +90,7 @@ Five bounded, browser-local evidence interpreters connect supported command outp
 
 ## EP-010 / v0.10.0
 Operational coverage candidate: six reviewed journeys; pending final approval and commit.
+
+
+## EP-011 / v0.11.0
+Reference library, error/symptom index, unified local discovery, topic hubs and stable related-content relationships. Status: audit candidate pending final technical review.

@@ -4,12 +4,12 @@ import path from 'node:path';
 const root=process.cwd();
 const pkg=JSON.parse(fs.readFileSync(path.join(root,'package.json')));
 const release=JSON.parse(fs.readFileSync(path.join(root,'release-meta.json')));
-if(pkg.version!==release.version||release.version!=='0.10.0'||release.ep!=='EP-010') throw new Error('Release version metadata is inconsistent.');
+if(pkg.version!==release.version||release.version!=='0.11.0'||release.ep!=='EP-011') throw new Error('Release version metadata is inconsistent.');
 const forbidden=['react','vue','svelte','angular','tailwind','analytics'];
 const dependencies=Object.keys({...pkg.dependencies,...pkg.devDependencies}).join(' ').toLowerCase();
 for(const item of forbidden) if(dependencies.includes(item)) throw new Error(`Forbidden dependency: ${item}`);
 if(pkg.dependencies.astro!=='7.0.7')throw new Error('Astro must remain pinned to the reviewed patched version 7.0.7.');
-for(const specFile of ['EP-002-SPEC.md','EP-003-SPEC.md','EP-004-SPEC.md','EP-005-SPEC.md','EP-006-SPEC.md','EP-007-SPEC.md','EP-008-SPEC.md','EP-009-SPEC.md']){const spec=fs.readFileSync(path.join(root,'docs',specFile),'utf8');if(spec.length<1000||!spec.includes('Acceptance Criteria'))throw new Error(`Authoritative specification is incomplete: ${specFile}`);}
+for(const specFile of ['EP-002-SPEC.md','EP-003-SPEC.md','EP-004-SPEC.md','EP-005-SPEC.md','EP-006-SPEC.md','EP-007-SPEC.md','EP-008-SPEC.md','EP-009-SPEC.md','EP-011-SPEC.md']){const spec=fs.readFileSync(path.join(root,'docs',specFile),'utf8');if(spec.length<1000||!spec.includes('Acceptance Criteria'))throw new Error(`Authoritative specification is incomplete: ${specFile}`);}
 const required=['src/layouts/BaseLayout.astro','src/layouts/DirectoryLayout.astro','src/layouts/ProductLayout.astro','src/layouts/PolicyLayout.astro','src/components/DesktopNav.astro','src/components/MobileNav.astro','src/config/security.js','.gitignore'];for(const file of required)if(!fs.existsSync(path.join(root,file)))throw new Error(`Required architecture file missing: ${file}`);
 const siteSource=fs.readFileSync(path.join(root,'src','config','site.js'),'utf8');if(process.env.RELEASE_CHANNEL==='production'&&siteSource.includes('.example'))throw new Error('Production release blocked: placeholder .example canonical domain remains.');
 const siteVersion=siteSource.match(/version:\s*'([^']+)'/)?.[1],siteEp=siteSource.match(/ep:\s*'([^']+)'/)?.[1];if(siteVersion!==release.version||siteEp!==release.ep)throw new Error(`Site release metadata is inconsistent: ${siteEp}/${siteVersion} versus ${release.ep}/${release.version}.`);
@@ -28,3 +28,5 @@ for(const forbiddenStorage of ['fetch(','XMLHttpRequest','sendBeacon']) if(works
 console.log('Source and release checks passed.');
 
 if(process.env.RELEASE_CHANNEL==='production'&&diagnosticJourneys.some(item=>item.status!=='reviewed'))throw new Error('Production release blocked: diagnostic journeys still require technical review.');
+
+for(const required of ['src/references/registry.js','src/references/discovery.js','src/pages/reference/index.astro','src/pages/reference/[slug].astro','src/pages/errors/index.astro','scripts/validate-references.mjs','scripts/validate-discovery.mjs']) if(!fs.existsSync(path.join(root,required))) throw new Error(`EP-011 required file missing: ${required}`);

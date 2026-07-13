@@ -1,0 +1,44 @@
+{
+  "id": "http-gateway-statuses",
+  "title": "HTTP gateway status distinctions",
+  "domain": "http",
+  "summary": "Distinguish 502, 503 and 504 evidence before investigating the wrong layer.",
+  "status": "reviewed",
+  "reviewedAt": "2026-07-13",
+  "reviewDue": "2027-07-13",
+  "stability": "slow-changing",
+  "aliases": [
+    "502",
+    "503",
+    "504",
+    "Bad Gateway",
+    "Service Unavailable",
+    "Gateway Timeout"
+  ],
+  "concepts": [
+    {
+      "title": "502 Bad Gateway",
+      "explanation": "A gateway or proxy received an invalid response from an upstream server."
+    },
+    {
+      "title": "503 Service Unavailable",
+      "explanation": "The server is currently unable to handle the request, often temporarily."
+    },
+    {
+      "title": "504 Gateway Timeout",
+      "explanation": "A gateway or proxy did not receive a timely upstream response."
+    }
+  ],
+  "limitations": [
+    "The status alone does not identify which intermediary generated it.",
+    "Different products can map internal failures to these statuses differently."
+  ],
+  "relatedJourneyIds": [
+    "journey-http-502",
+    "journey-networking-connection-refused",
+    "journey-networking-dns-resolution"
+  ],
+  "relatedInterpreterIds": [],
+  "relatedToolIds": [],
+  "path": "/reference/http-gateway-statuses/"
+}

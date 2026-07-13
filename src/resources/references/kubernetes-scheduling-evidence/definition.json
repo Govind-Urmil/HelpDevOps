@@ -1,0 +1,48 @@
+{
+  "id": "kubernetes-scheduling-evidence",
+  "title": "Kubernetes scheduling evidence",
+  "domain": "kubernetes",
+  "summary": "Read FailedScheduling events and placement constraints without jumping directly to disruptive changes.",
+  "status": "reviewed",
+  "reviewedAt": "2026-07-13",
+  "reviewDue": "2027-01-13",
+  "stability": "version-sensitive",
+  "aliases": [
+    "FailedScheduling",
+    "Insufficient cpu",
+    "Insufficient memory",
+    "taint",
+    "node selector",
+    "affinity",
+    "PVC Pending"
+  ],
+  "concepts": [
+    {
+      "title": "Resource fit",
+      "explanation": "Scheduler events can report insufficient allocatable CPU or memory for requested resources."
+    },
+    {
+      "title": "Placement constraints",
+      "explanation": "Taints, selectors, affinity, topology and host ports can make otherwise healthy nodes ineligible."
+    },
+    {
+      "title": "Dependencies",
+      "explanation": "Storage claims, quota and custom scheduler behavior can block placement."
+    }
+  ],
+  "limitations": [
+    "An event describes scheduler evidence at a point in time, not a universal root cause.",
+    "Reducing requests or removing constraints can alter reliability and policy."
+  ],
+  "relatedJourneyIds": [
+    "journey-kubernetes-pod-pending",
+    "journey-kubernetes-crashloopbackoff"
+  ],
+  "relatedInterpreterIds": [
+    "kubernetes-pod"
+  ],
+  "relatedToolIds": [
+    "kubernetes-manifest"
+  ],
+  "path": "/reference/kubernetes-scheduling-evidence/"
+}

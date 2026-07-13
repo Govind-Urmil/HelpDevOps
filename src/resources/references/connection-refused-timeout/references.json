@@ -1,0 +1,14 @@
+[
+  {
+    "id": "connection-refused-timeout-source-1",
+    "title": "connect(2)",
+    "url": "https://man7.org/linux/man-pages/man2/connect.2.html",
+    "official": true
+  },
+  {
+    "id": "connection-refused-timeout-source-2",
+    "title": "RFC 9293",
+    "url": "https://www.rfc-editor.org/rfc/rfc9293",
+    "official": true
+  }
+]

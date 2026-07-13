@@ -142,3 +142,7 @@ Five bounded, browser-local evidence interpreters connect supported command outp
 ## EP-010 checks
 - [ ] Six operational journeys load and traverse safely.
 - [ ] Git history rewrite, DNS changes, network exposure, cron, and permission actions retain risk/rollback guidance.
+
+- [ ] Reference validation passes and all 14 reviewed references are reachable.
+- [ ] Unified search ranking fixtures and generic-query safeguards pass.
+- [ ] `/errors/` and `/reference/` are crawlable and included in the sitemap.

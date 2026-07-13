@@ -1,0 +1,48 @@
+{
+  "id": "docker-container-states",
+  "title": "Docker container states and exit evidence",
+  "domain": "docker",
+  "summary": "Interpret container lifecycle state, exit evidence and health without equating \u201crunning\u201d with application health.",
+  "status": "reviewed",
+  "reviewedAt": "2026-07-13",
+  "reviewDue": "2027-01-13",
+  "stability": "version-sensitive",
+  "aliases": [
+    "docker inspect",
+    "docker ps -a",
+    "OOMKilled",
+    "ExitCode",
+    "Restarting",
+    "Health"
+  ],
+  "concepts": [
+    {
+      "title": "Lifecycle state",
+      "explanation": "Created, running, paused, restarting, exited and dead describe Docker lifecycle state."
+    },
+    {
+      "title": "Exit evidence",
+      "explanation": "Exit code, error, timestamps and OOMKilled state help narrow termination behavior."
+    },
+    {
+      "title": "Health evidence",
+      "explanation": "A configured health check adds application-oriented evidence but remains limited to its command and timing."
+    }
+  ],
+  "limitations": [
+    "Running does not prove the workload is serving correct responses.",
+    "Full inspect output can expose environment values and internal configuration."
+  ],
+  "relatedJourneyIds": [
+    "journey-docker-container-exits",
+    "journey-docker-disk-usage"
+  ],
+  "relatedInterpreterIds": [
+    "docker-state"
+  ],
+  "relatedToolIds": [
+    "dockerfile",
+    "docker-compose"
+  ],
+  "path": "/reference/docker-container-states/"
+}

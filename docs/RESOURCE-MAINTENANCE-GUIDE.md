@@ -103,3 +103,7 @@ Five bounded, browser-local evidence interpreters connect supported command outp
 
 ## EP-010 journeys
 Routine wording, aliases, references, review dates, and branches are maintained in `src/diagnostics/journeys/`; code changes are unnecessary unless the schema/runtime changes.
+
+
+## Operational references
+Edit `src/resources/references/<id>/` for reference content. Run `npm run validate:references`, `npm run validate:discovery`, tests and build. Stable IDs and existing relationships must not be silently repurposed.
