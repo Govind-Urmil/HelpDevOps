@@ -84,3 +84,7 @@ Use Git history to restore the prior resource file, rerun validation and tests, 
 ## Workspace configuration maintenance
 
 Workspace namespaces, schema versions and limits live in `src/workspace/config.js`. Changing a user-facing limit or format version requires corresponding schema documentation and tests. Do not rename localStorage/IndexedDB keys casually; treat that as a migration. Sensitive-warning patterns require regression tests for false positives, redaction and unsafe complexity. New tool-state fields must remain plain serializable data and must not store rendered HTML or analyzer functions.
+
+## EP-006 container and Kubernetes resources
+
+Routine wording, examples, references, and limitations live in `src/tools/dockerfile`, `src/tools/docker-compose`, and `src/tools/kubernetes-manifest`. Algorithmic checks remain code-and-test changes. Review Docker and Kubernetes official references before changing technical claims. Do not turn local resources into a pretend live schema: cluster-specific API versions, CRDs, policies, defaults and engine behavior require live-system validation and remain explicit limitations.

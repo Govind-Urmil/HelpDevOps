@@ -107,3 +107,11 @@ HelpDevOps cannot publicly launch until the Operations & Troubleshooting Runbook
 - [ ] Clear-all removes HelpDevOps preferences and workspace data
 - [ ] Cross-tab refresh/conflict behavior is verified
 - [ ] Privacy/Terms accurately disclose localStorage, IndexedDB, eviction, private mode and no cloud backup
+
+## EP-006 container/Kubernetes checks
+
+- [ ] Dockerfile Analyzer handles a valid multi-stage example and a malformed instruction.
+- [ ] Docker Compose Analyzer handles a valid services file and shows live-resolution limitations.
+- [ ] Kubernetes Manifest Analyzer handles multi-document YAML and shows cluster-aware validation limitations.
+- [ ] Universal Input routes Dockerfile, Compose and Kubernetes content to the specialized tool.
+- [ ] No tool contacts a Docker engine, registry, Kubernetes cluster, or external analysis service.

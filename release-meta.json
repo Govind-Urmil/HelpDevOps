@@ -1,7 +1,7 @@
 {
   "product": "HelpDevOps",
-  "version": "0.5.0",
-  "ep": "EP-005",
+  "version": "0.6.0",
+  "ep": "EP-006",
   "releaseDate": "2026-07-13",
   "commit": null,
   "status": "implementation-candidate"

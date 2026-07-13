@@ -11,11 +11,11 @@ Trusted, free, privacy-first, browser-based DevOps workspace.
 
 ## Current release candidate
 
-EP-005 / v0.5.0 adds privacy-first local continuity: favorites, recent tool navigation, explicit saved workspaces, versioned local import/export, sensitive-content warnings, cross-tab refresh, and clear local-data controls. Core analysis remains browser-local and works without storage.
+EP-006 / v0.6.0 adds deterministic Dockerfile, Docker Compose, and Kubernetes Manifest analyzers with specialized Universal Input routing and truthful live-engine/cluster limitations.
 
-EP-003 / v0.3.0 remains the deterministic core-tool baseline.
+EP-005 / v0.5.0 remains the completed privacy-first local continuity baseline.
 
-EP-002 / v0.2.0 remains the completed platform-shell and Obsidian Signal baseline.
+EP-004 / v0.4.0 remains the completed developer-essentials and owner-operations baseline.
 
 ## Commands
 

@@ -10,6 +10,8 @@ EP-003 establishes the resource-driven Core Tool Platform. Routine wording, exam
 Every EP that introduces a new operational failure mode must update the Operations & Troubleshooting Runbook before the EP can be considered complete. HelpDevOps cannot go live until the runbook and Production Checklist reflect and have been verified against the real deployed infrastructure.
 
 EP-005 introduces privacy-first local continuity. Tool navigation metadata may be remembered automatically when enabled, but raw DevOps input is saved only through explicit user action. Local data is not cloud backup, and core analysis must remain operational when browser storage is unavailable.
+EP-006 adds bounded container and Kubernetes engineering inspectors. Dockerfile, Compose, and Kubernetes findings are static review signals only; live builds, interpolation, image scanning, cluster schemas, admission, RBAC, CRDs, quotas and runtime state remain outside the browser-only evidence boundary.
+
 
 ## Locked business and repository strategy
 

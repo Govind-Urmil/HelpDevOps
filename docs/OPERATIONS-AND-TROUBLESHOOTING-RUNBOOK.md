@@ -217,3 +217,13 @@ Do not wipe data. Record the stored schema/export version, preserve an export wh
 ### IndexedDB blocked by another tab — P2/P3
 
 Close other HelpDevOps tabs/windows, retry, and verify the operation. The application must report the block rather than hanging or silently deleting data.
+
+## EP-006 container and Kubernetes tool incidents
+
+### Dockerfile/Compose/Kubernetes input parses but a live command fails
+
+Severity: usually P2 or P3 unless the guidance caused material production risk. Owner-safe first checks: preserve the exact input, confirm the HelpDevOps release, review the tool's **What was not checked** section, and reproduce with the authoritative live command (`docker build`, `docker compose config`, server-side Kubernetes validation, or `kubectl diff`) in a safe environment. HelpDevOps static inspection is not proof of engine/cluster acceptance. Add a regression fixture only when the local analyzer made an incorrect supported claim.
+
+### A container/Kubernetes finding is misleading
+
+Treat systematic unsafe or materially wrong guidance as P1-capable. Roll back the HelpDevOps release when necessary, preserve the input, compare with official Docker/Kubernetes documentation and a reproducible environment, correct the rule, add regression coverage, rerun all domain and release checks, and record the incident. Do not weaken limitations to hide the discrepancy.

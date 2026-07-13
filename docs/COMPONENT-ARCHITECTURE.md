@@ -34,3 +34,7 @@ These are disclosed consolidations, not claims that every proposed filename exis
 ## EP-005 additions
 
 `SessionDockShell` is the global explicit-save and local-workspace entry point. The Workspace route owns favorites/recent summaries, import/export, storage controls and destructive actions. `src/workspace/` separates configuration, plain-data models, sensitive-content warnings, import/export validation, storage adapters and cross-tab notifications. `workspace-client.js` coordinates browser-only behavior without making analyzers depend on persistence.
+
+## EP-006 tool routes
+
+The Dockerfile, Docker Compose, and Kubernetes Manifest pages reuse `ProductLayout`/`BaseLayout`, `AnalysisResult`, registry-driven discovery, domain examples/resources, and `data-tool-root`. Their page scripts render only text with DOM `textContent`; analyzers remain independently unit tested.

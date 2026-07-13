@@ -46,10 +46,20 @@ Operational completion rule: every EP that introduces a new operational failure 
 
 ## EP-005 — Privacy-First DevOps Workspace
 
-Status: Implementation candidate; pending independent browser/Lighthouse verification and Product Owner approval.
+Status: Completed, audited, remediated, approved and committed.
 
 Version: v0.5.0.
 
 Purpose: Deliver useful browser-local continuity without automatic raw-input history. Add favorites, recent tool metadata, explicit saved workspaces, versioned import/export, sensitive-content warnings, cross-tab refresh and clear local-data controls while keeping every analysis tool operational when storage is unavailable.
 
-Next: Core implementation verification here, specialized browser/Lighthouse audit by ChatGPT Work, at most one narrow remediation, then owner-controlled commit and push.
+Next: Completed baseline for EP-006 development.
+
+## EP-006 — Container & Kubernetes Engineering Tools
+
+Status: Implementation candidate; pending specialized browser/Lighthouse verification and Product Owner approval.
+
+Version: v0.6.0.
+
+Purpose: Add deterministic Dockerfile, Docker Compose and Kubernetes Manifest analyzers with resource-backed limitations, official references, Universal Input routing, workspace compatibility and no live engine/cluster claims.
+
+Next: Core implementation verification here, narrow environment-specific browser/Lighthouse verification, at most one blocker remediation, then owner-controlled commit and push.

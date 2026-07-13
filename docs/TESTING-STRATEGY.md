@@ -14,3 +14,7 @@ Resource validation, Cron parsing, JSON/YAML parsing, registry integrity, input 
 ## EP-005 coverage
 
 Workspace testing includes preference normalization, favorites/recent metadata boundaries, schema/version validation, revision conflict protection, sensitive-content warnings, import/export validation, unknown tool rejection and size/count limits. Browser verification must cover explicit save/reopen, refresh persistence, local export/import, clear-all, storage denial, cross-tab notifications, mobile/reflow, keyboard/accessibility, and confirmation that core tools remain usable when persistence fails.
+
+## EP-006 coverage
+
+Tests cover Dockerfile instruction/stage parsing and selected review signals; Compose structure, services, privilege, host access and secret-like environment handling; Kubernetes multi-document object identity, common workload structure, selector matching, host/security/resource/probe signals and Secret warnings. Browser coverage should verify the three new routes, Universal Input transfer, explicit workspace restoration, accessibility, mobile/reflow and truthful limitation language.

@@ -30,3 +30,7 @@ Operational knowledge is maintained in `OPERATIONS-AND-TROUBLESHOOTING-RUNBOOK.m
 ## EP-005 local continuity layer
 
 Small non-sensitive preferences use the versioned `helpdevops.preferences.v1` localStorage namespace. Explicitly saved structured workspaces use the native `helpdevops-workspace` IndexedDB database. Core tools do not depend on storage availability. Workspace records contain plain validated data, never DOM/HTML or executable behavior. Transfer state is explicit, same-tab, short-lived sessionStorage data that is consumed and deleted on destination load.
+
+## EP-006 container and Kubernetes domains
+
+Dockerfile, Docker Compose, and Kubernetes Manifest analyzers follow the existing domain-owned analyzer/resource/example pattern. Compose and Kubernetes reuse the reviewed YAML parser with bounded aliases and document counts. No engine, registry, cluster, admission controller, or remote API is contacted. Universal Input sends recognized content to the specialized routes, and every route exposes the shared explicit-workspace contract.

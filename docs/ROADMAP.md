@@ -17,12 +17,12 @@ Completed. Universal Input, resource validation, Cron and JSON/YAML tools.
 Completed, audited, remediated and committed. Encoding/Hash, IPv4 CIDR, Linux Permissions, Git Reference, owner runbook and production checklist.
 
 ### EP-005 — Privacy-First DevOps Workspace
-Implementation candidate for v0.5.0. Session Dock, favorites, recent tool metadata, explicit saved workspaces, local import/export, sensitive-content warnings, cross-tab refresh and local-data controls.
+Completed, audited, remediated and committed as v0.5.0. Session Dock, favorites, recent tool metadata, explicit saved workspaces, local import/export, sensitive-content warnings, cross-tab refresh and local-data controls.
 
 ## Defining product
 
 ### EP-006 — Docker & Kubernetes Engineering Tools
-Deterministic container/Kubernetes utilities that reuse existing evidence, resources and truthful limits.
+Implementation candidate for v0.6.0. Dockerfile, Docker Compose and Kubernetes Manifest analyzers reuse existing evidence, resources, workspace contracts and truthful live-system limits.
 
 ### EP-007 — Diagnostic Platform Foundation
 Diagnostic schemas, stable IDs, typed relationships, safety/risk model, provenance, compatibility, validators, crawlable routes and journey runtime.
