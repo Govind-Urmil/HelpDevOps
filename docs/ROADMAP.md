@@ -22,13 +22,13 @@ Completed, audited, remediated and committed as v0.5.0. Session Dock, favorites,
 ## Defining product
 
 ### EP-006 — Docker & Kubernetes Engineering Tools
-Implementation candidate for v0.6.0. Dockerfile, Docker Compose and Kubernetes Manifest analyzers reuse existing evidence, resources, workspace contracts and truthful live-system limits.
+Completed, independently verified and committed as v0.6.0. Dockerfile, Docker Compose and Kubernetes Manifest analyzers reuse existing evidence, resources, workspace contracts and truthful live-system limits.
 
 ### EP-007 — Diagnostic Platform Foundation
-Diagnostic schemas, stable IDs, typed relationships, safety/risk model, provenance, compatibility, validators, crawlable routes and journey runtime.
+Implementation candidate for v0.7.0. Adds semantic diagnostic validation, crawlable hubs, guided and emergency views, workspace-compatible journey state, and three reviewed pilots: Linux disk full, Docker container exits, and Kubernetes Pod Pending.
 
-### EP-008 — First Diagnostic Journeys
-Five deep pilots: Kubernetes Pod Pending, Linux disk appears full, HTTP 502, Docker container exits immediately and Terraform state lock.
+### EP-008 — Diagnostic Expansion and Output Intelligence
+Add HTTP 502 and Terraform state-lock journeys, selected exact-error and command-output interpretation, stronger internal relationships, and evidence-report foundations after EP-007 pilot review.
 
 ### EP-009 — Exact Error & Output Intelligence
 Exact-error discovery, selected deterministic command-output interpreters, evidence extraction and safe next-command guidance.

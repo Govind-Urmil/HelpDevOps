@@ -18,3 +18,7 @@ Workspace testing includes preference normalization, favorites/recent metadata b
 ## EP-006 coverage
 
 Tests cover Dockerfile instruction/stage parsing and selected review signals; Compose structure, services, privilege, host access and secret-like environment handling; Kubernetes multi-document object identity, common workload structure, selector matching, host/security/resource/probe signals and Secret warnings. Browser coverage should verify the three new routes, Universal Input transfer, explicit workspace restoration, accessibility, mobile/reflow and truthful limitation language.
+
+## EP-007 diagnostic coverage
+
+Diagnostic tests cover registry publication, stable IDs, broken links, unreachable nodes, required fallback branches, rollback requirements, verification criteria, synthetic fixture policy, compact indexing, route generation, journey progression, emergency view, accessibility and reflow. Automated tests validate structure and behavior; they do not replace independent technical review of operational guidance.

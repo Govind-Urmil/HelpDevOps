@@ -1,5 +1,0 @@
----
-import { navigation, isCurrentRoute } from '../config/site.js';
-const { pathname } = Astro.props;
----
-<nav id="mobile-nav" class="mobile-nav" aria-label="Mobile" hidden><div class="container">{navigation.map(item => <a href={item.href} aria-current={isCurrentRoute(pathname,item.href)?'page':undefined}>{item.label}{item.status && <small>{item.status}</small>}</a>)}</div></nav>

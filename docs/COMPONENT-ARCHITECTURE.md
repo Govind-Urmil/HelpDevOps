@@ -38,3 +38,7 @@ These are disclosed consolidations, not claims that every proposed filename exis
 ## EP-006 tool routes
 
 The Dockerfile, Docker Compose, and Kubernetes Manifest pages reuse `ProductLayout`/`BaseLayout`, `AnalysisResult`, registry-driven discovery, domain examples/resources, and `data-tool-root`. Their page scripts render only text with DOM `textContent`; analyzers remain independently unit tested.
+
+## Diagnostic journey components
+
+`DiagnosticJourney.astro` renders all reviewed journeys from the same records and supports guided and emergency presentations. Journey pages remain crawlable before client enhancement. The component exposes plain form state through the existing workspace contract, so progress is stored only after explicit save.

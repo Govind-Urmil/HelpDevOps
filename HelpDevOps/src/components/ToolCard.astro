@@ -1,4 +1,0 @@
----
-const {tool}=Astro.props;
----
-<article class="card tool-card" data-tool-card={tool.id}><div class="tool-card-head"><span class="capability">{tool.capabilities.join(' · ')}</span><span class:list={['badge',tool.status==='planned'&&'warning']}>{tool.status.toUpperCase()}</span></div><h2>{tool.title}</h2><p>{tool.description}</p>{tool.status==='available'?<div class="tool-card-actions"><a class="button secondary" href={tool.path}>Open tool →</a><button class="button ghost" type="button" data-favorite-tool={tool.id} aria-pressed="false">☆ Favorite</button></div>:<span class="muted">Planned capability</span>}</article>

@@ -16,3 +16,7 @@ EP-006 adds bounded container and Kubernetes engineering inspectors. Dockerfile,
 ## Locked business and repository strategy
 
 HelpDevOps is a mission-first free DevOps problem-solving platform intended to grow through global organic traffic and later generate low-maintenance passive income through restrained AdSense and ethical contextual affiliate partnerships. Monetization remains dormant until meaningful free value and traffic exist and Govind explicitly approves activation. The main HelpDevOps repository remains private; the public website is crawlable, and a carefully scoped public companion repository may be considered later only when growth evidence justifies it.
+
+## EP-007 product foundation
+
+HelpDevOps now includes three reviewed diagnostic pilots. They guide evidence collection and safe next checks but do not inspect live systems or guarantee a cause. Diagnostic pages support the locked mission-first organic-growth strategy because one reviewed resource powers the interactive journey, crawlable summary, search entry, internal linking and future learning reuse.

@@ -56,10 +56,21 @@ Next: Completed baseline for EP-006 development.
 
 ## EP-006 — Container & Kubernetes Engineering Tools
 
-Status: Implementation candidate; pending specialized browser/Lighthouse verification and Product Owner approval.
+Status: Completed, independently verified, approved and committed.
 
 Version: v0.6.0.
 
 Purpose: Add deterministic Dockerfile, Docker Compose and Kubernetes Manifest analyzers with resource-backed limitations, official references, Universal Input routing, workspace compatibility and no live engine/cluster claims.
 
-Next: Core implementation verification here, narrow environment-specific browser/Lighthouse verification, at most one blocker remediation, then owner-controlled commit and push.
+Next: Completed baseline for EP-007 development.
+
+
+## EP-007 — Diagnostic Platform Foundation
+
+Status: Implementation candidate pending specialized browser/Lighthouse and technical-content verification.
+
+Version: v0.7.0.
+
+Purpose: Introduce the smallest reviewed diagnostic knowledge system, semantic validation, crawlable troubleshooting hubs, a shared guided runtime, safety/risk metadata, emergency view, and three pilot journeys without a backend, command execution, AI, ads, or deployment.
+
+Next: Focused environment-specific verification, at most one narrow blocker remediation, then owner approval and commit.

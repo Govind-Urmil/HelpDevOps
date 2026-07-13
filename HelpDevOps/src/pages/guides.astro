@@ -1,5 +1,0 @@
----
-import StatusPage from '../components/StatusPage.astro'; import {pageMetadata as m} from '../config/pages.js';
-const sections=[{label:'LIBRARY STATUS',title:'Guide publishing has not started',text:'No placeholder articles or thin SEO pages are presented as finished guidance.'},{label:'CONTENT CONTRACT',title:'Problem → explanation → solution',text:'Future guides will start with an engineering problem, explain the relevant behavior, provide verifiable steps, disclose limits, and link to useful references.'}];
----
-<StatusPage meta={m.guides} eyebrow="GUIDES" title="Guides" description="Problem-first DevOps guidance will live here after technical review and evidence testing." status="Library pending" sections={sections}/>

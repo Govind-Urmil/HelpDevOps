@@ -115,3 +115,14 @@ HelpDevOps cannot publicly launch until the Operations & Troubleshooting Runbook
 - [ ] Kubernetes Manifest Analyzer handles multi-document YAML and shows cluster-aware validation limitations.
 - [ ] Universal Input routes Dockerfile, Compose and Kubernetes content to the specialized tool.
 - [ ] No tool contacts a Docker engine, registry, Kubernetes cluster, or external analysis service.
+
+## EP-007 diagnostic checks
+
+- [ ] Every published journey has `reviewed` status and current review metadata.
+- [ ] `npm run validate:diagnostics` passes.
+- [ ] Symptom and exact-error search open the correct journey.
+- [ ] Every branch offers an unclear or escalation path.
+- [ ] Higher-risk actions show prerequisites, rollback and verification.
+- [ ] Guided, emergency, previous and restart controls work.
+- [ ] Journey state is not stored until explicit workspace save.
+- [ ] Static summaries, canonical routes, references and sitemap entries are present.

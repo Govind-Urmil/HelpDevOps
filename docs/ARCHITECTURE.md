@@ -34,3 +34,7 @@ Small non-sensitive preferences use the versioned `helpdevops.preferences.v1` lo
 ## EP-006 container and Kubernetes domains
 
 Dockerfile, Docker Compose, and Kubernetes Manifest analyzers follow the existing domain-owned analyzer/resource/example pattern. Compose and Kubernetes reuse the reviewed YAML parser with bounded aliases and document counts. No engine, registry, cluster, admission controller, or remote API is contacted. Universal Input sends recognized content to the specialized routes, and every route exposes the shared explicit-workspace contract.
+
+## EP-007 diagnostic platform
+
+Reviewed diagnostic journeys are static resource bundles under `src/diagnostics/journeys/`. Each bundle owns its metadata, nodes, synthetic examples, and references. The shared renderer consumes explicit next-node relationships. `scripts/validate-diagnostics.mjs` validates safety and relationship invariants and produces compact generated indexes. No graph database, server, live infrastructure connection, or command execution exists.

@@ -1,1 +1,0 @@
-[{"id":"feature-branch","label":"Feature branch","input":"feature/add-login"},{"id":"full-ref","label":"Full ref","input":"refs/heads/main"},{"id":"revision-range","label":"Revision range","input":"main...feature"}]

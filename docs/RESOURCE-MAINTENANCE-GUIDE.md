@@ -88,3 +88,7 @@ Workspace namespaces, schema versions and limits live in `src/workspace/config.j
 ## EP-006 container and Kubernetes resources
 
 Routine wording, examples, references, and limitations live in `src/tools/dockerfile`, `src/tools/docker-compose`, and `src/tools/kubernetes-manifest`. Algorithmic checks remain code-and-test changes. Review Docker and Kubernetes official references before changing technical claims. Do not turn local resources into a pretend live schema: cluster-specific API versions, CRDs, policies, defaults and engine behavior require live-system validation and remain explicit limitations.
+
+## Maintaining diagnostic journeys
+
+Edit the journey-owned JSON files under `src/diagnostics/journeys/<journey>/`. Keep IDs stable. Update review dates, compatibility, limitations and primary references when technical guidance changes. Run `npm run validate:diagnostics`, `npm test`, `npm run build`, and `npm run validate`. Do not publish draft or needs-review content. Extract a shared record only after identical meaning is reused by multiple journeys.

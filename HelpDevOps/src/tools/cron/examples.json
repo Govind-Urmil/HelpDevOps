@@ -1,6 +1,0 @@
-[
-  {"id":"every-five-minutes","label":"Every five minutes","input":"*/5 * * * *"},
-  {"id":"weekday-morning","label":"Weekdays at 09:30","input":"30 9 * * 1-5"},
-  {"id":"daily-backup","label":"Daily command","input":"0 2 * * * /usr/local/bin/backup.sh"},
-  {"id":"hourly-macro","label":"Hourly macro","input":"@hourly"}
-]

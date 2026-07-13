@@ -18,7 +18,7 @@ test('explicit save persists a workspace and reopening restores input only', asy
   await page.goto('/tools/cron/');
   await page.locator('#cron-input').fill('30 9 * * 1-5');
   await page.locator('header [data-session-open]').click();
-  await page.locator('[data-workspace-title]').fill('Weekday schedule');
+  await page.locator('[data-workspace-title-input]').fill('Weekday schedule');
   await page.locator('[data-save-current-tool]').click();
   await expect(page.locator('[data-session-dock] [data-workspace-status]')).toContainText('saved in this browser');
   await page.goto('/workspace/');
@@ -33,7 +33,7 @@ test('private-key material is blocked before saving', async ({ page }) => {
   await page.goto('/tools/structured-data/');
   await page.locator('#structured-input').fill('-----BEGIN PRIVATE KEY-----\nabc\n-----END PRIVATE KEY-----');
   await page.locator('header [data-session-open]').click();
-  await page.locator('[data-workspace-title]').fill('Unsafe content');
+  await page.locator('[data-workspace-title-input]').fill('Unsafe content');
   page.once('dialog', async dialog => { expect(dialog.message()).toContain('private-key material'); await dialog.accept(); });
   await page.locator('[data-save-current-tool]').click();
   await expect(page.locator('[data-session-dock] [data-workspace-status]')).toContainText('cannot be saved');
@@ -44,7 +44,7 @@ test('private-key material is blocked before saving', async ({ page }) => {
 test('export is local and clear-all removes workspace data', async ({ page }) => {
   await page.goto('/tools/ipv4-cidr/');
   await page.locator('header [data-session-open]').click();
-  await page.locator('[data-workspace-title]').fill('Subnet review');
+  await page.locator('[data-workspace-title-input]').fill('Subnet review');
   await page.locator('[data-save-current-tool]').click();
   await page.goto('/workspace/');
   const downloadPromise = page.waitForEvent('download');
@@ -84,7 +84,7 @@ test('saved workspace can be renamed, duplicated, and deleted', async ({ page })
   await page.goto('/tools/cron/');
   await page.locator('#cron-input').fill('15 8 * * 1-5');
   await page.locator('header [data-session-open]').click();
-  await page.locator('[data-workspace-title]').fill('Lifecycle workspace');
+  await page.locator('[data-workspace-title-input]').fill('Lifecycle workspace');
   await page.locator('[data-save-current-tool]').click();
   await page.goto('/workspace/');
 
@@ -130,7 +130,7 @@ test('Universal Input transfer can be explicitly saved and restored without exte
   await expect(page).toHaveURL(/\/tools\/cron\/$/);
   await expect(page.locator('#cron-input')).toHaveValue('*/12 * * * *');
   await page.locator('header [data-session-open]').click();
-  await page.locator('[data-workspace-title]').fill('Transferred cron');
+  await page.locator('[data-workspace-title-input]').fill('Transferred cron');
   await page.locator('[data-save-current-tool]').click();
   await page.goto('/workspace/');
   await page.locator('[data-workspace-open]').click();

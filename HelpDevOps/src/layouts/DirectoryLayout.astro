@@ -1,5 +1,0 @@
----
-import BaseLayout from './BaseLayout.astro';import Breadcrumbs from '../components/Breadcrumbs.astro';import PageHeader from '../components/PageHeader.astro';
-const {meta,eyebrow,title,description,status,crumbs}=Astro.props;
----
-<BaseLayout {...meta} breadcrumbs={crumbs}><Breadcrumbs items={crumbs}/><PageHeader {eyebrow} {title} {description} {status}/><section class="section directory-surface"><div class="container reading"><slot /></div></section></BaseLayout>

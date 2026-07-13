@@ -1,8 +1,0 @@
-{
-  "schemaVersion":"1.0.0","resourceVersion":"1.0.0","tool":"structured-data",
-  "references":[
-    {"id":"json-rfc8259","publisher":"IETF","title":"RFC 8259 — The JavaScript Object Notation Data Interchange Format","sourceType":"standard","url":"https://www.rfc-editor.org/rfc/rfc8259"},
-    {"id":"yaml-1-2-2","publisher":"YAML Language Development Team","title":"YAML 1.2.2 Specification","sourceType":"specification","url":"https://yaml.org/spec/1.2.2/"}
-  ],
-  "limitations":["JSON duplicate keys are not detected by the native parser.","Parsing does not prove that a configuration is semantically valid for another product.","Kubernetes and Docker Compose inputs are classified only; detailed validation is not performed."]
-}

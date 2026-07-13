@@ -1,9 +1,10 @@
 ---
-import SearchInput from './SearchInput.astro';import SearchResult from './SearchResult.astro';import {tools} from '../config/tools.js';
+import SearchInput from './SearchInput.astro';import SearchResult from './SearchResult.astro';import {tools} from '../config/tools.js';import {publishedJourneys} from '../diagnostics/registry.js';
 const index=[
   ['Command Center','Private DevOps task starting point','/'],['Tools','Available and planned tool directory','/tools/'],
   ...tools.map(tool=>[tool.title,[tool.description,...tool.aliases,tool.category,...tool.capabilities].join(' '),tool.path]),
-  ['Workspace','Privacy-first local favorites, recent tools, saved workspaces, import and export','/workspace/'],['Preflight','Cross-file workflow preview','/preflight/'],
+  ...publishedJourneys.map(journey=>[journey.title,[journey.summary,...journey.aliases,...journey.exactErrors,journey.domain].join(' '),journey.path]),
+  ['Troubleshoot','Reviewed symptom-first diagnostic journeys','/troubleshoot/'],['Workspace','Privacy-first local favorites, recent tools, saved workspaces, import and export','/workspace/'],['Preflight','Cross-file workflow preview','/preflight/'],
   ['Guides','Problem-first guidance status','/guides/'],['References','Concise reference status','/references/'],
   ['Privacy','Input and privacy behavior','/privacy/'],['About','Mission and architecture','/about/']
 ];

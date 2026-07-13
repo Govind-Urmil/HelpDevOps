@@ -1,13 +1,14 @@
 export const site = {
   name: 'HelpDevOps',
   url: 'https://helpdevops.example',
-  version: '0.6.0',
-  ep: 'EP-006',
-  description: 'A privacy-first DevOps problem-solving workspace with deterministic container and Kubernetes engineering tools.'
+  version: '0.7.0',
+  ep: 'EP-007',
+  description: 'A privacy-first DevOps problem-solving workspace with deterministic tools and reviewed diagnostic journeys.'
 };
 
 export const navigation = [
   { label: 'Tools', href: '/tools/' },
+  { label: 'Troubleshoot', href: '/troubleshoot/' },
   { label: 'Workspace', href: '/workspace/' },
   { label: 'Preflight', href: '/preflight/', status: 'In development' },
   { label: 'Guides', href: '/guides/' },

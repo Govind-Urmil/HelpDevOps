@@ -6,10 +6,13 @@ import { createWorkspaceExport, parseWorkspaceImport, mergeImportedWorkspaces } 
 import { loadPreferences, savePreferences, openWorkspaceDatabase, listWorkspaces, putWorkspace, deleteWorkspace, replaceWorkspaces, clearWorkspaceDatabase, clearPreferences } from '../workspace/storage.js';
 import { createWorkspaceChannel } from '../workspace/channel.js';
 import { site } from '../config/site.js';
+import { publishedJourneys } from '../diagnostics/registry.js';
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const toolByPath = tools.find(tool => tool.status === 'available' && location.pathname === tool.path);
+const journeyByPath = publishedJourneys.find(journey => location.pathname === journey.path);
+const currentEntity = toolByPath || (journeyByPath ? {id:journeyByPath.id,title:journeyByPath.title,path:journeyByPath.path,status:'available'} : null);
 let preferences = loadPreferences();
 let dbPromise;
 const db = () => {
@@ -40,7 +43,7 @@ function renderFavoriteButtons() {
 }
 
 function collectCurrentToolState() {
-  if (!toolByPath) return null;
+  if (!currentEntity) return null;
   const root = $('[data-tool-root]');
   if (!root) return null;
   const input = {};
@@ -52,7 +55,7 @@ function collectCurrentToolState() {
       input[key] = element.type === 'checkbox' ? element.checked : element.value;
     } else input[key] = element.value;
   });
-  return { toolId:toolByPath.id, toolSchemaVersion:1, input, options:{ sourcePath:location.pathname }, resultSnapshot:null };
+  return { toolId:currentEntity.id, toolSchemaVersion:1, input, options:{ sourcePath:location.pathname, entityType:journeyByPath?'diagnostic-journey':'tool' }, resultSnapshot:null };
 }
 
 function describeWarnings(warnings) {
@@ -70,8 +73,8 @@ async function saveCurrentTool() {
     return;
   }
   if (warnings.length && !confirm(`Possible sensitive content was found. Detection is incomplete. Redact secrets before saving.\n\n${describeWarnings(warnings)}\n\nSave anyway?`)) return;
-  const titleInput = $('[data-workspace-title]');
-  const title = titleInput?.value.trim() || `${toolByPath.title} workspace`;
+  const titleInput = $('[data-workspace-title-input]');
+  const title = titleInput?.value.trim() || `${currentEntity.title} workspace`;
   if (!title) return setStatus('Enter a workspace title.', 'warning');
   try {
     const database = await db();
@@ -149,7 +152,7 @@ async function renderWorkspaceList() {
     $$('[data-workspace-open]', list).forEach(button => button.onclick = () => {
       const record = records.find(item => item.id === button.dataset.workspaceOpen);
       const state = record?.toolStates?.[0];
-      const target = tools.find(tool => tool.id === state?.toolId && tool.status === 'available');
+      const target = tools.find(tool => tool.id === state?.toolId && tool.status === 'available') || publishedJourneys.find(journey=>journey.id===state?.toolId);
       if (!state || !target) return setStatus('This workspace references an unavailable tool.', 'warning');
       sessionStorage.setItem('helpdevops.transfer.v1', JSON.stringify({ contractVersion:1, source:'saved-workspace', workspaceId:record.id, state }));
       location.href = target.path;
@@ -229,11 +232,11 @@ function renderNavigationLists() {
 }
 
 function applyPendingTransfer() {
-  if (!toolByPath) return;
+  if (!currentEntity) return;
   let transfer;
   try { transfer = JSON.parse(sessionStorage.getItem('helpdevops.transfer.v1') || 'null'); } catch { transfer = null; }
   sessionStorage.removeItem('helpdevops.transfer.v1');
-  if (!transfer?.state || transfer.state.toolId !== toolByPath.id) return;
+  if (!transfer?.state || transfer.state.toolId !== currentEntity.id) return;
   const root = $('[data-tool-root]'); if (!root) return;
   const inputs = transfer.state.input || {};
   $$('input, textarea, select', root).forEach((element,index) => {
@@ -267,9 +270,9 @@ $$('[data-preference-toggle]').forEach(control => control.addEventListener('chan
 $('[data-import-file]')?.addEventListener('change', event => importFile(event.target.files?.[0], $('[data-import-mode]')?.value || 'merge'));
 $('[data-dock-collapse]')?.addEventListener('click', () => { preferences.sessionDock.collapsed = !preferences.sessionDock.collapsed; persistPreferences(preferences); renderDock(); });
 
-if (toolByPath) {
-  persistPreferences(recordRecentTool(preferences, toolByPath.id));
-  document.documentElement.dataset.currentTool = toolByPath.id;
+if (currentEntity) {
+  if(toolByPath) persistPreferences(recordRecentTool(preferences, toolByPath.id));
+  document.documentElement.dataset.currentTool = currentEntity.id;
 }
 applyPendingTransfer();
 refreshWorkspaceUI();
