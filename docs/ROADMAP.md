@@ -73,3 +73,7 @@ Use real traffic, returning-user, search and revenue evidence to decide the next
 ## Permanent launch gate
 
 HelpDevOps cannot go live until the Operations & Troubleshooting Runbook and Production Checklist are verified against the actual private repository, deployment provider/workflow, production branch, domain, DNS, TLS, rollback process and production tools.
+
+
+### EP-008 — Diagnostic Expansion I
+Implementation candidate for v0.8.0 with five high-intent reviewed journeys.

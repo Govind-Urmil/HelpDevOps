@@ -1,6 +1,6 @@
 import {test,expect} from '@playwright/test';
 import AxeBuilder from '@axe-core/playwright';
-const routes=['/troubleshoot/linux/disk-full/','/troubleshoot/docker/container-exits-immediately/','/troubleshoot/kubernetes/pod-pending/'];
+const routes=['/troubleshoot/linux/disk-full/','/troubleshoot/docker/container-exits-immediately/','/troubleshoot/kubernetes/pod-pending/','/troubleshoot/kubernetes/crashloopbackoff/','/troubleshoot/terraform/state-lock/','/troubleshoot/http/502-bad-gateway/','/troubleshoot/docker/disk-usage/','/troubleshoot/linux/service-wont-start/'];
 
 test('diagnostic hubs and journeys are crawlable',async({page})=>{
   await page.goto('/troubleshoot/');await expect(page.getByRole('heading',{name:'Find the safest next check'})).toBeVisible();

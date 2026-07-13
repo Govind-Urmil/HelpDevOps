@@ -11,7 +11,7 @@ Trusted, free, privacy-first, browser-based DevOps workspace.
 
 ## Current release candidate
 
-EP-007 / v0.7.0 adds the first reviewed diagnostic platform: crawlable troubleshooting hubs, guided evidence-first journeys, explicit safety labels, emergency view, and three pilot journeys for Linux disk pressure, Docker container exits, and Kubernetes Pod Pending.
+EP-008 / v0.8.0 expands the reviewed diagnostic platform to eight high-intent journeys.
 
 EP-006 / v0.6.0 remains the completed container and Kubernetes engineering baseline.
 

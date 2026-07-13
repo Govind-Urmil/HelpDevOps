@@ -92,3 +92,7 @@ Routine wording, examples, references, and limitations live in `src/tools/docker
 ## Maintaining diagnostic journeys
 
 Edit the journey-owned JSON files under `src/diagnostics/journeys/<journey>/`. Keep IDs stable. Update review dates, compatibility, limitations and primary references when technical guidance changes. Run `npm run validate:diagnostics`, `npm test`, `npm run build`, and `npm run validate`. Do not publish draft or needs-review content. Extract a shared record only after identical meaning is reused by multiple journeys.
+
+
+## Maintaining EP-008 journeys
+Update `src/diagnostics/journeys/<journey>/`, keep aliases conservative and references current, then run diagnostic validation, tests, build and snapshot checks.

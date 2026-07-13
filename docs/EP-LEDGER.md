@@ -74,3 +74,12 @@ Version: v0.7.0.
 Purpose: Introduce the smallest reviewed diagnostic knowledge system, semantic validation, crawlable troubleshooting hubs, a shared guided runtime, safety/risk metadata, emergency view, and three pilot journeys without a backend, command execution, AI, ads, or deployment.
 
 Next: Focused environment-specific verification, at most one narrow blocker remediation, then owner approval and commit.
+
+
+## EP-008 — Diagnostic Expansion I: High-Intent Failures
+
+Status: Implementation candidate pending focused independent/environment verification.
+
+Version: v0.8.0.
+
+Purpose: Expand to eight reviewed journeys with CrashLoopBackOff, Terraform lock, HTTP 502, Docker disk usage and systemd startup failure.

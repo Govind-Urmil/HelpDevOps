@@ -1,0 +1,50 @@
+{
+  "id": "journey-http-502",
+  "slug": "502-bad-gateway",
+  "domain": "http",
+  "title": "HTTP 502 Bad Gateway",
+  "summary": "Identify the gateway that generated the 502, then inspect the immediately upstream hop.",
+  "aliases": [
+    "502 bad gateway",
+    "http 502",
+    "upstream invalid response"
+  ],
+  "exactErrors": [
+    "502 Bad Gateway",
+    "upstream prematurely closed connection",
+    "no live upstreams"
+  ],
+  "status": "reviewed",
+  "entryNodeId": "http-start",
+  "reviewedAt": "2026-07-13",
+  "reviewDue": "2026-10-13",
+  "riskProfile": "read-only-first",
+  "compatibility": {
+    "technology": "HTTP",
+    "appliesGenerally": true,
+    "reviewedAgainst": [
+      "RFC 9110",
+      "Gateway/reverse-proxy architectures"
+    ],
+    "limitations": [
+      "Products may use 502 for implementation-specific failures.",
+      "No proxy, DNS, TLS or application is inspected."
+    ]
+  },
+  "whatItDoesNotProve": [
+    "A 502 does not prove the application is fully offline.",
+    "It is distinct from 503 and 504."
+  ],
+  "firstChecks": [
+    "Identify the generating intermediary",
+    "Inspect its error log",
+    "Test the immediate upstream from that environment"
+  ],
+  "relatedToolIds": [
+    "ipv4-cidr"
+  ],
+  "references": [
+    "http-rfc",
+    "nginx-up"
+  ]
+}

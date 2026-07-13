@@ -146,5 +146,251 @@
     "path": "/troubleshoot/kubernetes/pod-pending/",
     "nodeCount": 17,
     "referenceCount": 3
+  },
+  {
+    "id": "journey-kubernetes-crashloopbackoff",
+    "slug": "crashloopbackoff",
+    "domain": "kubernetes",
+    "title": "Kubernetes CrashLoopBackOff",
+    "summary": "Determine why a container repeatedly exits before changing probes, resources, commands, or restart behavior.",
+    "aliases": [
+      "crashloopbackoff",
+      "container crash loop",
+      "pod restarting repeatedly"
+    ],
+    "exactErrors": [
+      "CrashLoopBackOff",
+      "Back-off restarting failed container"
+    ],
+    "status": "reviewed",
+    "entryNodeId": "crash-start",
+    "reviewedAt": "2026-07-13",
+    "reviewDue": "2026-10-13",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "Kubernetes",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "1.34",
+        "1.35",
+        "1.36"
+      ],
+      "limitations": [
+        "Managed platforms and runtimes may add provider-specific evidence.",
+        "No live cluster, admission, or CRD validation is performed."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "CrashLoopBackOff is a backoff condition, not the root cause.",
+      "A running container does not prove application health."
+    ],
+    "firstChecks": [
+      "kubectl get pod <pod> -n <namespace>",
+      "kubectl describe pod <pod> -n <namespace>",
+      "kubectl logs <pod> -n <namespace> -c <container> --previous"
+    ],
+    "relatedToolIds": [
+      "kubernetes-manifest"
+    ],
+    "path": "/troubleshoot/kubernetes/crashloopbackoff/",
+    "nodeCount": 11,
+    "referenceCount": 3
+  },
+  {
+    "id": "journey-terraform-state-lock",
+    "slug": "state-lock",
+    "domain": "terraform",
+    "title": "Terraform state-lock failure",
+    "summary": "Determine whether a lock is active, stale, backend-specific, or caused by connectivity before any unlock.",
+    "aliases": [
+      "terraform state lock",
+      "error acquiring the state lock",
+      "state is locked"
+    ],
+    "exactErrors": [
+      "Error acquiring the state lock",
+      "state blob is already locked",
+      "Terraform state lock ConditionalCheckFailedException"
+    ],
+    "status": "reviewed",
+    "entryNodeId": "tf-start",
+    "reviewedAt": "2026-07-13",
+    "reviewDue": "2026-10-13",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "Terraform",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Terraform CLI 1.x",
+        "HCP Terraform concepts",
+        "Backend-specific locking"
+      ],
+      "limitations": [
+        "Recovery differs by backend.",
+        "No state, run, or backend is inspected."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "A lock error does not prove a stale lock.",
+      "Lock age alone does not prove no run is active."
+    ],
+    "firstChecks": [
+      "Identify backend and workspace",
+      "Check CI and remote-run activity",
+      "Record redacted lock metadata"
+    ],
+    "relatedToolIds": [
+      "structured-data"
+    ],
+    "path": "/troubleshoot/terraform/state-lock/",
+    "nodeCount": 16,
+    "referenceCount": 5
+  },
+  {
+    "id": "journey-http-502",
+    "slug": "502-bad-gateway",
+    "domain": "http",
+    "title": "HTTP 502 Bad Gateway",
+    "summary": "Identify the gateway that generated the 502, then inspect the immediately upstream hop.",
+    "aliases": [
+      "502 bad gateway",
+      "http 502",
+      "upstream invalid response"
+    ],
+    "exactErrors": [
+      "502 Bad Gateway",
+      "upstream prematurely closed connection",
+      "no live upstreams"
+    ],
+    "status": "reviewed",
+    "entryNodeId": "http-start",
+    "reviewedAt": "2026-07-13",
+    "reviewDue": "2026-10-13",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "HTTP",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "RFC 9110",
+        "Gateway/reverse-proxy architectures"
+      ],
+      "limitations": [
+        "Products may use 502 for implementation-specific failures.",
+        "No proxy, DNS, TLS or application is inspected."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "A 502 does not prove the application is fully offline.",
+      "It is distinct from 503 and 504."
+    ],
+    "firstChecks": [
+      "Identify the generating intermediary",
+      "Inspect its error log",
+      "Test the immediate upstream from that environment"
+    ],
+    "relatedToolIds": [
+      "ipv4-cidr"
+    ],
+    "path": "/troubleshoot/http/502-bad-gateway/",
+    "nodeCount": 11,
+    "referenceCount": 2
+  },
+  {
+    "id": "journey-docker-disk-usage",
+    "slug": "disk-usage",
+    "domain": "docker",
+    "title": "Docker disk usage excessive",
+    "summary": "Separate host filesystem, Docker data-root, images, containers, build cache, volumes and logs before pruning.",
+    "aliases": [
+      "docker disk usage",
+      "docker storage full",
+      "docker no space"
+    ],
+    "exactErrors": [
+      "Docker disk usage excessive",
+      "docker system df"
+    ],
+    "status": "reviewed",
+    "entryNodeId": "dockdisk-start",
+    "reviewedAt": "2026-07-13",
+    "reviewDue": "2026-10-13",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "Docker",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Docker Engine CLI",
+        "Buildx where available"
+      ],
+      "limitations": [
+        "Docker Desktop/VM storage may release host space differently.",
+        "No daemon is inspected and volume data importance is unknown."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "Reclaimable does not mean unimportant.",
+      "Host usage may be outside Docker."
+    ],
+    "firstChecks": [
+      "df -h",
+      "docker info",
+      "docker system df -v"
+    ],
+    "relatedToolIds": [
+      "dockerfile",
+      "docker-compose"
+    ],
+    "path": "/troubleshoot/docker/disk-usage/",
+    "nodeCount": 12,
+    "referenceCount": 4
+  },
+  {
+    "id": "journey-linux-systemd-service-start",
+    "slug": "service-wont-start",
+    "domain": "linux",
+    "title": "systemd service will not start",
+    "summary": "Use service state, journal, effective unit and dependencies before restarting or weakening controls.",
+    "aliases": [
+      "systemd service failed",
+      "service will not start",
+      "failed to start service"
+    ],
+    "exactErrors": [
+      "Failed to start",
+      "start request repeated too quickly",
+      "Unit entered failed state"
+    ],
+    "status": "reviewed",
+    "entryNodeId": "sys-start",
+    "reviewedAt": "2026-07-13",
+    "reviewDue": "2026-10-13",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "systemd",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "systemctl/journalctl",
+        "Linux service units"
+      ],
+      "limitations": [
+        "Distribution packaging, names and security controls vary.",
+        "No host or app config is inspected."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "Failed state is not necessarily the root cause.",
+      "reset-failed clears state/counters only."
+    ],
+    "firstChecks": [
+      "systemctl status <service> --no-pager",
+      "journalctl -u <service> -b --no-pager",
+      "systemctl cat <service>"
+    ],
+    "relatedToolIds": [
+      "linux-permissions"
+    ],
+    "path": "/troubleshoot/linux/service-wont-start/",
+    "nodeCount": 12,
+    "referenceCount": 3
   }
 ]

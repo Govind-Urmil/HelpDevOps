@@ -1,0 +1,303 @@
+[
+  {
+    "id": "dockdisk-start",
+    "nodeKind": "question",
+    "title": "Which layer dominates usage?",
+    "summary": "Compare host, data root and Docker accounting.",
+    "why": "Wrong-layer cleanup is unsafe.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "df -h",
+        "purpose": "Show host capacity."
+      },
+      {
+        "command": "docker info --format '{{.DockerRootDir}}'",
+        "purpose": "Show data root."
+      },
+      {
+        "command": "docker system df -v",
+        "purpose": "Break down Docker usage; output may expose internal names."
+      }
+    ],
+    "choices": [
+      {
+        "id": "images",
+        "label": "Images",
+        "nextNodeId": "dockdisk-review"
+      },
+      {
+        "id": "containers",
+        "label": "Containers/writable layers",
+        "nextNodeId": "dockdisk-review"
+      },
+      {
+        "id": "cache",
+        "label": "Build cache",
+        "nextNodeId": "dockdisk-cache"
+      },
+      {
+        "id": "volumes",
+        "label": "Volumes",
+        "nextNodeId": "dockdisk-volume"
+      },
+      {
+        "id": "logs",
+        "label": "Logs",
+        "nextNodeId": "dockdisk-logs"
+      },
+      {
+        "id": "host",
+        "label": "Docker does not explain host use",
+        "nextNodeId": "dockdisk-host"
+      },
+      {
+        "id": "unknown",
+        "label": "Unclear",
+        "nextNodeId": "dockdisk-escalate"
+      }
+    ]
+  },
+  {
+    "id": "dockdisk-review",
+    "nodeKind": "question",
+    "title": "Is the object truly unused and recoverable?",
+    "summary": "Confirm ownership and rebuild/pull/recovery before removal.",
+    "why": "Stopped or unused does not always mean safe.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "safe",
+        "label": "Specific objects reviewed",
+        "nextNodeId": "dockdisk-clean"
+      },
+      {
+        "id": "unsafe",
+        "label": "May be needed",
+        "nextNodeId": "dockdisk-escalate"
+      },
+      {
+        "id": "unknown",
+        "label": "Ownership unclear",
+        "nextNodeId": "dockdisk-escalate"
+      }
+    ]
+  },
+  {
+    "id": "dockdisk-cache",
+    "nodeKind": "question",
+    "title": "Can cache cleanup be bounded?",
+    "summary": "Prefer age/retention filters.",
+    "why": "Removing all cache can disrupt builds.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "docker buildx du",
+        "purpose": "Inspect cache when Buildx exists."
+      }
+    ],
+    "choices": [
+      {
+        "id": "safe",
+        "label": "Bounded cleanup reviewed",
+        "nextNodeId": "dockdisk-cache-clean"
+      },
+      {
+        "id": "unknown",
+        "label": "Unavailable/unclear",
+        "nextNodeId": "dockdisk-escalate"
+      }
+    ]
+  },
+  {
+    "id": "dockdisk-cache-clean",
+    "nodeKind": "action",
+    "title": "Prune only the reviewed builder cache",
+    "summary": "Remove bounded cache only after confirming the selected builder, retention window and rebuild impact.",
+    "why": "Builder prune deletes cache and can slow or disrupt future builds.",
+    "risk": "high-risk",
+    "prerequisites": [
+      "Confirm the selected builder and cache ownership.",
+      "Review the age filter and retained-storage requirement.",
+      "Confirm rebuild cost and CI impact.",
+      "Do not use --force unless an approved automation context requires it."
+    ],
+    "rollback": "Rebuild or repopulate cache; stop cleanup if the selected builder or retention scope is wrong.",
+    "commands": [
+      {
+        "command": "docker builder prune --filter until=24h",
+        "purpose": "Delete only cache older than the reviewed age threshold after interactive confirmation."
+      }
+    ],
+    "choices": [
+      {
+        "id": "done",
+        "label": "Reviewed cache cleanup completed",
+        "nextNodeId": "dockdisk-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Scope is not safe",
+        "nextNodeId": "dockdisk-escalate"
+      }
+    ]
+  },
+  {
+    "id": "dockdisk-volume",
+    "nodeKind": "question",
+    "title": "Is each volume owned, disposable or backed up?",
+    "summary": "Unreferenced volumes can contain important data.",
+    "why": "Deletion may be irreversible.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "safe",
+        "label": "Specific volume reviewed",
+        "nextNodeId": "dockdisk-clean"
+      },
+      {
+        "id": "needed",
+        "label": "Required",
+        "nextNodeId": "dockdisk-escalate"
+      },
+      {
+        "id": "unknown",
+        "label": "Unclear",
+        "nextNodeId": "dockdisk-escalate"
+      }
+    ]
+  },
+  {
+    "id": "dockdisk-logs",
+    "nodeKind": "question",
+    "title": "Is log growth controlled?",
+    "summary": "Inspect logging driver, path and retention.",
+    "why": "Deleting active log files can retain hidden blocks or corrupt assumptions.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "docker inspect --format '{{.HostConfig.LogConfig.Type}} {{.LogPath}}' <container>",
+        "purpose": "Inspect driver/path; redact internal details before sharing."
+      }
+    ],
+    "choices": [
+      {
+        "id": "safe",
+        "label": "Rotation change reviewed",
+        "nextNodeId": "dockdisk-clean"
+      },
+      {
+        "id": "unknown",
+        "label": "Unclear",
+        "nextNodeId": "dockdisk-escalate"
+      }
+    ]
+  },
+  {
+    "id": "dockdisk-host",
+    "nodeKind": "interpretation",
+    "title": "Docker is not the only storage consumer",
+    "summary": "Use the Linux disk-full journey on the actual backing filesystem.",
+    "why": "Snapshots, sparse/VM files and other services may dominate.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "found",
+        "label": "Source found",
+        "nextNodeId": "dockdisk-host-followup"
+      },
+      {
+        "id": "unknown",
+        "label": "Unclear",
+        "nextNodeId": "dockdisk-escalate"
+      }
+    ]
+  },
+  {
+    "id": "dockdisk-host-followup",
+    "nodeKind": "escalation",
+    "title": "Continue with the Linux filesystem diagnosis",
+    "summary": "The dominant usage is outside Docker accounting. Use the reviewed Linux disk-full journey for the affected filesystem instead of removing Docker objects.",
+    "risk": "read-only"
+  },
+  {
+    "id": "dockdisk-clean",
+    "nodeKind": "action",
+    "title": "Apply one scoped cleanup or retention change",
+    "summary": "Remove only reviewed objects or adjust bounded retention.",
+    "why": "Broad prune can remove useful data.",
+    "risk": "high-risk",
+    "prerequisites": [
+      "Confirm owner and recovery.",
+      "Assess workloads/builds.",
+      "Back up important volumes."
+    ],
+    "rollback": "Restore backups, repull/rebuild images, or revert retention config.",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Completed",
+        "nextNodeId": "dockdisk-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Not safe",
+        "nextNodeId": "dockdisk-escalate"
+      }
+    ]
+  },
+  {
+    "id": "dockdisk-verify",
+    "nodeKind": "verification",
+    "title": "Verify Docker and host capacity",
+    "summary": "Confirm the original symptom is resolved and remains stable.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "docker system df -v",
+        "purpose": "Confirm Docker usage."
+      },
+      {
+        "command": "df -h",
+        "purpose": "Confirm host space."
+      }
+    ],
+    "verification": [
+      "Expected usage decreases.",
+      "Host behavior is understood.",
+      "Required objects remain.",
+      "Workloads/builds remain healthy."
+    ],
+    "choices": [
+      {
+        "id": "resolved",
+        "label": "Stable",
+        "nextNodeId": "dockdisk-complete"
+      },
+      {
+        "id": "not-resolved",
+        "label": "Still excessive",
+        "nextNodeId": "dockdisk-escalate"
+      }
+    ]
+  },
+  {
+    "id": "dockdisk-complete",
+    "nodeKind": "completion",
+    "title": "Storage recovery verified",
+    "summary": "Recovery is verified; record cause and prevention work.",
+    "risk": "read-only",
+    "prevention": [
+      "Bound cache/log retention.",
+      "Monitor data root and host separately.",
+      "Document image/volume ownership."
+    ]
+  },
+  {
+    "id": "dockdisk-escalate",
+    "nodeKind": "escalation",
+    "title": "Escalate without broad prune",
+    "summary": "Share redacted filesystem, data-root, Docker accounting, logging, cache and volume-ownership evidence.",
+    "risk": "read-only"
+  }
+]

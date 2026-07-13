@@ -1,0 +1,52 @@
+{
+  "id": "journey-docker-disk-usage",
+  "slug": "disk-usage",
+  "domain": "docker",
+  "title": "Docker disk usage excessive",
+  "summary": "Separate host filesystem, Docker data-root, images, containers, build cache, volumes and logs before pruning.",
+  "aliases": [
+    "docker disk usage",
+    "docker storage full",
+    "docker no space"
+  ],
+  "exactErrors": [
+    "Docker disk usage excessive",
+    "docker system df"
+  ],
+  "status": "reviewed",
+  "entryNodeId": "dockdisk-start",
+  "reviewedAt": "2026-07-13",
+  "reviewDue": "2026-10-13",
+  "riskProfile": "read-only-first",
+  "compatibility": {
+    "technology": "Docker",
+    "appliesGenerally": true,
+    "reviewedAgainst": [
+      "Docker Engine CLI",
+      "Buildx where available"
+    ],
+    "limitations": [
+      "Docker Desktop/VM storage may release host space differently.",
+      "No daemon is inspected and volume data importance is unknown."
+    ]
+  },
+  "whatItDoesNotProve": [
+    "Reclaimable does not mean unimportant.",
+    "Host usage may be outside Docker."
+  ],
+  "firstChecks": [
+    "df -h",
+    "docker info",
+    "docker system df -v"
+  ],
+  "relatedToolIds": [
+    "dockerfile",
+    "docker-compose"
+  ],
+  "references": [
+    "docker-df",
+    "docker-prune",
+    "docker-vol",
+    "docker-builder"
+  ]
+}

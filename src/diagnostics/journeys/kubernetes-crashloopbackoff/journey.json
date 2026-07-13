@@ -1,0 +1,51 @@
+{
+  "id": "journey-kubernetes-crashloopbackoff",
+  "slug": "crashloopbackoff",
+  "domain": "kubernetes",
+  "title": "Kubernetes CrashLoopBackOff",
+  "summary": "Determine why a container repeatedly exits before changing probes, resources, commands, or restart behavior.",
+  "aliases": [
+    "crashloopbackoff",
+    "container crash loop",
+    "pod restarting repeatedly"
+  ],
+  "exactErrors": [
+    "CrashLoopBackOff",
+    "Back-off restarting failed container"
+  ],
+  "status": "reviewed",
+  "entryNodeId": "crash-start",
+  "reviewedAt": "2026-07-13",
+  "reviewDue": "2026-10-13",
+  "riskProfile": "read-only-first",
+  "compatibility": {
+    "technology": "Kubernetes",
+    "appliesGenerally": true,
+    "reviewedAgainst": [
+      "1.34",
+      "1.35",
+      "1.36"
+    ],
+    "limitations": [
+      "Managed platforms and runtimes may add provider-specific evidence.",
+      "No live cluster, admission, or CRD validation is performed."
+    ]
+  },
+  "whatItDoesNotProve": [
+    "CrashLoopBackOff is a backoff condition, not the root cause.",
+    "A running container does not prove application health."
+  ],
+  "firstChecks": [
+    "kubectl get pod <pod> -n <namespace>",
+    "kubectl describe pod <pod> -n <namespace>",
+    "kubectl logs <pod> -n <namespace> -c <container> --previous"
+  ],
+  "relatedToolIds": [
+    "kubernetes-manifest"
+  ],
+  "references": [
+    "k8s-life",
+    "k8s-debug",
+    "k8s-failure"
+  ]
+}

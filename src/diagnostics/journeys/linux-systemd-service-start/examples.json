@@ -1,0 +1,11 @@
+[
+  {
+    "id": "sys-example",
+    "label": "Failed unit",
+    "input": "example.service: Failed with result exit-code.",
+    "fixtureType": "synthetic",
+    "containsRealEnvironmentData": false,
+    "source": "HelpDevOps-authored",
+    "reviewedAt": "2026-07-13"
+  }
+]

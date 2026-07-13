@@ -233,3 +233,7 @@ Treat systematic unsafe or materially wrong guidance as P1-capable. Roll back th
 Treat a systematically misleading diagnostic branch as a potential P1 correctness incident. Preserve the journey URL, selected answers, displayed command, affected release and authoritative counter-evidence. Disable or roll back the reviewed journey if necessary while leaving existing tools operational. Correct the resource, add a regression fixture, rerun diagnostic validation and technical review, then verify search, guided flow, emergency view, workspace restoration and static page content.
 
 If a journey does not advance, first confirm JavaScript loaded without console errors, then validate node IDs and relationships with `npm run validate:diagnostics`. If the static summary loads but choices fail, restore the previous known-good release rather than editing production files.
+
+
+## EP-008 diagnostic incidents
+Treat unsafe unlock, destructive cleanup, weakened probes/security, or misleading HTTP-layer guidance as potentially P1. Preserve the failing path, roll back if needed, correct the resource and add a regression.

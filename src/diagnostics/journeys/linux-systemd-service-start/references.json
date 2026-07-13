@@ -1,0 +1,20 @@
+[
+  {
+    "id": "systemctl",
+    "title": "systemctl manual",
+    "url": "https://www.freedesktop.org/software/systemd/man/latest/systemctl.html",
+    "type": "official"
+  },
+  {
+    "id": "service",
+    "title": "systemd.service manual",
+    "url": "https://www.freedesktop.org/software/systemd/man/latest/systemd.service.html",
+    "type": "official"
+  },
+  {
+    "id": "journal",
+    "title": "journalctl manual",
+    "url": "https://www.freedesktop.org/software/systemd/man/latest/journalctl.html",
+    "type": "official"
+  }
+]

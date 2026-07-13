@@ -1,0 +1,318 @@
+[
+  {
+    "id": "sys-start",
+    "nodeKind": "question",
+    "title": "What state is reported?",
+    "summary": "Distinguish missing/masked from failed or rate-limited.",
+    "why": "Each requires different evidence.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "systemctl status <service> --no-pager",
+        "purpose": "Show state and exit status."
+      },
+      {
+        "command": "journalctl -u <service> -b --no-pager",
+        "purpose": "Read current-boot logs; access may require privileges."
+      }
+    ],
+    "choices": [
+      {
+        "id": "missing",
+        "label": "Not found/masked",
+        "nextNodeId": "sys-unit"
+      },
+      {
+        "id": "failed",
+        "label": "Failed",
+        "nextNodeId": "sys-failure"
+      },
+      {
+        "id": "limit",
+        "label": "Start limit",
+        "nextNodeId": "sys-limit"
+      },
+      {
+        "id": "unknown",
+        "label": "Unclear",
+        "nextNodeId": "sys-escalate"
+      }
+    ]
+  },
+  {
+    "id": "sys-unit",
+    "nodeKind": "question",
+    "title": "Is the unit correctly installed, named and intentionally available?",
+    "summary": "Check package, aliases, templates and mask reason.",
+    "why": "Blind unmasking can bypass control.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "systemctl list-unit-files | grep <service>",
+        "purpose": "Inspect known unit files."
+      }
+    ],
+    "choices": [
+      {
+        "id": "found",
+        "label": "Name/package/stale mask issue proven",
+        "nextNodeId": "sys-change"
+      },
+      {
+        "id": "intentional",
+        "label": "Intentional mask",
+        "nextNodeId": "sys-escalate"
+      },
+      {
+        "id": "unknown",
+        "label": "Unclear",
+        "nextNodeId": "sys-escalate"
+      }
+    ]
+  },
+  {
+    "id": "sys-failure",
+    "nodeKind": "question",
+    "title": "Which concrete failure appears first?",
+    "summary": "Inspect effective unit and result fields.",
+    "why": "Repeated restarts can hide the original cause.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "systemctl cat <service>",
+        "purpose": "Show effective unit/drop-ins."
+      },
+      {
+        "command": "systemctl show <service> -p Result -p ExecMainCode -p ExecMainStatus -p FragmentPath -p DropInPaths",
+        "purpose": "Show result/config paths."
+      }
+    ],
+    "choices": [
+      {
+        "id": "config",
+        "label": "Exec/config/env/user/path/timeout/type issue",
+        "nextNodeId": "sys-config"
+      },
+      {
+        "id": "port",
+        "label": "Port/socket conflict",
+        "nextNodeId": "sys-port"
+      },
+      {
+        "id": "dependency",
+        "label": "Dependency failed",
+        "nextNodeId": "sys-dep"
+      },
+      {
+        "id": "security",
+        "label": "Security denial",
+        "nextNodeId": "sys-security"
+      },
+      {
+        "id": "unknown",
+        "label": "Unclear",
+        "nextNodeId": "sys-escalate"
+      }
+    ]
+  },
+  {
+    "id": "sys-limit",
+    "nodeKind": "interpretation",
+    "title": "Restart-rate limit reached",
+    "summary": "Fix the original cause before reset-failed.",
+    "why": "Clearing state does not repair cause.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "fixed",
+        "label": "Original cause fixed",
+        "nextNodeId": "sys-change"
+      },
+      {
+        "id": "unknown",
+        "label": "Cause unknown",
+        "nextNodeId": "sys-escalate"
+      }
+    ]
+  },
+  {
+    "id": "sys-port",
+    "nodeKind": "interpretation",
+    "title": "Port/socket conflict",
+    "summary": "Identify listener and ownership before changes.",
+    "why": "Killing unknown processes can break services.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "ss -lntp",
+        "purpose": "Inspect listeners; process identity may require privileges."
+      }
+    ],
+    "choices": [
+      {
+        "id": "found",
+        "label": "Conflict proven",
+        "nextNodeId": "sys-change"
+      },
+      {
+        "id": "unknown",
+        "label": "Unclear",
+        "nextNodeId": "sys-escalate"
+      }
+    ]
+  },
+  {
+    "id": "sys-dep",
+    "nodeKind": "interpretation",
+    "title": "Required dependency failed",
+    "summary": "Recover the dependency and confirm ordering.",
+    "why": "Restarting the dependent unit hides upstream failure.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "found",
+        "label": "Dependency recovery established",
+        "nextNodeId": "sys-change"
+      },
+      {
+        "id": "unknown",
+        "label": "Unclear",
+        "nextNodeId": "sys-escalate"
+      }
+    ]
+  },
+  {
+    "id": "sys-security",
+    "nodeKind": "interpretation",
+    "title": "Security control denied access",
+    "summary": "Inspect SELinux/AppArmor/filesystem/systemd sandbox evidence.",
+    "why": "Do not disable controls broadly.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "found",
+        "label": "Smallest-scope policy/path correction proven",
+        "nextNodeId": "sys-change"
+      },
+      {
+        "id": "unknown",
+        "label": "Unclear",
+        "nextNodeId": "sys-escalate"
+      }
+    ]
+  },
+  {
+    "id": "sys-config",
+    "nodeKind": "interpretation",
+    "title": "Unit or application configuration failure",
+    "summary": "Validate executable, quoting, env file, user/group, paths and service type.",
+    "why": "Root or broad chmod is not a generic fix.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "found",
+        "label": "Scoped correction proven",
+        "nextNodeId": "sys-change"
+      },
+      {
+        "id": "unknown",
+        "label": "Unclear",
+        "nextNodeId": "sys-escalate"
+      }
+    ]
+  },
+  {
+    "id": "sys-change",
+    "nodeKind": "action",
+    "title": "Apply one reviewed correction",
+    "summary": "Change only the proven package, unit, dependency, port, policy or app cause.",
+    "why": "Multiple changes obscure rollback.",
+    "risk": "moderate-risk",
+    "prerequisites": [
+      "Confirm owner/source.",
+      "Assess restart impact.",
+      "Capture current unit/config."
+    ],
+    "rollback": "Restore prior package, unit/drop-in, environment, app config or port.",
+    "commands": [
+      {
+        "command": "systemctl daemon-reload",
+        "purpose": "Only if unit/drop-in changed."
+      },
+      {
+        "command": "systemctl reset-failed <service>",
+        "purpose": "Only after cause fixed."
+      },
+      {
+        "command": "systemctl start <service>",
+        "purpose": "Start once for verification."
+      }
+    ],
+    "choices": [
+      {
+        "id": "done",
+        "label": "Correction ready",
+        "nextNodeId": "sys-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Not safe",
+        "nextNodeId": "sys-escalate"
+      }
+    ]
+  },
+  {
+    "id": "sys-verify",
+    "nodeKind": "verification",
+    "title": "Verify service and app health",
+    "summary": "Confirm the original symptom is resolved and remains stable.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "systemctl status <service> --no-pager",
+        "purpose": "Confirm intended state."
+      },
+      {
+        "command": "journalctl -u <service> -b --since \"15 minutes ago\" --no-pager",
+        "purpose": "Confirm failure is not recurring."
+      }
+    ],
+    "verification": [
+      "Intended unit state.",
+      "Stable process/restart counter.",
+      "Port/socket and app health succeed.",
+      "Logs stay clear."
+    ],
+    "choices": [
+      {
+        "id": "resolved",
+        "label": "Healthy",
+        "nextNodeId": "sys-complete"
+      },
+      {
+        "id": "not-resolved",
+        "label": "Still failing",
+        "nextNodeId": "sys-escalate"
+      }
+    ]
+  },
+  {
+    "id": "sys-complete",
+    "nodeKind": "completion",
+    "title": "Service recovery verified",
+    "summary": "Recovery is verified; record cause and prevention work.",
+    "risk": "read-only",
+    "prevention": [
+      "Validate config before deployment.",
+      "Monitor state/restarts/app health.",
+      "Document deps/env/ports/security."
+    ]
+  },
+  {
+    "id": "sys-escalate",
+    "nodeKind": "escalation",
+    "title": "Escalate with unit evidence",
+    "summary": "Share redacted status, journal, unit/drop-ins, exit result, dependencies, port evidence and recent changes.",
+    "risk": "read-only"
+  }
+]

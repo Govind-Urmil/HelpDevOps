@@ -20,3 +20,7 @@ HelpDevOps is a mission-first free DevOps problem-solving platform intended to g
 ## EP-007 product foundation
 
 HelpDevOps now includes three reviewed diagnostic pilots. They guide evidence collection and safe next checks but do not inspect live systems or guarantee a cause. Diagnostic pages support the locked mission-first organic-growth strategy because one reviewed resource powers the interactive journey, crawlable summary, search entry, internal linking and future learning reuse.
+
+
+## EP-008 diagnostic expansion
+The platform contains eight reviewed, static, browser-local, risk-rated journeys and remains owner-maintainable.

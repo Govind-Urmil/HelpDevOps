@@ -1,0 +1,271 @@
+[
+  {
+    "id": "http-start",
+    "nodeKind": "question",
+    "title": "Which intermediary generated the 502?",
+    "summary": "Identify CDN, load balancer, ingress, mesh, proxy or gateway.",
+    "why": "Without the layer, users may inspect the wrong logs.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "curl -v https://<host>/<path>",
+        "purpose": "Inspect response details; redact authorization, cookies, hostnames and tokens."
+      }
+    ],
+    "choices": [
+      {
+        "id": "gateway",
+        "label": "CDN/load balancer/host proxy",
+        "nextNodeId": "http-evidence"
+      },
+      {
+        "id": "k8s",
+        "label": "Kubernetes ingress/mesh",
+        "nextNodeId": "http-k8s"
+      },
+      {
+        "id": "unknown",
+        "label": "Unknown",
+        "nextNodeId": "http-escalate"
+      }
+    ]
+  },
+  {
+    "id": "http-evidence",
+    "nodeKind": "question",
+    "title": "What does the gateway report?",
+    "summary": "Classify the immediately upstream failure.",
+    "why": "502 alone cannot distinguish refusal, protocol mismatch, close, DNS or no healthy upstream.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "refused",
+        "label": "Connection refused/no listener",
+        "nextNodeId": "http-refused"
+      },
+      {
+        "id": "protocol",
+        "label": "HTTP/TLS/SNI mismatch",
+        "nextNodeId": "http-protocol"
+      },
+      {
+        "id": "dns",
+        "label": "DNS failure",
+        "nextNodeId": "http-dns"
+      },
+      {
+        "id": "invalid",
+        "label": "Invalid/early response or no upstream",
+        "nextNodeId": "http-app"
+      },
+      {
+        "id": "unknown",
+        "label": "Unclear",
+        "nextNodeId": "http-escalate"
+      }
+    ]
+  },
+  {
+    "id": "http-k8s",
+    "nodeKind": "question",
+    "title": "Does the Service have usable endpoints?",
+    "summary": "Trace ingress to Service, EndpointSlice/endpoints and Pods.",
+    "why": "Selectors/readiness may leave no upstream.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "kubectl get ingress,svc,endpoints,endpointslices,pods -n <namespace>",
+        "purpose": "Inspect routing and selected endpoints."
+      }
+    ],
+    "choices": [
+      {
+        "id": "none",
+        "label": "No usable endpoints",
+        "nextNodeId": "http-app"
+      },
+      {
+        "id": "exists",
+        "label": "Endpoints exist but unreachable",
+        "nextNodeId": "http-refused"
+      },
+      {
+        "id": "protocol",
+        "label": "Protocol/TLS mismatch",
+        "nextNodeId": "http-protocol"
+      },
+      {
+        "id": "unknown",
+        "label": "Unclear",
+        "nextNodeId": "http-escalate"
+      }
+    ]
+  },
+  {
+    "id": "http-refused",
+    "nodeKind": "interpretation",
+    "title": "Upstream connection cannot be opened",
+    "summary": "Confirm process, address, port, socket and network path.",
+    "why": "Restarting the gateway does not create a missing listener.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "ss -lntp",
+        "purpose": "Inspect listeners; process identity may require privileges."
+      }
+    ],
+    "choices": [
+      {
+        "id": "found",
+        "label": "Specific cause proven",
+        "nextNodeId": "http-change"
+      },
+      {
+        "id": "workload",
+        "label": "Container/workload failing",
+        "nextNodeId": "http-app"
+      },
+      {
+        "id": "unknown",
+        "label": "Unclear",
+        "nextNodeId": "http-escalate"
+      }
+    ]
+  },
+  {
+    "id": "http-protocol",
+    "nodeKind": "interpretation",
+    "title": "Gateway/upstream protocol expectations differ",
+    "summary": "Compare HTTP/HTTPS, SNI, certificate trust and scheme.",
+    "why": "Disabling TLS verification is not a generic fix.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "found",
+        "label": "Mismatch proven",
+        "nextNodeId": "http-change"
+      },
+      {
+        "id": "unknown",
+        "label": "Unclear",
+        "nextNodeId": "http-escalate"
+      }
+    ]
+  },
+  {
+    "id": "http-dns",
+    "nodeKind": "interpretation",
+    "title": "Gateway cannot resolve upstream",
+    "summary": "Test from the gateway environment and compare configuration.",
+    "why": "Client DNS success does not prove gateway DNS success.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "found",
+        "label": "DNS/hostname issue proven",
+        "nextNodeId": "http-change"
+      },
+      {
+        "id": "unknown",
+        "label": "Unclear",
+        "nextNodeId": "http-escalate"
+      }
+    ]
+  },
+  {
+    "id": "http-app",
+    "nodeKind": "interpretation",
+    "title": "Upstream is unhealthy, unavailable or returning invalid data",
+    "summary": "Inspect the immediately upstream workload and logs.",
+    "why": "A running process does not prove a valid response.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "found",
+        "label": "Scoped cause proven",
+        "nextNodeId": "http-change"
+      },
+      {
+        "id": "unknown",
+        "label": "Unclear",
+        "nextNodeId": "http-escalate"
+      }
+    ]
+  },
+  {
+    "id": "http-change",
+    "nodeKind": "action",
+    "title": "Apply one scoped correction",
+    "summary": "Change only the proven address, port, protocol, certificate, selector, readiness, socket or app cause.",
+    "why": "Multiple changes obscure rollback.",
+    "risk": "moderate-risk",
+    "prerequisites": [
+      "Confirm owner/source.",
+      "Confirm traffic scope.",
+      "Prepare last-known-good rollback."
+    ],
+    "rollback": "Restore prior gateway/upstream config or application revision.",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Correction applied",
+        "nextNodeId": "http-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Not safe",
+        "nextNodeId": "http-escalate"
+      }
+    ]
+  },
+  {
+    "id": "http-verify",
+    "nodeKind": "verification",
+    "title": "Verify the complete request path",
+    "summary": "Confirm the original symptom is resolved and remains stable.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "curl -fsS https://<host>/<functional-path>",
+        "purpose": "Confirm a real request succeeds through the gateway."
+      }
+    ],
+    "verification": [
+      "Gateway receives valid upstream response.",
+      "Functional endpoint succeeds.",
+      "Error rate remains normal.",
+      "No secondary intermediary remains unhealthy."
+    ],
+    "choices": [
+      {
+        "id": "resolved",
+        "label": "Healthy",
+        "nextNodeId": "http-complete"
+      },
+      {
+        "id": "not-resolved",
+        "label": "Still 502",
+        "nextNodeId": "http-escalate"
+      }
+    ]
+  },
+  {
+    "id": "http-complete",
+    "nodeKind": "completion",
+    "title": "Gateway recovery verified",
+    "summary": "Recovery is verified; record cause and prevention work.",
+    "risk": "read-only",
+    "prevention": [
+      "Monitor status by upstream cause.",
+      "Validate protocol/DNS/TLS/endpoints in deployment.",
+      "Document intermediary ownership."
+    ]
+  },
+  {
+    "id": "http-escalate",
+    "nodeKind": "escalation",
+    "title": "Escalate with redacted path evidence",
+    "summary": "Share generating layer, timestamp, redacted headers, gateway error, upstream protocol/address, endpoint health and recent changes.",
+    "risk": "read-only"
+  }
+]

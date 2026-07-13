@@ -1,0 +1,11 @@
+[
+  {
+    "id": "http-example",
+    "label": "502 response",
+    "input": "HTTP/1.1 502 Bad Gateway\nServer: example-gateway",
+    "fixtureType": "synthetic",
+    "containsRealEnvironmentData": false,
+    "source": "HelpDevOps-authored",
+    "reviewedAt": "2026-07-13"
+  }
+]

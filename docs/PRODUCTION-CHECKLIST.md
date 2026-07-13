@@ -126,3 +126,11 @@ HelpDevOps cannot publicly launch until the Operations & Troubleshooting Runbook
 - [ ] Guided, emergency, previous and restart controls work.
 - [ ] Journey state is not stored until explicit workspace save.
 - [ ] Static summaries, canonical routes, references and sitemap entries are present.
+
+
+## EP-008 diagnostic checks
+- [ ] Eight journeys are reviewed and validated.
+- [ ] High-risk Terraform/Docker actions include prerequisites, rollback and verification.
+- [ ] HTTP identifies the intermediary first.
+- [ ] CrashLoopBackOff distinguishes current/previous logs and container context.
+- [ ] systemd does not present reset-failed or disabling security as a fix.

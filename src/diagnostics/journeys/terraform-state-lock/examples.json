@@ -1,0 +1,11 @@
+[
+  {
+    "id": "tf-example",
+    "label": "Lock error",
+    "input": "Error acquiring the state lock: Lock Info ID: 11111111-2222-3333-4444-555555555555",
+    "fixtureType": "synthetic",
+    "containsRealEnvironmentData": false,
+    "source": "HelpDevOps-authored",
+    "reviewedAt": "2026-07-13"
+  }
+]

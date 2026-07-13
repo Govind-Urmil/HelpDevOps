@@ -1,0 +1,11 @@
+[
+  {
+    "id": "dockdisk-example",
+    "label": "Docker usage",
+    "input": "Images: 85GB, Build Cache: 42GB",
+    "fixtureType": "synthetic",
+    "containsRealEnvironmentData": false,
+    "source": "HelpDevOps-authored",
+    "reviewedAt": "2026-07-13"
+  }
+]

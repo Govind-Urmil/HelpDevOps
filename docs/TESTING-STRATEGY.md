@@ -22,3 +22,7 @@ Tests cover Dockerfile instruction/stage parsing and selected review signals; Co
 ## EP-007 diagnostic coverage
 
 Diagnostic tests cover registry publication, stable IDs, broken links, unreachable nodes, required fallback branches, rollback requirements, verification criteria, synthetic fixture policy, compact indexing, route generation, journey progression, emergency view, accessibility and reflow. Automated tests validate structure and behavior; they do not replace independent technical review of operational guidance.
+
+
+## EP-008 coverage
+Validate eight journeys, discovery, risk/rollback rules, 33 routes, workspace compatibility, accessibility, reflow and privacy boundaries.

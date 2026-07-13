@@ -1,0 +1,20 @@
+[
+  {
+    "id": "k8s-life",
+    "title": "Pod lifecycle",
+    "url": "https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/",
+    "type": "official"
+  },
+  {
+    "id": "k8s-debug",
+    "title": "Debug running Pods",
+    "url": "https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/",
+    "type": "official"
+  },
+  {
+    "id": "k8s-failure",
+    "title": "Determine Pod failure reason",
+    "url": "https://kubernetes.io/docs/tasks/debug/debug-application/determine-reason-pod-failure/",
+    "type": "official"
+  }
+]

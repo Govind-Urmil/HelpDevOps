@@ -6,13 +6,10 @@ import risks from '../src/diagnostics/config/risk-levels.json' with {type:'json'
 const options={riskIds:risks.map(item=>item.id)};
 const clone=value=>JSON.parse(JSON.stringify(value));
 
-describe('EP-007 diagnostic knowledge model',()=>{
-  it('loads exactly three independently reviewed pilot journeys',()=>{
-    expect(publishedJourneys).toHaveLength(3);
+describe('EP-008 diagnostic knowledge model',()=>{
+  it('loads eight independently reviewed journeys',()=>{
+    expect(publishedJourneys).toHaveLength(8);
     expect(publishedJourneys.every(item=>item.status==='reviewed')).toBe(true);
-    expect(publishedJourneys.map(item=>item.id)).toEqual([
-      'journey-linux-disk-full','journey-docker-container-exits','journey-kubernetes-pod-pending'
-    ]);
   });
   it.each(diagnosticJourneys.map(item=>[item.id,item]))('%s passes semantic validation',(_,journey)=>{
     expect(validateDiagnosticJourney(journey,options)).toEqual([]);
@@ -73,5 +70,58 @@ describe('diagnostic discovery',()=>{
     expect(result.summary).toContain('does not prove one root cause');
   });
   it('routes a stable disk error to the Linux journey',()=>expect(analyzeInput('write failed: No space left on device').kind).toBe('diagnostic:journey-linux-disk-full'));
+  it('routes CrashLoopBackOff',()=>expect(analyzeInput('CrashLoopBackOff').kind).toBe('diagnostic:journey-kubernetes-crashloopbackoff'));
+  it('routes Terraform lock errors',()=>expect(analyzeInput('Error acquiring the state lock').kind).toBe('diagnostic:journey-terraform-state-lock'));
+  it('routes HTTP 502',()=>expect(analyzeInput('502 Bad Gateway').kind).toBe('diagnostic:journey-http-502'));
+  it('routes systemd failures',()=>expect(analyzeInput('Failed to start example.service').kind).toBe('diagnostic:journey-linux-systemd-service-start'));
   it('does not choose a journey for an unrelated sentence',()=>expect(analyzeInput('please review this deployment later').kind).not.toMatch(/^diagnostic:/));
+});
+
+
+describe('EP-008 remediation regressions',()=>{
+  const journey=id=>diagnosticJourneys.find(item=>item.id===id);
+  const reachable=(item,startId)=>{
+    const map=new Map(item.nodes.map(node=>[node.id,node]));
+    const seen=new Set(),stack=[startId];
+    while(stack.length){const id=stack.pop();if(seen.has(id))continue;seen.add(id);for(const choice of map.get(id)?.choices||[])stack.push(choice.nextNodeId)}
+    return seen;
+  };
+
+  it('keeps local Terraform locks away from force-unlock',()=>{
+    const item=journey('journey-terraform-state-lock');
+    const start=item.nodes.find(node=>node.id==='tf-start');
+    expect(start.choices.find(choice=>choice.id==='local').nextNodeId).toBe('tf-local');
+    expect(reachable(item,'tf-local').has('tf-force')).toBe(false);
+    expect(reachable(item,'tf-active').has('tf-force')).toBe(true);
+  });
+
+  it('does not route a standalone AWS conditional-write error to Terraform',()=>{
+    expect(analyzeInput('ConditionalCheckFailedException').kind).not.toBe('diagnostic:journey-terraform-state-lock');
+    expect(analyzeInput('Terraform state lock ConditionalCheckFailedException').kind).toBe('diagnostic:journey-terraform-state-lock');
+  });
+
+  it('keeps Docker cache deletion inside a high-risk action',()=>{
+    const item=journey('journey-docker-disk-usage');
+    const destructive=item.nodes.flatMap(node=>(node.commands||[]).filter(command=>/prune/.test(command.command)).map(command=>({node,command})));
+    expect(destructive).toHaveLength(1);
+    expect(destructive[0].node.id).toBe('dockdisk-cache-clean');
+    expect(destructive[0].node.risk).toBe('high-risk');
+  });
+
+  it('does not route non-Docker host usage into Docker cleanup',()=>{
+    const item=journey('journey-docker-disk-usage');
+    const host=item.nodes.find(node=>node.id==='dockdisk-host');
+    expect(host.choices.find(choice=>choice.id==='found').nextNodeId).toBe('dockdisk-host-followup');
+    expect(reachable(item,'dockdisk-host-followup').has('dockdisk-clean')).toBe(false);
+  });
+
+  it('offers current and previous init-container logs conditionally',()=>{
+    const item=journey('journey-kubernetes-crashloopbackoff');
+    const node=item.nodes.find(candidate=>candidate.id==='crash-init');
+    expect(node.commands.map(command=>command.command)).toEqual([
+      'kubectl logs <pod> -n <namespace> -c <init-container>',
+      'kubectl logs <pod> -n <namespace> -c <init-container> --previous'
+    ]);
+    expect(node.commands[1].purpose).toContain('when restart history exists');
+  });
 });

@@ -1,0 +1,11 @@
+[
+  {
+    "id": "crash-example",
+    "label": "CrashLoopBackOff",
+    "input": "app-7d9f CrashLoopBackOff 6",
+    "fixtureType": "synthetic",
+    "containsRealEnvironmentData": false,
+    "source": "HelpDevOps-authored",
+    "reviewedAt": "2026-07-13"
+  }
+]

@@ -1,0 +1,262 @@
+[
+  {
+    "id": "crash-start",
+    "nodeKind": "question",
+    "title": "Which container is failing?",
+    "summary": "Identify application, sidecar, or init container first.",
+    "why": "Logs from the wrong container can mislead.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "kubectl describe pod <pod> -n <namespace>",
+        "purpose": "Inspect current/last state, events and probes."
+      }
+    ],
+    "choices": [
+      {
+        "id": "main",
+        "label": "Application or sidecar",
+        "nextNodeId": "crash-evidence"
+      },
+      {
+        "id": "init",
+        "label": "Init container",
+        "nextNodeId": "crash-init"
+      },
+      {
+        "id": "unknown",
+        "label": "Unclear",
+        "nextNodeId": "crash-escalate"
+      }
+    ]
+  },
+  {
+    "id": "crash-evidence",
+    "nodeKind": "question",
+    "title": "What does termination evidence show?",
+    "summary": "Use current logs, previous logs, reason, code and signal.",
+    "why": "The previous instance often has the useful failure.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "kubectl logs <pod> -n <namespace> -c <container>",
+        "purpose": "Read current logs; redact secrets before sharing."
+      },
+      {
+        "command": "kubectl logs <pod> -n <namespace> -c <container> --previous",
+        "purpose": "Read previous crashed-instance logs."
+      }
+    ],
+    "choices": [
+      {
+        "id": "oom",
+        "label": "OOMKilled or memory signal",
+        "nextNodeId": "crash-oom"
+      },
+      {
+        "id": "probe",
+        "label": "Probe-driven restart",
+        "nextNodeId": "crash-probe"
+      },
+      {
+        "id": "app",
+        "label": "Command, config, permission or dependency error",
+        "nextNodeId": "crash-app"
+      },
+      {
+        "id": "zero",
+        "label": "Exit code 0 / expected completion",
+        "nextNodeId": "crash-zero"
+      },
+      {
+        "id": "unknown",
+        "label": "Evidence unclear",
+        "nextNodeId": "crash-escalate"
+      }
+    ]
+  },
+  {
+    "id": "crash-init",
+    "nodeKind": "interpretation",
+    "title": "Init container failure",
+    "summary": "Inspect the init container before the main workload.",
+    "why": "The main process may never start.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "kubectl logs <pod> -n <namespace> -c <init-container>",
+        "purpose": "Read logs from the current init-container instance."
+      },
+      {
+        "command": "kubectl logs <pod> -n <namespace> -c <init-container> --previous",
+        "purpose": "Read logs from the previous terminated init-container instance when restart history exists."
+      }
+    ],
+    "choices": [
+      {
+        "id": "found",
+        "label": "Cause identified",
+        "nextNodeId": "crash-change"
+      },
+      {
+        "id": "unknown",
+        "label": "Cause unclear",
+        "nextNodeId": "crash-escalate"
+      }
+    ]
+  },
+  {
+    "id": "crash-oom",
+    "nodeKind": "interpretation",
+    "title": "Memory termination confirmed",
+    "summary": "Distinguish legitimate need from leak or configuration before raising limits.",
+    "why": "Blind increases may hide defects or violate capacity policy.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "reviewed",
+        "label": "A reviewed resource/application fix exists",
+        "nextNodeId": "crash-change"
+      },
+      {
+        "id": "unknown",
+        "label": "Cause unclear",
+        "nextNodeId": "crash-escalate"
+      }
+    ]
+  },
+  {
+    "id": "crash-probe",
+    "nodeKind": "interpretation",
+    "title": "Probe or startup behavior needs review",
+    "summary": "Compare path, port, timing and real startup behavior.",
+    "why": "Removing probes can expose unhealthy workloads.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "reviewed",
+        "label": "A specific probe or app fix exists",
+        "nextNodeId": "crash-change"
+      },
+      {
+        "id": "unknown",
+        "label": "Cause unclear",
+        "nextNodeId": "crash-escalate"
+      }
+    ]
+  },
+  {
+    "id": "crash-app",
+    "nodeKind": "interpretation",
+    "title": "Application/runtime failure identified",
+    "summary": "Correct the owning source rather than deleting Pods or changing restart policy.",
+    "why": "Restarts do not repair the underlying cause.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "reviewed",
+        "label": "A scoped fix exists",
+        "nextNodeId": "crash-change"
+      },
+      {
+        "id": "unknown",
+        "label": "Fix unsafe or unclear",
+        "nextNodeId": "crash-escalate"
+      }
+    ]
+  },
+  {
+    "id": "crash-zero",
+    "nodeKind": "interpretation",
+    "title": "Lifecycle may be mismatched",
+    "summary": "A one-shot process may need a Job rather than a long-running controller.",
+    "why": "Exit code 0 is not automatically a defect.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "reviewed",
+        "label": "Intended lifecycle is established",
+        "nextNodeId": "crash-change"
+      },
+      {
+        "id": "unknown",
+        "label": "Intent unclear",
+        "nextNodeId": "crash-escalate"
+      }
+    ]
+  },
+  {
+    "id": "crash-change",
+    "nodeKind": "action",
+    "title": "Apply one source-controlled correction",
+    "summary": "Change only the proven image, command, config, probe, resource or workload type.",
+    "why": "Scoped changes are easier to roll back and verify.",
+    "risk": "moderate-risk",
+    "prerequisites": [
+      "Confirm owning manifest and service impact.",
+      "Prepare last-known-good rollback."
+    ],
+    "rollback": "Roll back the workload revision or prior configuration.",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Change deployed",
+        "nextNodeId": "crash-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Not safe",
+        "nextNodeId": "crash-escalate"
+      }
+    ]
+  },
+  {
+    "id": "crash-verify",
+    "nodeKind": "verification",
+    "title": "Verify stable recovery",
+    "summary": "Confirm the original symptom is resolved and remains stable.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "kubectl get pod <pod> -n <namespace> -w",
+        "purpose": "Observe readiness and restart count."
+      }
+    ],
+    "verification": [
+      "Restart count stops increasing.",
+      "Container remains Ready during observation.",
+      "Application behavior and traffic succeed."
+    ],
+    "choices": [
+      {
+        "id": "resolved",
+        "label": "Stable",
+        "nextNodeId": "crash-complete"
+      },
+      {
+        "id": "not-resolved",
+        "label": "Still failing",
+        "nextNodeId": "crash-escalate"
+      }
+    ]
+  },
+  {
+    "id": "crash-complete",
+    "nodeKind": "completion",
+    "title": "Crash loop resolved",
+    "summary": "Recovery is verified; record cause and prevention work.",
+    "risk": "read-only",
+    "prevention": [
+      "Alert on restart growth.",
+      "Preflight probes and resources.",
+      "Document expected process lifecycle."
+    ]
+  },
+  {
+    "id": "crash-escalate",
+    "nodeKind": "escalation",
+    "title": "Escalate with redacted evidence",
+    "summary": "Share Pod status, events, current/previous logs, termination state, manifest and recent changes.",
+    "risk": "read-only"
+  }
+]

@@ -1,0 +1,54 @@
+{
+  "id": "journey-terraform-state-lock",
+  "slug": "state-lock",
+  "domain": "terraform",
+  "title": "Terraform state-lock failure",
+  "summary": "Determine whether a lock is active, stale, backend-specific, or caused by connectivity before any unlock.",
+  "aliases": [
+    "terraform state lock",
+    "error acquiring the state lock",
+    "state is locked"
+  ],
+  "exactErrors": [
+    "Error acquiring the state lock",
+    "state blob is already locked",
+    "Terraform state lock ConditionalCheckFailedException"
+  ],
+  "status": "reviewed",
+  "entryNodeId": "tf-start",
+  "reviewedAt": "2026-07-13",
+  "reviewDue": "2026-10-13",
+  "riskProfile": "read-only-first",
+  "compatibility": {
+    "technology": "Terraform",
+    "appliesGenerally": true,
+    "reviewedAgainst": [
+      "Terraform CLI 1.x",
+      "HCP Terraform concepts",
+      "Backend-specific locking"
+    ],
+    "limitations": [
+      "Recovery differs by backend.",
+      "No state, run, or backend is inspected."
+    ]
+  },
+  "whatItDoesNotProve": [
+    "A lock error does not prove a stale lock.",
+    "Lock age alone does not prove no run is active."
+  ],
+  "firstChecks": [
+    "Identify backend and workspace",
+    "Check CI and remote-run activity",
+    "Record redacted lock metadata"
+  ],
+  "relatedToolIds": [
+    "structured-data"
+  ],
+  "references": [
+    "tf-lock",
+    "tf-force",
+    "tf-plan",
+    "tf-pg",
+    "tf-hcp"
+  ]
+}

@@ -1,0 +1,418 @@
+[
+  {
+    "id": "tf-start",
+    "nodeKind": "question",
+    "title": "Which backend owns the lock?",
+    "summary": "Identify backend and workspace first.",
+    "why": "PostgreSQL and managed workspaces differ from standard remote backends.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "local",
+        "label": "Local state",
+        "nextNodeId": "tf-local"
+      },
+      {
+        "id": "remote",
+        "label": "Standard remote backend",
+        "nextNodeId": "tf-active"
+      },
+      {
+        "id": "hcp",
+        "label": "HCP Terraform / Enterprise",
+        "nextNodeId": "tf-hcp"
+      },
+      {
+        "id": "pg",
+        "label": "PostgreSQL",
+        "nextNodeId": "tf-pg"
+      },
+      {
+        "id": "unknown",
+        "label": "Unknown or custom backend",
+        "nextNodeId": "tf-escalate"
+      }
+    ]
+  },
+  {
+    "id": "tf-local",
+    "nodeKind": "question",
+    "title": "Is the local Terraform process still active?",
+    "summary": "Local state locks belong to the local process and cannot be force-unlocked by another process.",
+    "why": "The safe recovery path is to identify the owning process, not use terraform force-unlock.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "terraform workspace show",
+        "purpose": "Confirm the intended local workspace before retrying."
+      }
+    ],
+    "choices": [
+      {
+        "id": "active",
+        "label": "Terraform process is active",
+        "nextNodeId": "tf-local-wait"
+      },
+      {
+        "id": "ended",
+        "label": "Owning process has ended",
+        "nextNodeId": "tf-local-retry"
+      },
+      {
+        "id": "unknown",
+        "label": "Process ownership is unclear",
+        "nextNodeId": "tf-escalate"
+      }
+    ]
+  },
+  {
+    "id": "tf-local-wait",
+    "nodeKind": "interpretation",
+    "title": "Allow the local operation to finish safely",
+    "summary": "Do not start a competing local operation or remove lock artifacts blindly.",
+    "why": "The lock protects the local state while the owning process is active.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "released",
+        "label": "Operation finished and lock released",
+        "nextNodeId": "tf-verify"
+      },
+      {
+        "id": "ended",
+        "label": "Process ended but lock symptom remains",
+        "nextNodeId": "tf-local-retry"
+      },
+      {
+        "id": "unknown",
+        "label": "Process state remains unclear",
+        "nextNodeId": "tf-escalate"
+      }
+    ]
+  },
+  {
+    "id": "tf-local-retry",
+    "nodeKind": "interpretation",
+    "title": "Retry only after the local owner has ended",
+    "summary": "Local state cannot be unlocked with terraform force-unlock; retry after confirming no Terraform process is active.",
+    "why": "A persistent local lock symptom may indicate an orphaned process, permissions problem, or incorrect working directory that needs owner review.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "terraform plan -lock-timeout=60s",
+        "purpose": "Retry bounded lock acquisition without disabling locking."
+      }
+    ],
+    "choices": [
+      {
+        "id": "released",
+        "label": "Lock acquired and released normally",
+        "nextNodeId": "tf-verify"
+      },
+      {
+        "id": "persists",
+        "label": "Local lock symptom persists",
+        "nextNodeId": "tf-escalate"
+      },
+      {
+        "id": "unknown",
+        "label": "Result remains unclear",
+        "nextNodeId": "tf-escalate"
+      }
+    ]
+  },
+  {
+    "id": "tf-active",
+    "nodeKind": "question",
+    "title": "Is another remote-backend operation active?",
+    "summary": "Check terminals, CI, remote runs and lock-owner metadata.",
+    "why": "Removing a valid lock can permit concurrent state writes.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "terraform workspace show",
+        "purpose": "Confirm workspace."
+      },
+      {
+        "command": "terraform plan -lock-timeout=60s",
+        "purpose": "Retry for a bounded duration without disabling locking."
+      }
+    ],
+    "choices": [
+      {
+        "id": "active",
+        "label": "Active run exists",
+        "nextNodeId": "tf-remote-wait"
+      },
+      {
+        "id": "stale",
+        "label": "No active run and stale evidence",
+        "nextNodeId": "tf-review"
+      },
+      {
+        "id": "unknown",
+        "label": "Ownership/connectivity unclear",
+        "nextNodeId": "tf-escalate"
+      }
+    ]
+  },
+  {
+    "id": "tf-remote-wait",
+    "nodeKind": "interpretation",
+    "title": "Preserve the valid remote-backend lock",
+    "summary": "Wait or coordinate with the remote operation owner.",
+    "why": "The lock protects state consistency.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "released",
+        "label": "Lock released",
+        "nextNodeId": "tf-verify"
+      },
+      {
+        "id": "stuck",
+        "label": "Run abandoned",
+        "nextNodeId": "tf-review"
+      },
+      {
+        "id": "unknown",
+        "label": "Unclear",
+        "nextNodeId": "tf-escalate"
+      }
+    ]
+  },
+  {
+    "id": "tf-hcp",
+    "nodeKind": "interpretation",
+    "title": "Use managed workspace controls",
+    "summary": "Inspect run and lock ownership in the platform.",
+    "why": "CLI force-unlock is not automatically correct.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "active",
+        "label": "Run active",
+        "nextNodeId": "tf-hcp-wait"
+      },
+      {
+        "id": "stale",
+        "label": "Authorized admin confirms stale lock",
+        "nextNodeId": "tf-managed"
+      },
+      {
+        "id": "unknown",
+        "label": "Unclear",
+        "nextNodeId": "tf-escalate"
+      }
+    ]
+  },
+  {
+    "id": "tf-hcp-wait",
+    "nodeKind": "interpretation",
+    "title": "Preserve the active managed-workspace lock",
+    "summary": "Wait or coordinate through the HCP Terraform or Terraform Enterprise workspace.",
+    "why": "Managed workspace ownership and run status are authoritative for this lock.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "released",
+        "label": "Run finished and workspace unlocked",
+        "nextNodeId": "tf-verify"
+      },
+      {
+        "id": "stale",
+        "label": "Authorized administrator confirms a stale lock",
+        "nextNodeId": "tf-managed"
+      },
+      {
+        "id": "unknown",
+        "label": "Run or ownership remains unclear",
+        "nextNodeId": "tf-escalate"
+      }
+    ]
+  },
+  {
+    "id": "tf-pg",
+    "nodeKind": "interpretation",
+    "title": "PostgreSQL uses session advisory locks",
+    "summary": "Confirm the DB session/process state.",
+    "why": "The PostgreSQL backend does not support terraform force-unlock.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "active",
+        "label": "Session active",
+        "nextNodeId": "tf-pg-wait"
+      },
+      {
+        "id": "stuck",
+        "label": "Stuck session needs DB-owner review",
+        "nextNodeId": "tf-escalate"
+      },
+      {
+        "id": "unknown",
+        "label": "Unclear",
+        "nextNodeId": "tf-escalate"
+      }
+    ]
+  },
+  {
+    "id": "tf-pg-wait",
+    "nodeKind": "interpretation",
+    "title": "Preserve the active PostgreSQL advisory lock",
+    "summary": "Wait for or coordinate with the database session that owns the Terraform advisory lock.",
+    "why": "PostgreSQL backend locks are session-native and force-unlock is not supported.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "released",
+        "label": "Session ended and lock released",
+        "nextNodeId": "tf-verify"
+      },
+      {
+        "id": "stuck",
+        "label": "Session requires database-owner review",
+        "nextNodeId": "tf-escalate"
+      },
+      {
+        "id": "unknown",
+        "label": "Session ownership remains unclear",
+        "nextNodeId": "tf-escalate"
+      }
+    ]
+  },
+  {
+    "id": "tf-review",
+    "nodeKind": "question",
+    "title": "Are all force-unlock prerequisites proven?",
+    "summary": "Confirm directory, backend, workspace, lock ID, ownership and recovery options.",
+    "why": "Never force-unlock based only on elapsed time.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "proven",
+        "label": "All confirmed",
+        "nextNodeId": "tf-force"
+      },
+      {
+        "id": "unsafe",
+        "label": "Any uncertainty",
+        "nextNodeId": "tf-escalate"
+      },
+      {
+        "id": "unknown",
+        "label": "Evidence incomplete",
+        "nextNodeId": "tf-escalate"
+      }
+    ]
+  },
+  {
+    "id": "tf-force",
+    "nodeKind": "action",
+    "title": "Force-unlock only the exact stale lock",
+    "summary": "Remove protection only after proving no operation is active.",
+    "why": "Wrong unlock can allow concurrent state mutation.",
+    "risk": "high-risk",
+    "prerequisites": [
+      "Confirm backend/workspace/configuration.",
+      "Confirm exact lock ID.",
+      "Confirm no local, CI or remote run.",
+      "Confirm state recovery/version history."
+    ],
+    "rollback": "Stop new runs and coordinate state recovery if competing activity appears.",
+    "commands": [
+      {
+        "command": "terraform force-unlock <lock-id>",
+        "purpose": "Use only the exact confirmed stale lock ID."
+      }
+    ],
+    "choices": [
+      {
+        "id": "done",
+        "label": "Exact stale lock removed",
+        "nextNodeId": "tf-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Not safe",
+        "nextNodeId": "tf-escalate"
+      }
+    ]
+  },
+  {
+    "id": "tf-managed",
+    "nodeKind": "action",
+    "title": "Use authorized managed unlock",
+    "summary": "An authorized owner may remove a proven stale managed lock.",
+    "why": "Managed platform audit and ownership remain authoritative.",
+    "risk": "high-risk",
+    "prerequisites": [
+      "Confirm administrator authority.",
+      "Confirm no active run.",
+      "Record the action."
+    ],
+    "rollback": "Re-lock or pause runs if unexpected activity appears.",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Managed lock removed",
+        "nextNodeId": "tf-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Not safe",
+        "nextNodeId": "tf-escalate"
+      }
+    ]
+  },
+  {
+    "id": "tf-verify",
+    "nodeKind": "verification",
+    "title": "Verify normal locking",
+    "summary": "Confirm the original symptom is resolved and remains stable.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "terraform plan -lock-timeout=60s",
+        "purpose": "Confirm normal lock acquisition/release."
+      }
+    ],
+    "verification": [
+      "No competing run remains.",
+      "Correct workspace/backend confirmed.",
+      "State is readable and locks normally.",
+      "No lock disabling or state editing used."
+    ],
+    "choices": [
+      {
+        "id": "resolved",
+        "label": "Healthy",
+        "nextNodeId": "tf-complete"
+      },
+      {
+        "id": "not-resolved",
+        "label": "Still failing",
+        "nextNodeId": "tf-escalate"
+      }
+    ]
+  },
+  {
+    "id": "tf-complete",
+    "nodeKind": "completion",
+    "title": "Lock recovery verified",
+    "summary": "Recovery is verified; record cause and prevention work.",
+    "risk": "read-only",
+    "prevention": [
+      "Serialize runs per state.",
+      "Keep ownership metadata and state history.",
+      "Use bounded lock timeouts."
+    ]
+  },
+  {
+    "id": "tf-escalate",
+    "nodeKind": "escalation",
+    "title": "Escalate to the state/backend owner",
+    "summary": "Preserve redacted lock message, backend, workspace, lock ID, operation, run status and Terraform version; never share state or credentials.",
+    "risk": "read-only"
+  }
+]

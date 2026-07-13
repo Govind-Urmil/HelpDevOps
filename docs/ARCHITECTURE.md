@@ -38,3 +38,7 @@ Dockerfile, Docker Compose, and Kubernetes Manifest analyzers follow the existin
 ## EP-007 diagnostic platform
 
 Reviewed diagnostic journeys are static resource bundles under `src/diagnostics/journeys/`. Each bundle owns its metadata, nodes, synthetic examples, and references. The shared renderer consumes explicit next-node relationships. `scripts/validate-diagnostics.mjs` validates safety and relationship invariants and produces compact generated indexes. No graph database, server, live infrastructure connection, or command execution exists.
+
+
+## EP-008 diagnostic expansion
+Five journey-owned resource sets reuse the registry, validators, indexes, renderer and dynamic static routes.

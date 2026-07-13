@@ -1,0 +1,26 @@
+[
+  {
+    "id": "docker-df",
+    "title": "docker system df",
+    "url": "https://docs.docker.com/reference/cli/docker/system/df/",
+    "type": "official"
+  },
+  {
+    "id": "docker-prune",
+    "title": "docker system prune",
+    "url": "https://docs.docker.com/reference/cli/docker/system/prune/",
+    "type": "official"
+  },
+  {
+    "id": "docker-vol",
+    "title": "docker volume prune",
+    "url": "https://docs.docker.com/reference/cli/docker/volume/prune/",
+    "type": "official"
+  },
+  {
+    "id": "docker-builder",
+    "title": "docker builder prune",
+    "url": "https://docs.docker.com/reference/cli/docker/builder/prune/",
+    "type": "official"
+  }
+]

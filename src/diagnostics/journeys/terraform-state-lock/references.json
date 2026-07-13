@@ -1,0 +1,32 @@
+[
+  {
+    "id": "tf-lock",
+    "title": "State locking",
+    "url": "https://developer.hashicorp.com/terraform/language/state/locking",
+    "type": "official"
+  },
+  {
+    "id": "tf-force",
+    "title": "force-unlock",
+    "url": "https://developer.hashicorp.com/terraform/cli/commands/force-unlock",
+    "type": "official"
+  },
+  {
+    "id": "tf-plan",
+    "title": "Plan locking options",
+    "url": "https://developer.hashicorp.com/terraform/cli/commands/plan",
+    "type": "official"
+  },
+  {
+    "id": "tf-pg",
+    "title": "PostgreSQL backend",
+    "url": "https://developer.hashicorp.com/terraform/language/backend/pg",
+    "type": "official"
+  },
+  {
+    "id": "tf-hcp",
+    "title": "Workspace settings and locking in HCP Terraform",
+    "url": "https://developer.hashicorp.com/terraform/cloud-docs/workspaces/settings",
+    "type": "official"
+  }
+]

@@ -50,5 +50,88 @@
     "domain": "kubernetes",
     "summary": "Use Pod scheduling events and related evidence to distinguish resource, placement, storage, port, and scheduler constraints.",
     "path": "/troubleshoot/kubernetes/pod-pending/"
+  },
+  {
+    "id": "journey-kubernetes-crashloopbackoff",
+    "title": "Kubernetes CrashLoopBackOff",
+    "aliases": [
+      "crashloopbackoff",
+      "container crash loop",
+      "pod restarting repeatedly"
+    ],
+    "exactErrors": [
+      "CrashLoopBackOff",
+      "Back-off restarting failed container"
+    ],
+    "domain": "kubernetes",
+    "summary": "Determine why a container repeatedly exits before changing probes, resources, commands, or restart behavior.",
+    "path": "/troubleshoot/kubernetes/crashloopbackoff/"
+  },
+  {
+    "id": "journey-terraform-state-lock",
+    "title": "Terraform state-lock failure",
+    "aliases": [
+      "terraform state lock",
+      "error acquiring the state lock",
+      "state is locked"
+    ],
+    "exactErrors": [
+      "Error acquiring the state lock",
+      "state blob is already locked",
+      "Terraform state lock ConditionalCheckFailedException"
+    ],
+    "domain": "terraform",
+    "summary": "Determine whether a lock is active, stale, backend-specific, or caused by connectivity before any unlock.",
+    "path": "/troubleshoot/terraform/state-lock/"
+  },
+  {
+    "id": "journey-http-502",
+    "title": "HTTP 502 Bad Gateway",
+    "aliases": [
+      "502 bad gateway",
+      "http 502",
+      "upstream invalid response"
+    ],
+    "exactErrors": [
+      "502 Bad Gateway",
+      "upstream prematurely closed connection",
+      "no live upstreams"
+    ],
+    "domain": "http",
+    "summary": "Identify the gateway that generated the 502, then inspect the immediately upstream hop.",
+    "path": "/troubleshoot/http/502-bad-gateway/"
+  },
+  {
+    "id": "journey-docker-disk-usage",
+    "title": "Docker disk usage excessive",
+    "aliases": [
+      "docker disk usage",
+      "docker storage full",
+      "docker no space"
+    ],
+    "exactErrors": [
+      "Docker disk usage excessive",
+      "docker system df"
+    ],
+    "domain": "docker",
+    "summary": "Separate host filesystem, Docker data-root, images, containers, build cache, volumes and logs before pruning.",
+    "path": "/troubleshoot/docker/disk-usage/"
+  },
+  {
+    "id": "journey-linux-systemd-service-start",
+    "title": "systemd service will not start",
+    "aliases": [
+      "systemd service failed",
+      "service will not start",
+      "failed to start service"
+    ],
+    "exactErrors": [
+      "Failed to start",
+      "start request repeated too quickly",
+      "Unit entered failed state"
+    ],
+    "domain": "linux",
+    "summary": "Use service state, journal, effective unit and dependencies before restarting or weakening controls.",
+    "path": "/troubleshoot/linux/service-wont-start/"
   }
 ]
