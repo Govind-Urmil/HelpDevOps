@@ -40,3 +40,7 @@ EP-004 / v0.4.0 remains the completed developer-essentials and owner-operations 
 Static Astro website + vanilla browser JavaScript + local processing. No backend, database, authentication, required remote APIs, or paid dependencies without explicit approval.
 
 Routine resource maintenance is documented in `docs/RESOURCE-MAINTENANCE-GUIDE.md`.
+
+
+## EP-009 Evidence Interpreter Foundation
+Five bounded, browser-local evidence interpreters connect supported command output to observations, interpretations, unknowns, safe next checks, and reviewed diagnostic journeys. Raw evidence is not saved automatically. Routine wording, examples, references, limitations, and fixtures remain resource-maintained.

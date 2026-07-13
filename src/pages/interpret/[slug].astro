@@ -1,0 +1,9 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';import PageHeader from '../../components/PageHeader.astro';import {evidenceDefinitions} from '../../core/evidence/registry.js';
+export function getStaticPaths(){return evidenceDefinitions.map(item=>({params:{slug:item.slug},props:{item}}));}
+const {item}=Astro.props;const meta={path:`/interpret/${item.slug}/`,title:`${item.title} | HelpDevOps`,description:item.summary};
+---
+<BaseLayout {...meta} breadcrumbs={[{label:'Home',href:'/'},{label:'Interpret',href:'/interpret/'},{label:item.title,href:meta.path}]}>
+ <PageHeader eyebrow="EVIDENCE INTERPRETER" title={item.title} description={item.summary}/>
+ <section class="section"><div class="container prose-grid"><article class="reference-panel"><h2>Recommended evidence command</h2>{item.recommendedCommands.length?<pre>{item.recommendedCommands.join('\n')}</pre>:<p>Paste the original Terraform state-lock error block. Do not run a state-changing command merely to collect evidence.</p>}<h2>Supported formats</h2><h3>Structured or stable</h3><ul>{item.supportedFormats.structured.map(value=><li>{value}</li>)}</ul><h3>Human-readable</h3><ul>{item.supportedFormats.humanReadable.map(value=><li>{value}</li>)}</ul><h2>Visible limitations</h2><ul>{item.limitations.map(value=><li>{value}</li>)}</ul><a class="button primary" href={`/interpret/?source=${item.id}`}>Open interpreter</a></article><aside class="reference-panel"><h2>Why this is local</h2><p>Interpretation runs in your browser. Output is not uploaded or automatically saved.</p><h2>Authoritative references</h2><ul>{item.references.map(ref=><li><a href={ref.url} rel="noreferrer">{ref.title}</a></li>)}</ul></aside></div></section>
+</BaseLayout>

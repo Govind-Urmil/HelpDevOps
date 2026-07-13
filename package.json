@@ -1,6 +1,6 @@
 {
   "name": "helpdevops",
-  "version": "0.8.0",
+  "version": "0.9.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -8,7 +8,7 @@
     "build": "astro build && node scripts/generate-security-headers.mjs",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "check": "astro check && node scripts/validate-resources.mjs && node scripts/validate-diagnostics.mjs && node scripts/validate-source.mjs",
+    "check": "astro check && node scripts/validate-resources.mjs && node scripts/validate-diagnostics.mjs && node scripts/validate-evidence.mjs && node scripts/validate-source.mjs",
     "validate": "node scripts/validate-build.mjs",
     "audit:budgets": "node scripts/check-budgets.mjs",
     "audit:dependencies": "npm audit --audit-level=high",
@@ -17,7 +17,8 @@
     "snapshot:validate": "node scripts/validate-snapshot.mjs",
     "test:all": "npm run audit:dependencies && npm run check && npm test && npm run build && npm run validate && npm run audit:budgets && npm run test:e2e && npm run audit:lighthouse",
     "validate:resources": "node scripts/validate-resources.mjs",
-    "validate:diagnostics": "node scripts/validate-diagnostics.mjs"
+    "validate:diagnostics": "node scripts/validate-diagnostics.mjs",
+    "validate:evidence": "node scripts/validate-evidence.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.6.0",

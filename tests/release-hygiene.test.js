@@ -11,10 +11,16 @@ describe('EP-008 release hygiene',()=>{
   it('keeps raw ignored evidence out of snapshot requirements',()=>{
     const config=fs.readFileSync(path.join(root,'scripts/snapshot-config.mjs'),'utf8');
     expect(config).not.toMatch(/requiredFiles=.*evidence\//);
-    expect(config).toMatch(/excludedNames=.*'evidence'/);
+    expect(config).toMatch(/excludedPaths=.*'evidence'/);
   });
   it('requires owner operations recovery files',()=>{
     for(const file of ['docs/OPERATIONS-AND-TROUBLESHOOTING-RUNBOOK.md','docs/PRODUCTION-CHECKLIST.md'])expect(fs.existsSync(path.join(root,file))).toBe(true);
+  });
+
+
+  it('requires the EP-009 evidence implementation in portable snapshots',()=>{
+    const config=fs.readFileSync(path.join(root,'scripts/snapshot-config.mjs'),'utf8');
+    for(const required of ['src/core/evidence/interpreter.js','src/core/evidence/registry.js','src/core/evidence/parsers/df.js','src/resources/evidence/df-usage/definition.json','src/resources/evidence/systemd-unit/fixtures.json'])expect(config).toContain(`'${required}'`);
   });
 
   it('keeps workspace title input selectors unique and input-only',()=>{

@@ -24,3 +24,7 @@ HelpDevOps now includes three reviewed diagnostic pilots. They guide evidence co
 
 ## EP-008 diagnostic expansion
 The platform contains eight reviewed, static, browser-local, risk-rated journeys and remains owner-maintainable.
+
+
+## EP-009 Evidence Interpreter Foundation
+Five bounded, browser-local evidence interpreters connect supported command output to observations, interpretations, unknowns, safe next checks, and reviewed diagnostic journeys. Raw evidence is not saved automatically. Routine wording, examples, references, limitations, and fixtures remain resource-maintained.

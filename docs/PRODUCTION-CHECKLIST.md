@@ -134,3 +134,7 @@ HelpDevOps cannot publicly launch until the Operations & Troubleshooting Runbook
 - [ ] HTTP identifies the intermediary first.
 - [ ] CrashLoopBackOff distinguishes current/previous logs and container context.
 - [ ] systemd does not present reset-failed or disabling security as a fix.
+
+
+## EP-009 Evidence Interpreter Foundation
+Five bounded, browser-local evidence interpreters connect supported command output to observations, interpretations, unknowns, safe next checks, and reviewed diagnostic journeys. Raw evidence is not saved automatically. Routine wording, examples, references, limitations, and fixtures remain resource-maintained.

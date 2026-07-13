@@ -42,3 +42,7 @@ Reviewed diagnostic journeys are static resource bundles under `src/diagnostics/
 
 ## EP-008 diagnostic expansion
 Five journey-owned resource sets reuse the registry, validators, indexes, renderer and dynamic static routes.
+
+
+## EP-009 Evidence Interpreter Foundation
+Five bounded, browser-local evidence interpreters connect supported command output to observations, interpretations, unknowns, safe next checks, and reviewed diagnostic journeys. Raw evidence is not saved automatically. Routine wording, examples, references, limitations, and fixtures remain resource-maintained.

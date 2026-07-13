@@ -12,7 +12,8 @@ const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
 const toolByPath = tools.find(tool => tool.status === 'available' && location.pathname === tool.path);
 const journeyByPath = publishedJourneys.find(journey => location.pathname === journey.path);
-const currentEntity = toolByPath || (journeyByPath ? {id:journeyByPath.id,title:journeyByPath.title,path:journeyByPath.path,status:'available'} : null);
+const evidenceEntity = location.pathname === '/interpret/' ? {id:'evidence-interpreter',title:'Evidence Interpreter',path:'/interpret/',status:'available'} : null;
+const currentEntity = toolByPath || evidenceEntity || (journeyByPath ? {id:journeyByPath.id,title:journeyByPath.title,path:journeyByPath.path,status:'available'} : null);
 let preferences = loadPreferences();
 let dbPromise;
 const db = () => {
@@ -50,6 +51,7 @@ function collectCurrentToolState() {
   $$('input, textarea, select', root).forEach((element, index) => {
     if (['button','submit','reset','file'].includes(element.type)) return;
     const key = element.name || element.id || element.dataset.inputKey || `field-${index + 1}`;
+    if (currentEntity.id === 'evidence-interpreter' && key === 'evidence-input' && !$('[data-save-raw-evidence]', root)?.checked) return;
     if (element.type === 'checkbox' || element.type === 'radio') {
       if (element.type === 'radio' && !element.checked) return;
       input[key] = element.type === 'checkbox' ? element.checked : element.value;
@@ -152,7 +154,7 @@ async function renderWorkspaceList() {
     $$('[data-workspace-open]', list).forEach(button => button.onclick = () => {
       const record = records.find(item => item.id === button.dataset.workspaceOpen);
       const state = record?.toolStates?.[0];
-      const target = tools.find(tool => tool.id === state?.toolId && tool.status === 'available') || publishedJourneys.find(journey=>journey.id===state?.toolId);
+      const target = tools.find(tool => tool.id === state?.toolId && tool.status === 'available') || (state?.toolId === 'evidence-interpreter' ? {id:'evidence-interpreter',path:'/interpret/'} : null) || publishedJourneys.find(journey=>journey.id===state?.toolId);
       if (!state || !target) return setStatus('This workspace references an unavailable tool.', 'warning');
       sessionStorage.setItem('helpdevops.transfer.v1', JSON.stringify({ contractVersion:1, source:'saved-workspace', workspaceId:record.id, state }));
       location.href = target.path;
@@ -246,7 +248,8 @@ function applyPendingTransfer() {
     else if (element.type === 'radio') element.checked = element.value === inputs[key];
     else element.value = inputs[key];
   });
-  setStatus('Saved tool state opened in this tab. Re-run analysis to generate a current result.', 'success');
+  document.dispatchEvent(new CustomEvent('helpdevops:workspace-state-restored',{detail:{toolId:currentEntity.id,input:inputs}}));
+  setStatus(currentEntity.id === 'evidence-interpreter' && !('evidence-input' in inputs) ? 'Saved interpretation opened without raw evidence.' : 'Saved tool state opened in this tab. Re-run analysis to generate a current result.', 'success');
 }
 async function refreshWorkspaceUI() {
   preferences = loadPreferences(); renderFavoriteButtons(); renderPreferenceControls(); renderNavigationLists(); await Promise.all([renderWorkspaceList(), renderDock(), renderStorageEstimate()]);

@@ -26,3 +26,7 @@ Diagnostic tests cover registry publication, stable IDs, broken links, unreachab
 
 ## EP-008 coverage
 Validate eight journeys, discovery, risk/rollback rules, 33 routes, workspace compatibility, accessibility, reflow and privacy boundaries.
+
+
+## EP-009 Evidence Interpreter Foundation
+Five bounded, browser-local evidence interpreters connect supported command output to observations, interpretations, unknowns, safe next checks, and reviewed diagnostic journeys. Raw evidence is not saved automatically. Routine wording, examples, references, limitations, and fixtures remain resource-maintained.

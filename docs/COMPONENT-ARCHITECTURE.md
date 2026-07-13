@@ -42,3 +42,7 @@ The Dockerfile, Docker Compose, and Kubernetes Manifest pages reuse `ProductLayo
 ## Diagnostic journey components
 
 `DiagnosticJourney.astro` renders all reviewed journeys from the same records and supports guided and emergency presentations. Journey pages remain crawlable before client enhancement. The component exposes plain form state through the existing workspace contract, so progress is stored only after explicit save.
+
+
+## EP-009 Evidence Interpreter Foundation
+Five bounded, browser-local evidence interpreters connect supported command output to observations, interpretations, unknowns, safe next checks, and reviewed diagnostic journeys. Raw evidence is not saved automatically. Routine wording, examples, references, limitations, and fixtures remain resource-maintained.

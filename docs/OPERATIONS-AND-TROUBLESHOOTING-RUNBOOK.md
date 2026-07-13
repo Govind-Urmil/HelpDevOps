@@ -237,3 +237,7 @@ If a journey does not advance, first confirm JavaScript loaded without console e
 
 ## EP-008 diagnostic incidents
 Treat unsafe unlock, destructive cleanup, weakened probes/security, or misleading HTTP-layer guidance as potentially P1. Preserve the failing path, roll back if needed, correct the resource and add a regression.
+
+
+## EP-009 Evidence Interpreter Foundation
+Five bounded, browser-local evidence interpreters connect supported command output to observations, interpretations, unknowns, safe next checks, and reviewed diagnostic journeys. Raw evidence is not saved automatically. Routine wording, examples, references, limitations, and fixtures remain resource-maintained.

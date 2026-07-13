@@ -24,3 +24,7 @@ Workspace export is versioned JSON generated locally. Import files are untrusted
 
 ## Failure behavior
 Storage failures disable continuity, not core tools. Existing data is preserved when a write or import fails.
+
+
+## EP-009 Evidence Interpreter Foundation
+Five bounded, browser-local evidence interpreters connect supported command output to observations, interpretations, unknowns, safe next checks, and reviewed diagnostic journeys. Raw evidence is not saved automatically. Routine wording, examples, references, limitations, and fixtures remain resource-maintained.

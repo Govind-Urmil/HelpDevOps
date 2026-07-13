@@ -96,3 +96,7 @@ Edit the journey-owned JSON files under `src/diagnostics/journeys/<journey>/`. K
 
 ## Maintaining EP-008 journeys
 Update `src/diagnostics/journeys/<journey>/`, keep aliases conservative and references current, then run diagnostic validation, tests, build and snapshot checks.
+
+
+## EP-009 Evidence Interpreter Foundation
+Five bounded, browser-local evidence interpreters connect supported command output to observations, interpretations, unknowns, safe next checks, and reviewed diagnostic journeys. Raw evidence is not saved automatically. Routine wording, examples, references, limitations, and fixtures remain resource-maintained.

@@ -83,3 +83,7 @@ Status: Implementation candidate pending focused independent/environment verific
 Version: v0.8.0.
 
 Purpose: Expand to eight reviewed journeys with CrashLoopBackOff, Terraform lock, HTTP 502, Docker disk usage and systemd startup failure.
+
+
+## EP-009 Evidence Interpreter Foundation
+Five bounded, browser-local evidence interpreters connect supported command output to observations, interpretations, unknowns, safe next checks, and reviewed diagnostic journeys. Raw evidence is not saved automatically. Routine wording, examples, references, limitations, and fixtures remain resource-maintained.
