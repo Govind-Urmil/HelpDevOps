@@ -1,0 +1,48 @@
+{
+  "id": "journey-cron-job-not-running",
+  "slug": "job-not-running",
+  "domain": "cron",
+  "title": "Cron job does not run",
+  "summary": "Separate scheduler launch, schedule, execution context, and application failures before changing permissions or running as root.",
+  "aliases": [
+    "cron job not running",
+    "crontab not working",
+    "scheduled job did not run"
+  ],
+  "exactErrors": [
+    "CRON job failed",
+    "cron: command not found"
+  ],
+  "status": "reviewed",
+  "entryNodeId": "cron-start",
+  "reviewedAt": "2026-07-13",
+  "reviewDue": "2026-10-13",
+  "riskProfile": "read-only-first",
+  "compatibility": {
+    "technology": "Cron",
+    "appliesGenerally": true,
+    "reviewedAgainst": [
+      "Current stable command-line behavior and official operational guidance"
+    ],
+    "limitations": [
+      "Cron implementations, service names, logging and timezones vary.",
+      "This journey does not execute or install scheduled jobs."
+    ]
+  },
+  "whatItDoesNotProve": [
+    "The symptom alone does not identify one root cause.",
+    "HelpDevOps does not inspect or change a live environment."
+  ],
+  "firstChecks": [
+    "Identify user versus system crontab",
+    "Check whether execution was attempted",
+    "Compare the scheduled execution context"
+  ],
+  "relatedToolIds": [
+    "cron"
+  ],
+  "references": [
+    "crontab-man",
+    "cron-man"
+  ]
+}

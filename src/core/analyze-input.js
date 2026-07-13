@@ -17,8 +17,9 @@ export function analyzeInput(input){
   const normalized=trimmed.toLowerCase().replace(/\s+/g,' ');
   const evidenceResult=interpretEvidence(input);
   if(['recognized','ambiguous'].includes(evidenceResult.status))return evidenceResult;
+  const looksLikeMetaDiscussion=/\b(guide|documentation|docs|article|phrase|term|acronym)\b/.test(normalized) && normalized.split(/\s+/).length>3;
   const diagnostic=publishedJourneys.find(journey=>
-    journey.exactErrors.some(token=>token.length>=6&&normalized.includes(token.toLowerCase())) ||
+    (!looksLikeMetaDiscussion && journey.exactErrors.some(token=>token.length>=6&&normalized.includes(token.toLowerCase()))) ||
     journey.aliases.some(alias=>normalized===alias.toLowerCase())
   );
   if(diagnostic)return buildDiagnosticDiscoveryResult(diagnostic,trimmed);

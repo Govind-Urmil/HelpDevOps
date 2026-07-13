@@ -6,9 +6,9 @@ import risks from '../src/diagnostics/config/risk-levels.json' with {type:'json'
 const options={riskIds:risks.map(item=>item.id)};
 const clone=value=>JSON.parse(JSON.stringify(value));
 
-describe('EP-008 diagnostic knowledge model',()=>{
-  it('loads eight independently reviewed journeys',()=>{
-    expect(publishedJourneys).toHaveLength(8);
+describe('EP-010 diagnostic knowledge model',()=>{
+  it('loads fourteen independently reviewed journeys',()=>{
+    expect(publishedJourneys).toHaveLength(14);
     expect(publishedJourneys.every(item=>item.status==='reviewed')).toBe(true);
   });
   it.each(diagnosticJourneys.map(item=>[item.id,item]))('%s passes semantic validation',(_,journey)=>{
@@ -123,5 +123,49 @@ describe('EP-008 remediation regressions',()=>{
       'kubectl logs <pod> -n <namespace> -c <init-container> --previous'
     ]);
     expect(node.commands[1].purpose).toContain('when restart history exists');
+  });
+});
+
+
+describe('EP-010 operational coverage regressions',()=>{
+  const byId=id=>diagnosticJourneys.find(item=>item.id===id);
+  const reachable=(item,start)=>{const map=new Map(item.nodes.map(n=>[n.id,n]));const seen=new Set(),stack=[start];while(stack.length){const id=stack.pop();if(seen.has(id))continue;seen.add(id);for(const c of map.get(id)?.choices||[])stack.push(c.nextNodeId)}return seen};
+  it('adds six reviewed operational journeys',()=>{
+    for(const id of ['journey-git-push-rejected','journey-jenkins-agent-offline','journey-networking-dns-resolution','journey-networking-connection-refused','journey-cron-job-not-running','journey-bash-execution-failure'])expect(byId(id)?.status).toBe('reviewed');
+  });
+  it('keeps Git normal integration separate from guarded history rewrite',()=>{const j=byId('journey-git-push-rejected');expect(reachable(j,'git-integrate').has('git-rewrite')).toBe(false);expect(j.nodes.find(n=>n.id==='git-rewrite').commands[0].command).toContain('--force-with-lease')});
+  it('triages Jenkins offline reasons before launch method',()=>{
+    const j=byId('journey-jenkins-agent-offline');
+    const start=j.nodes.find(n=>n.id==='jenkins-start');
+    expect(start.choices.map(c=>c.id)).toEqual(expect.arrayContaining(['manual','monitor','channel','launch','unknown']));
+    expect(start.choices.find(c=>c.id==='manual').nextNodeId).toBe('jenkins-manual-offline');
+    expect(start.choices.find(c=>c.id==='monitor').nextNodeId).toBe('jenkins-monitor-offline');
+    expect(start.choices.find(c=>c.id==='channel').nextNodeId).toBe('jenkins-launch-method');
+    expect(reachable(j,'jenkins-manual-offline').has('jenkins-auth')).toBe(false);
+    expect(reachable(j,'jenkins-monitor-offline').has('jenkins-auth')).toBe(false);
+    expect(j.nodes.find(n=>n.id==='jenkins-launch-method').choices.map(c=>c.id)).toEqual(expect.arrayContaining(['ssh','inbound','service','container','unknown']));
+  });
+  it('distinguishes DNS response classes',()=>{const ids=byId('journey-networking-dns-resolution').nodes.find(n=>n.id==='dns-start').choices.map(c=>c.id);expect(ids).toEqual(expect.arrayContaining(['nxdomain','servfail','timeout','wrong','context']))});
+  it('does not recommend disabling firewall or binding broadly as a default',()=>{const text=JSON.stringify(byId('journey-networking-connection-refused'));expect(text).not.toMatch(/disable (the )?firewall/i);expect(text).not.toMatch(/bind.*0\.0\.0\.0 as/i)});
+  it('separates cron launch from command failure',()=>{const ids=byId('journey-cron-job-not-running').nodes.find(n=>n.id==='cron-start').choices.map(c=>c.id);expect(ids).toEqual(expect.arrayContaining(['no','yes-fail','yes-ok']))});
+  it('separates cron read-only inspection from temporary instrumentation',()=>{
+    const j=byId('journey-cron-job-not-running');
+    const observe=j.nodes.find(n=>n.id==='cron-observe');
+    const instrument=j.nodes.find(n=>n.id==='cron-instrument');
+    expect(observe.risk).toBe('read-only');
+    expect(JSON.stringify(observe)).not.toMatch(/env\s*\|\s*sort/i);
+    expect(observe.summary).toMatch(/interactive shell output is not cron execution evidence/i);
+    expect(instrument.risk).not.toBe('read-only');
+    expect(instrument.summary).toMatch(/selected non-sensitive environment/i);
+    expect(JSON.stringify(instrument)).not.toMatch(/env\s*\|\s*sort/i);
+    expect(instrument.rollback).toMatch(/remove the temporary diagnostic entry/i);
+    expect(instrument.verification.join(' ')).toMatch(/removed/i);
+  });
+  it('never offers chmod 777 or disabling security controls as commands or actions',()=>{const j=byId('journey-bash-execution-failure');const commands=j.nodes.flatMap(n=>(n.commands||[]).map(c=>c.command));expect(commands.join(' ')).not.toMatch(/chmod\s+777/i);expect(j.nodes.filter(n=>n.nodeKind==='action').map(n=>n.title+' '+n.summary).join(' ')).not.toMatch(/disable (SELinux|AppArmor)/i)});
+  it('routes strong reviewed signals conservatively',()=>{expect(analyzeInput('[rejected] main -> main (non-fast-forward) failed to push some refs').kind).toBe('diagnostic:journey-git-push-rejected');expect(analyzeInput('curl: (7) Connection refused').kind).toBe('diagnostic:journey-networking-connection-refused');expect(analyzeInput('Temporary failure in name resolution').kind).toBe('diagnostic:journey-networking-dns-resolution')});
+  it('does not route generic operational words without context',()=>{
+    for(const text of ['offline','Permission denied','rejected','This guide explains NXDOMAIN responses','The phrase command not found appears in documentation']){
+      expect(analyzeInput(text).kind).not.toMatch(/^diagnostic:journey-(jenkins-agent-offline|bash-execution-failure|git-push-rejected|networking-dns-resolution)$/);
+    }
   });
 });

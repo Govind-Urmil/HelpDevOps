@@ -1,0 +1,14 @@
+[
+  {
+    "id": "socket-connect",
+    "title": "Linux connect system call",
+    "url": "https://man7.org/linux/man-pages/man2/connect.2.html",
+    "type": "official"
+  },
+  {
+    "id": "curl-doc",
+    "title": "curl command documentation",
+    "url": "https://curl.se/docs/manpage.html",
+    "type": "official"
+  }
+]

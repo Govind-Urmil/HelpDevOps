@@ -10,7 +10,7 @@ function run(command,args){const result=spawnSync(command,args,{cwd:temporary,en
 try{
  zip.extractAllTo(temporary,true);
  for(const required of requiredFiles)if(!fs.existsSync(path.join(temporary,...required.split('/'))))errors.push(`Extracted file missing: ${required}`);
- const pkg=JSON.parse(fs.readFileSync(path.join(temporary,'package.json'),'utf8'));if(pkg.version!=='0.9.0')errors.push('Extracted package version mismatch');
+ const pkg=JSON.parse(fs.readFileSync(path.join(temporary,'package.json'),'utf8'));if(pkg.version!=='0.10.0')errors.push('Extracted package version mismatch');
  if(!errors.length){run('npm',['ci']);run('npm',['run','validate:evidence']);run('npm',['test']);run('npm',['run','build']);}
 }
 finally{fs.rmSync(temporary,{recursive:true,force:true});}

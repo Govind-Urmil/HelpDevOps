@@ -1,0 +1,493 @@
+[
+  {
+    "id": "shell-start",
+    "nodeKind": "question",
+    "title": "What exact execution failure appears?",
+    "summary": "Permission, command lookup, interpreter, format, and environment failures need different checks.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "permission",
+        "label": "Permission denied",
+        "nextNodeId": "shell-permission"
+      },
+      {
+        "id": "not-found",
+        "label": "command not found",
+        "nextNodeId": "shell-path"
+      },
+      {
+        "id": "missing",
+        "label": "No such file or directory / bad interpreter",
+        "nextNodeId": "shell-interpreter"
+      },
+      {
+        "id": "format",
+        "label": "Exec format error",
+        "nextNodeId": "shell-format"
+      },
+      {
+        "id": "context",
+        "label": "Works interactively but not in cron/Jenkins/systemd",
+        "nextNodeId": "shell-context"
+      },
+      {
+        "id": "unknown",
+        "label": "Message is unclear",
+        "nextNodeId": "shell-escalate"
+      }
+    ]
+  },
+  {
+    "id": "shell-permission",
+    "nodeKind": "question",
+    "title": "Which permission boundary blocks execution?",
+    "summary": "Check execute bits, directory traversal, user identity, ACLs, mount options, and security controls without broadening permissions.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "ls -l <script>",
+        "purpose": "Inspect mode and ownership."
+      },
+      {
+        "command": "namei -l <script>",
+        "purpose": "Inspect each parent-directory permission where available."
+      },
+      {
+        "command": "findmnt -T <script>",
+        "purpose": "Identify the backing mount and options."
+      }
+    ],
+    "choices": [
+      {
+        "id": "mode",
+        "label": "Execute bit or directory traversal",
+        "nextNodeId": "shell-mode"
+      },
+      {
+        "id": "noexec",
+        "label": "Filesystem is mounted noexec",
+        "nextNodeId": "shell-noexec"
+      },
+      {
+        "id": "security",
+        "label": "ACL or security policy denial",
+        "nextNodeId": "shell-security"
+      },
+      {
+        "id": "unknown",
+        "label": "Boundary is unclear",
+        "nextNodeId": "shell-escalate"
+      }
+    ]
+  },
+  {
+    "id": "shell-path",
+    "nodeKind": "question",
+    "title": "Can the intended shell resolve the command?",
+    "summary": "Interactive aliases, functions, virtual environments, and PATH entries may not exist in automation contexts.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "type -a <command>",
+        "purpose": "Show how the current shell resolves the command."
+      },
+      {
+        "command": "command -v <command>",
+        "purpose": "Locate the command without executing it."
+      }
+    ],
+    "choices": [
+      {
+        "id": "absent",
+        "label": "Command is not installed or path is wrong",
+        "nextNodeId": "shell-install"
+      },
+      {
+        "id": "path",
+        "label": "Command exists outside PATH",
+        "nextNodeId": "shell-fix-path"
+      },
+      {
+        "id": "interactive",
+        "label": "Alias/function/virtual environment only",
+        "nextNodeId": "shell-context"
+      },
+      {
+        "id": "unknown",
+        "label": "Lookup remains unclear",
+        "nextNodeId": "shell-escalate"
+      }
+    ]
+  },
+  {
+    "id": "shell-interpreter",
+    "nodeKind": "question",
+    "title": "Does the shebang name a real interpreter without CRLF corruption?",
+    "summary": "A visible script can fail with \u201cNo such file\u201d when its interpreter or loader is missing.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "head -n 1 <script>",
+        "purpose": "Inspect the shebang."
+      },
+      {
+        "command": "file <script>",
+        "purpose": "Inspect file type and line-ending clues."
+      }
+    ],
+    "choices": [
+      {
+        "id": "missing",
+        "label": "Interpreter path is missing",
+        "nextNodeId": "shell-fix-interpreter"
+      },
+      {
+        "id": "crlf",
+        "label": "CRLF corrupts the shebang",
+        "nextNodeId": "shell-fix-crlf"
+      },
+      {
+        "id": "symlink",
+        "label": "Broken symlink or loader",
+        "nextNodeId": "shell-format"
+      },
+      {
+        "id": "unknown",
+        "label": "Cause is unclear",
+        "nextNodeId": "shell-escalate"
+      }
+    ]
+  },
+  {
+    "id": "shell-format",
+    "nodeKind": "question",
+    "title": "Does the executable match the host architecture and format?",
+    "summary": "Wrong architecture, missing dynamic loader, or attempting to execute data can produce format/loader failures.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "file <executable>",
+        "purpose": "Inspect architecture and executable format."
+      }
+    ],
+    "choices": [
+      {
+        "id": "architecture",
+        "label": "Architecture or loader mismatch",
+        "nextNodeId": "shell-fix-format"
+      },
+      {
+        "id": "script",
+        "label": "Script lacks intended interpreter",
+        "nextNodeId": "shell-fix-interpreter"
+      },
+      {
+        "id": "unknown",
+        "label": "Format remains unclear",
+        "nextNodeId": "shell-escalate"
+      }
+    ]
+  },
+  {
+    "id": "shell-context",
+    "nodeKind": "question",
+    "title": "What differs in the real automation environment?",
+    "summary": "User, PATH, shell, working directory, environment variables, mounts, and permissions can differ from an interactive terminal.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "path",
+        "label": "PATH or command lookup differs",
+        "nextNodeId": "shell-fix-path"
+      },
+      {
+        "id": "user",
+        "label": "User/permission differs",
+        "nextNodeId": "shell-permission"
+      },
+      {
+        "id": "env",
+        "label": "Environment or working directory differs",
+        "nextNodeId": "shell-fix-context"
+      },
+      {
+        "id": "unknown",
+        "label": "Context remains unclear",
+        "nextNodeId": "shell-escalate"
+      }
+    ]
+  },
+  {
+    "id": "shell-mode",
+    "nodeKind": "action",
+    "title": "Apply the minimum required execute/traverse permission",
+    "summary": "Grant only the intended user/group permission; never use chmod 777 as a generic fix.",
+    "risk": "moderate-risk",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Permission corrected",
+        "nextNodeId": "shell-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Ownership or exposure is unclear",
+        "nextNodeId": "shell-escalate"
+      }
+    ],
+    "prerequisites": [
+      "Intended owner/user confirmed",
+      "Current mode and parent permissions recorded"
+    ],
+    "rollback": "Restore the previous mode/ACL if access becomes too broad or behavior changes.",
+    "verification": [
+      "Intended user can execute while unrelated users do not gain unnecessary access."
+    ]
+  },
+  {
+    "id": "shell-noexec",
+    "nodeKind": "interpretation",
+    "title": "Respect the noexec boundary",
+    "summary": "Move the executable to an approved executable filesystem or use the intended interpreter only if policy permits; do not remount broadly by default.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Approved execution path used",
+        "nextNodeId": "shell-verify"
+      },
+      {
+        "id": "unknown",
+        "label": "Policy ownership is unclear",
+        "nextNodeId": "shell-escalate"
+      }
+    ]
+  },
+  {
+    "id": "shell-security",
+    "nodeKind": "interpretation",
+    "title": "Inspect the denial evidence",
+    "summary": "Review ACL, SELinux, AppArmor, or sandbox logs and correct the smallest wrong policy/configuration; do not disable controls.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Policy corrected safely",
+        "nextNodeId": "shell-verify"
+      },
+      {
+        "id": "unknown",
+        "label": "Security policy requires owner review",
+        "nextNodeId": "shell-escalate"
+      }
+    ]
+  },
+  {
+    "id": "shell-install",
+    "nodeKind": "action",
+    "title": "Install or reference the intended command through the approved mechanism",
+    "summary": "Confirm package/source and environment before changing the host.",
+    "risk": "moderate-risk",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Command available",
+        "nextNodeId": "shell-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Software source or version is unclear",
+        "nextNodeId": "shell-escalate"
+      }
+    ],
+    "prerequisites": [
+      "Required command and version confirmed",
+      "Approved package/source identified"
+    ],
+    "rollback": "Remove the new package/path change and restore the previous environment configuration.",
+    "verification": [
+      "Correct command resolves for the intended user and context."
+    ]
+  },
+  {
+    "id": "shell-fix-path",
+    "nodeKind": "action",
+    "title": "Set a narrow explicit PATH or absolute command path",
+    "summary": "Avoid global PATH changes when only one script/service needs the command.",
+    "risk": "moderate-risk",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Lookup corrected",
+        "nextNodeId": "shell-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Command identity is uncertain",
+        "nextNodeId": "shell-escalate"
+      }
+    ],
+    "prerequisites": [
+      "Resolved command path verified",
+      "Automation user confirmed"
+    ],
+    "rollback": "Restore the prior environment or command path.",
+    "verification": [
+      "The intended binary resolves in the real execution context."
+    ]
+  },
+  {
+    "id": "shell-fix-interpreter",
+    "nodeKind": "action",
+    "title": "Correct the intended interpreter path",
+    "summary": "Use an installed, supported interpreter and preserve script semantics.",
+    "risk": "moderate-risk",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Interpreter corrected",
+        "nextNodeId": "shell-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Interpreter requirements are unclear",
+        "nextNodeId": "shell-escalate"
+      }
+    ],
+    "prerequisites": [
+      "Intended language/version confirmed",
+      "Interpreter path verified"
+    ],
+    "rollback": "Restore the previous shebang/script revision.",
+    "verification": [
+      "Script executes with the intended interpreter and behavior."
+    ]
+  },
+  {
+    "id": "shell-fix-crlf",
+    "nodeKind": "action",
+    "title": "Convert only the affected script to expected line endings",
+    "summary": "Preserve content and repository policy while removing CRLF from the shebang/script.",
+    "risk": "low-risk",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Line endings corrected",
+        "nextNodeId": "shell-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Repository policy is unclear",
+        "nextNodeId": "shell-escalate"
+      }
+    ],
+    "prerequisites": [
+      "CRLF confirmed",
+      "Clean source copy available"
+    ],
+    "rollback": "Restore the previous file from version control.",
+    "verification": [
+      "Shebang resolves and script behavior remains correct."
+    ]
+  },
+  {
+    "id": "shell-fix-format",
+    "nodeKind": "action",
+    "title": "Use a binary built for the target platform",
+    "summary": "Replace only after verifying architecture, loader, source, and integrity.",
+    "risk": "high-risk",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Compatible binary installed",
+        "nextNodeId": "shell-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Supply chain or platform is unclear",
+        "nextNodeId": "shell-escalate"
+      }
+    ],
+    "prerequisites": [
+      "Target architecture confirmed",
+      "Trusted artifact/source identified",
+      "Previous binary backed up"
+    ],
+    "rollback": "Restore the previous known-good binary/package.",
+    "verification": [
+      "Binary loads and executes in the target environment."
+    ]
+  },
+  {
+    "id": "shell-fix-context",
+    "nodeKind": "action",
+    "title": "Make the automation context explicit",
+    "summary": "Set only required environment, working directory, shell, and paths; do not copy an entire interactive environment or embed secrets.",
+    "risk": "moderate-risk",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Context corrected",
+        "nextNodeId": "shell-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Secret handling is unclear",
+        "nextNodeId": "shell-escalate"
+      }
+    ],
+    "prerequisites": [
+      "Real execution user and environment identified",
+      "Required values reviewed for sensitivity"
+    ],
+    "rollback": "Restore the previous service/job/script configuration and remove temporary debug output.",
+    "verification": [
+      "Execution succeeds in the real cron/Jenkins/systemd context."
+    ]
+  },
+  {
+    "id": "shell-verify",
+    "nodeKind": "verification",
+    "title": "Verify least-privilege execution in the real context",
+    "summary": "Interactive success alone is insufficient when automation originally failed.",
+    "risk": "read-only",
+    "verification": [
+      "Intended user resolves and executes the intended command",
+      "Correct interpreter/binary is used",
+      "Permissions remain least privilege",
+      "Automation context succeeds",
+      "No security control was disabled"
+    ],
+    "choices": [
+      {
+        "id": "complete",
+        "label": "Verification passed",
+        "nextNodeId": "shell-complete"
+      },
+      {
+        "id": "unknown",
+        "label": "Verification is incomplete or regressed",
+        "nextNodeId": "shell-escalate"
+      }
+    ]
+  },
+  {
+    "id": "shell-escalate",
+    "nodeKind": "escalation",
+    "title": "Escalate with exact error and execution context",
+    "summary": "Record user, shell, command path, file type, mount options, and sanitized environment differences.",
+    "risk": "read-only"
+  },
+  {
+    "id": "shell-complete",
+    "nodeKind": "completion",
+    "title": "Diagnosis complete",
+    "summary": "The reviewed recovery checks passed. Record the cause and prevention step before closing the incident.",
+    "risk": "read-only",
+    "prevention": [
+      "Document the confirmed cause and exact recovery.",
+      "Add monitoring or a regression check where practical."
+    ]
+  }
+]

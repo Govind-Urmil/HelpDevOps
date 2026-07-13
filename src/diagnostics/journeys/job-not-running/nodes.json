@@ -1,0 +1,457 @@
+[
+  {
+    "id": "cron-start",
+    "nodeKind": "question",
+    "title": "Did the scheduler attempt to run the job?",
+    "summary": "Separate scheduler launch failures from commands that launched and failed.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "no",
+        "label": "No execution evidence",
+        "nextNodeId": "cron-scheduler"
+      },
+      {
+        "id": "yes-fail",
+        "label": "Cron launched it but the command failed",
+        "nextNodeId": "cron-context"
+      },
+      {
+        "id": "yes-ok",
+        "label": "It ran but expected business effect is missing",
+        "nextNodeId": "cron-effect"
+      },
+      {
+        "id": "unknown",
+        "label": "Execution evidence is unavailable",
+        "nextNodeId": "cron-observe"
+      }
+    ]
+  },
+  {
+    "id": "cron-observe",
+    "nodeKind": "check",
+    "title": "Inspect existing scheduler evidence",
+    "summary": "Use the crontab, scheduler logs, existing mail, and already-configured output redirection. Interactive shell output is not cron execution evidence.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "crontab -l",
+        "purpose": "Inspect the current user crontab without changing it."
+      },
+      {
+        "command": "journalctl -u cron -u crond --since \"15 minutes ago\" --no-pager",
+        "purpose": "Where systemd and these unit names exist, inspect recent scheduler evidence; use the real service/log source for the platform."
+      }
+    ],
+    "choices": [
+      {
+        "id": "attempt",
+        "label": "Existing evidence shows an execution attempt",
+        "nextNodeId": "cron-context"
+      },
+      {
+        "id": "none",
+        "label": "Existing evidence shows no execution attempt",
+        "nextNodeId": "cron-scheduler"
+      },
+      {
+        "id": "instrument",
+        "label": "Existing evidence is insufficient; add temporary bounded instrumentation",
+        "nextNodeId": "cron-instrument"
+      },
+      {
+        "id": "unknown",
+        "label": "Evidence source or ownership is unclear",
+        "nextNodeId": "cron-escalate"
+      }
+    ]
+  },
+  {
+    "id": "cron-instrument",
+    "nodeKind": "action",
+    "title": "Temporarily capture bounded cron-launched evidence",
+    "summary": "Add a short-lived diagnostic wrapper or temporary scheduled entry that records only the timestamp, effective user, working directory, selected non-sensitive environment values, exit code, stdout, and stderr from the cron-launched process.",
+    "risk": "moderate-risk",
+    "commands": [
+      {
+        "command": "umask 077; diagnostic_command > /tmp/helpdevops-cron-debug.log 2>&1",
+        "purpose": "Illustrative pattern only: write bounded diagnostic output to an owner-restricted temporary file. Replace diagnostic_command with a reviewed wrapper; do not dump the full environment."
+      }
+    ],
+    "choices": [
+      {
+        "id": "attempt",
+        "label": "Temporary evidence captured an execution attempt",
+        "nextNodeId": "cron-context"
+      },
+      {
+        "id": "none",
+        "label": "Temporary evidence still shows no execution attempt",
+        "nextNodeId": "cron-scheduler"
+      },
+      {
+        "id": "unsafe",
+        "label": "Safe temporary instrumentation cannot be established",
+        "nextNodeId": "cron-escalate"
+      }
+    ],
+    "prerequisites": [
+      "Original crontab or scheduler configuration recorded",
+      "Real scheduled user and crontab type confirmed",
+      "Controlled temporary output path is permission-restricted",
+      "Only selected non-sensitive environment values will be captured"
+    ],
+    "rollback": "Remove the temporary diagnostic entry or wrapper, delete the temporary output after review, and restore the exact original crontab/configuration.",
+    "verification": [
+      "Temporary instrumentation is removed",
+      "No sensitive values remain in diagnostic output",
+      "The scheduler and job are rechecked using the original intended configuration."
+    ]
+  },
+  {
+    "id": "cron-scheduler",
+    "nodeKind": "question",
+    "title": "Which scheduler and crontab type are in use?",
+    "summary": "Service names and file syntax differ across cron implementations and system crontabs.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "user",
+        "label": "User crontab",
+        "nextNodeId": "cron-syntax"
+      },
+      {
+        "id": "system",
+        "label": "/etc/crontab or cron.d",
+        "nextNodeId": "cron-system"
+      },
+      {
+        "id": "other",
+        "label": "BusyBox, container, macOS, or platform scheduler",
+        "nextNodeId": "cron-platform"
+      },
+      {
+        "id": "unknown",
+        "label": "Scheduler is unclear",
+        "nextNodeId": "cron-escalate"
+      }
+    ]
+  },
+  {
+    "id": "cron-syntax",
+    "nodeKind": "question",
+    "title": "Is the schedule valid for the actual cron dialect and user timezone?",
+    "summary": "A command can be correct but never become due.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "valid",
+        "label": "Schedule is valid",
+        "nextNodeId": "cron-daemon"
+      },
+      {
+        "id": "invalid",
+        "label": "Schedule or timezone is wrong",
+        "nextNodeId": "cron-fix-schedule"
+      },
+      {
+        "id": "unknown",
+        "label": "Dialect is unclear",
+        "nextNodeId": "cron-escalate"
+      }
+    ]
+  },
+  {
+    "id": "cron-system",
+    "nodeKind": "question",
+    "title": "Does the system entry include the required user field and valid file ownership?",
+    "summary": "System crontabs differ from user crontabs.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "valid",
+        "label": "Entry structure is valid",
+        "nextNodeId": "cron-daemon"
+      },
+      {
+        "id": "invalid",
+        "label": "User field, ownership, or syntax is wrong",
+        "nextNodeId": "cron-fix-schedule"
+      },
+      {
+        "id": "unknown",
+        "label": "Rules are unclear",
+        "nextNodeId": "cron-escalate"
+      }
+    ]
+  },
+  {
+    "id": "cron-daemon",
+    "nodeKind": "interpretation",
+    "title": "Inspect the actual scheduler service and logs",
+    "summary": "Identify cron, crond, BusyBox, or another scheduler before restarting anything.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "running",
+        "label": "Scheduler runs",
+        "nextNodeId": "cron-context"
+      },
+      {
+        "id": "stopped",
+        "label": "Scheduler is stopped or failed",
+        "nextNodeId": "cron-fix-daemon"
+      },
+      {
+        "id": "unknown",
+        "label": "Service evidence unavailable",
+        "nextNodeId": "cron-escalate"
+      }
+    ]
+  },
+  {
+    "id": "cron-context",
+    "nodeKind": "question",
+    "title": "What differs from the successful interactive environment?",
+    "summary": "Cron commonly has a smaller PATH, different shell, no working-directory assumption, and fewer variables.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "path",
+        "label": "PATH, command, or interpreter differs",
+        "nextNodeId": "cron-fix-context"
+      },
+      {
+        "id": "permission",
+        "label": "Permission or execution failure",
+        "nextNodeId": "cron-shell"
+      },
+      {
+        "id": "secret",
+        "label": "Required secret/environment is absent",
+        "nextNodeId": "cron-fix-context"
+      },
+      {
+        "id": "unknown",
+        "label": "Command failure is unclear",
+        "nextNodeId": "cron-escalate"
+      }
+    ]
+  },
+  {
+    "id": "cron-effect",
+    "nodeKind": "question",
+    "title": "Did the command exit successfully in the expected user/context?",
+    "summary": "A launched command can succeed technically but operate on the wrong path, environment, or account.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "wrong-context",
+        "label": "Wrong path, user, or environment",
+        "nextNodeId": "cron-fix-context"
+      },
+      {
+        "id": "overlap",
+        "label": "Overlapping executions or timing",
+        "nextNodeId": "cron-overlap"
+      },
+      {
+        "id": "unknown",
+        "label": "Business effect is unclear",
+        "nextNodeId": "cron-escalate"
+      }
+    ]
+  },
+  {
+    "id": "cron-platform",
+    "nodeKind": "interpretation",
+    "title": "Use platform-specific scheduler evidence",
+    "summary": "Containers, macOS launchd, and managed schedulers do not follow one Linux cron service model.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Platform scheduler corrected",
+        "nextNodeId": "cron-verify"
+      },
+      {
+        "id": "unknown",
+        "label": "Platform unsupported",
+        "nextNodeId": "cron-escalate"
+      }
+    ]
+  },
+  {
+    "id": "cron-shell",
+    "nodeKind": "interpretation",
+    "title": "Continue with shell execution diagnosis",
+    "summary": "Inspect execute permission, shebang, interpreter, mount options, and real user context; never use chmod 777.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Shell cause corrected",
+        "nextNodeId": "cron-verify"
+      },
+      {
+        "id": "unknown",
+        "label": "Execution remains unclear",
+        "nextNodeId": "cron-escalate"
+      }
+    ]
+  },
+  {
+    "id": "cron-fix-schedule",
+    "nodeKind": "action",
+    "title": "Correct the confirmed schedule or system-crontab structure",
+    "summary": "Change only the validated entry and preserve a copy of the previous schedule.",
+    "risk": "moderate-risk",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Schedule corrected",
+        "nextNodeId": "cron-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Timing impact is unclear",
+        "nextNodeId": "cron-escalate"
+      }
+    ],
+    "prerequisites": [
+      "Cron dialect and timezone confirmed",
+      "Expected user and cadence recorded"
+    ],
+    "rollback": "Restore the previous crontab entry from the saved copy.",
+    "verification": [
+      "Scheduler attempts execution at the intended time and user."
+    ]
+  },
+  {
+    "id": "cron-fix-daemon",
+    "nodeKind": "action",
+    "title": "Restore the confirmed scheduler service",
+    "summary": "Repair the service-specific cause; do not restart blindly without reading failure evidence.",
+    "risk": "moderate-risk",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Scheduler restored",
+        "nextNodeId": "cron-verify"
+      },
+      {
+        "id": "unknown",
+        "label": "Service cause remains unclear",
+        "nextNodeId": "cron-escalate"
+      }
+    ],
+    "prerequisites": [
+      "Scheduler implementation identified",
+      "Service logs reviewed"
+    ],
+    "rollback": "Restore the previous service configuration and use the last known-good package/unit state.",
+    "verification": [
+      "Scheduler remains running and launches a controlled test job."
+    ]
+  },
+  {
+    "id": "cron-fix-context",
+    "nodeKind": "action",
+    "title": "Make execution context explicit",
+    "summary": "Use absolute paths, an intentional shell/interpreter, controlled environment sources, and a known working directory.",
+    "risk": "moderate-risk",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Context corrected",
+        "nextNodeId": "cron-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Secret handling or ownership is unclear",
+        "nextNodeId": "cron-escalate"
+      }
+    ],
+    "prerequisites": [
+      "Real cron user confirmed",
+      "Required environment identified",
+      "Secrets are not embedded insecurely"
+    ],
+    "rollback": "Restore the previous entry/script and remove temporary debug output containing sensitive values.",
+    "verification": [
+      "Job succeeds under the real scheduled user and environment."
+    ]
+  },
+  {
+    "id": "cron-overlap",
+    "nodeKind": "action",
+    "title": "Control overlapping executions deliberately",
+    "summary": "Use an appropriate locking or idempotency design after confirming overlap is the cause.",
+    "risk": "moderate-risk",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Overlap controlled",
+        "nextNodeId": "cron-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Locking behavior is unclear",
+        "nextNodeId": "cron-escalate"
+      }
+    ],
+    "prerequisites": [
+      "Runtime and cadence measured",
+      "Recovery from interrupted jobs understood"
+    ],
+    "rollback": "Remove the new lock wrapper and restore the previous schedule if it blocks legitimate work.",
+    "verification": [
+      "Only intended executions run and missed/overlapping work is handled safely."
+    ]
+  },
+  {
+    "id": "cron-verify",
+    "nodeKind": "verification",
+    "title": "Verify scheduler, command, and business effect",
+    "summary": "A log line alone does not prove the intended task completed.",
+    "risk": "read-only",
+    "verification": [
+      "Expected scheduler attempt occurs",
+      "Correct user and environment are used",
+      "Command exit/result is captured",
+      "Intended business effect occurs",
+      "Repeated execution is safe"
+    ],
+    "choices": [
+      {
+        "id": "complete",
+        "label": "Verification passed",
+        "nextNodeId": "cron-complete"
+      },
+      {
+        "id": "unknown",
+        "label": "Verification is incomplete or regressed",
+        "nextNodeId": "cron-escalate"
+      }
+    ]
+  },
+  {
+    "id": "cron-escalate",
+    "nodeKind": "escalation",
+    "title": "Escalate with crontab type and execution evidence",
+    "summary": "Record scheduler implementation, user, schedule, timezone, command, and sanitized output without exposing secrets.",
+    "risk": "read-only"
+  },
+  {
+    "id": "cron-complete",
+    "nodeKind": "completion",
+    "title": "Diagnosis complete",
+    "summary": "The reviewed recovery checks passed. Record the cause and prevention step before closing the incident.",
+    "risk": "read-only",
+    "prevention": [
+      "Document the confirmed cause and exact recovery.",
+      "Add monitoring or a regression check where practical."
+    ]
+  }
+]

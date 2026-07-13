@@ -1,0 +1,11 @@
+[
+  {
+    "id": "dns-nxdomain",
+    "label": "NXDOMAIN",
+    "input": ";; ->>HEADER<<- opcode: QUERY, status: NXDOMAIN",
+    "fixtureType": "synthetic",
+    "containsRealEnvironmentData": false,
+    "source": "HelpDevOps-authored",
+    "reviewedAt": "2026-07-13"
+  }
+]

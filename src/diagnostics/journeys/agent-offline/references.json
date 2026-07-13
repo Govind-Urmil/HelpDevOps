@@ -1,0 +1,14 @@
+[
+  {
+    "id": "jenkins-agents",
+    "title": "Jenkins using agents",
+    "url": "https://www.jenkins.io/doc/book/using/using-agents/",
+    "type": "official"
+  },
+  {
+    "id": "jenkins-nodes",
+    "title": "Jenkins managing nodes",
+    "url": "https://www.jenkins.io/doc/book/managing/nodes/",
+    "type": "official"
+  }
+]

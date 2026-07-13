@@ -1,0 +1,11 @@
+[
+  {
+    "id": "jenkins-offline",
+    "label": "Offline agent",
+    "input": "Jenkins agent build-linux-01 is offline: channel closed",
+    "fixtureType": "synthetic",
+    "containsRealEnvironmentData": false,
+    "source": "HelpDevOps-authored",
+    "reviewedAt": "2026-07-13"
+  }
+]

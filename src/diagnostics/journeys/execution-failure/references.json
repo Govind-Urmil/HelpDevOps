@@ -1,0 +1,14 @@
+[
+  {
+    "id": "bash-man",
+    "title": "GNU Bash manual",
+    "url": "https://www.gnu.org/software/bash/manual/bash.html",
+    "type": "official"
+  },
+  {
+    "id": "execve-man",
+    "title": "Linux execve system call",
+    "url": "https://man7.org/linux/man-pages/man2/execve.2.html",
+    "type": "official"
+  }
+]

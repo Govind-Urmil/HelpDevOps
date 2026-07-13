@@ -1,0 +1,11 @@
+[
+  {
+    "id": "cron-missing",
+    "label": "No run",
+    "input": "Expected cron task did not run; no output was captured.",
+    "fixtureType": "synthetic",
+    "containsRealEnvironmentData": false,
+    "source": "HelpDevOps-authored",
+    "reviewedAt": "2026-07-13"
+  }
+]

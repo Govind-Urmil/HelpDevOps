@@ -1,0 +1,329 @@
+[
+  {
+    "id": "conn-start",
+    "nodeKind": "question",
+    "title": "Where is the connection attempted from and to?",
+    "summary": "Confirm protocol, resolved address, port, and client execution context before changing services or firewalls.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "local",
+        "label": "Same host",
+        "nextNodeId": "conn-listener"
+      },
+      {
+        "id": "remote",
+        "label": "Remote host",
+        "nextNodeId": "conn-remote"
+      },
+      {
+        "id": "container",
+        "label": "Docker/container",
+        "nextNodeId": "conn-container"
+      },
+      {
+        "id": "kubernetes",
+        "label": "Kubernetes client or Service",
+        "nextNodeId": "conn-k8s"
+      },
+      {
+        "id": "unknown",
+        "label": "Boundary is unclear",
+        "nextNodeId": "conn-escalate"
+      }
+    ]
+  },
+  {
+    "id": "conn-listener",
+    "nodeKind": "question",
+    "title": "Is the intended process listening on the expected address and port?",
+    "summary": "A refusal commonly means the destination was reached but no acceptable listener handled the connection.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "ss -lnt",
+        "purpose": "List TCP listeners without requiring process identity."
+      },
+      {
+        "command": "systemctl status <service> --no-pager",
+        "purpose": "Inspect the expected service where systemd applies."
+      }
+    ],
+    "choices": [
+      {
+        "id": "none",
+        "label": "Nothing is listening",
+        "nextNodeId": "conn-service"
+      },
+      {
+        "id": "loopback",
+        "label": "Bound only to loopback or wrong interface",
+        "nextNodeId": "conn-binding"
+      },
+      {
+        "id": "listening",
+        "label": "Listener exists",
+        "nextNodeId": "conn-policy"
+      },
+      {
+        "id": "unknown",
+        "label": "Listener cannot be inspected",
+        "nextNodeId": "conn-escalate"
+      }
+    ]
+  },
+  {
+    "id": "conn-remote",
+    "nodeKind": "question",
+    "title": "Does DNS resolve to the intended destination?",
+    "summary": "Wrong-address resolution can make a healthy service appear refused.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "wrong",
+        "label": "Address is wrong",
+        "nextNodeId": "conn-dns"
+      },
+      {
+        "id": "correct",
+        "label": "Address is correct",
+        "nextNodeId": "conn-policy"
+      },
+      {
+        "id": "unknown",
+        "label": "Resolution is unclear",
+        "nextNodeId": "conn-escalate"
+      }
+    ]
+  },
+  {
+    "id": "conn-container",
+    "nodeKind": "question",
+    "title": "Is the port published and reachable on the intended Docker network?",
+    "summary": "Container listeners, published host ports, and inter-container networks are different paths.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "publish",
+        "label": "Port mapping or network is wrong",
+        "nextNodeId": "conn-container-fix"
+      },
+      {
+        "id": "service",
+        "label": "Container process is stopped or crashing",
+        "nextNodeId": "conn-service"
+      },
+      {
+        "id": "unknown",
+        "label": "Docker path is unclear",
+        "nextNodeId": "conn-escalate"
+      }
+    ]
+  },
+  {
+    "id": "conn-k8s",
+    "nodeKind": "question",
+    "title": "Does the Service select ready endpoints on the intended target port?",
+    "summary": "A Service, EndpointSlice, Pod listener, and client namespace all participate in the path.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "endpoint",
+        "label": "No usable endpoint or wrong selector",
+        "nextNodeId": "conn-k8s-fix"
+      },
+      {
+        "id": "target",
+        "label": "Endpoint exists but target refuses",
+        "nextNodeId": "conn-service"
+      },
+      {
+        "id": "unknown",
+        "label": "Cluster path is unclear",
+        "nextNodeId": "conn-escalate"
+      }
+    ]
+  },
+  {
+    "id": "conn-service",
+    "nodeKind": "interpretation",
+    "title": "Diagnose the service or process lifecycle",
+    "summary": "Read service/container/Pod failure evidence before restarting or changing the network.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Service cause corrected",
+        "nextNodeId": "conn-verify"
+      },
+      {
+        "id": "unknown",
+        "label": "Lifecycle cause is unclear",
+        "nextNodeId": "conn-escalate"
+      }
+    ]
+  },
+  {
+    "id": "conn-binding",
+    "nodeKind": "action",
+    "title": "Correct the intended bind address deliberately",
+    "summary": "Expose only the interfaces required by the architecture; do not default blindly to 0.0.0.0.",
+    "risk": "high-risk",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Binding corrected",
+        "nextNodeId": "conn-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Exposure requirements are unclear",
+        "nextNodeId": "conn-escalate"
+      }
+    ],
+    "prerequisites": [
+      "Expected client networks known",
+      "Authentication/TLS and firewall policy reviewed",
+      "Current listener recorded"
+    ],
+    "rollback": "Restore the previous bind address and configuration if exposure or service behavior is incorrect.",
+    "verification": [
+      "Listener is present on the intended interface and only intended clients can connect."
+    ]
+  },
+  {
+    "id": "conn-policy",
+    "nodeKind": "interpretation",
+    "title": "Inspect rejection policy and protocol mismatch",
+    "summary": "Check firewall reject rules, IPv4/IPv6 choice, proxy path, and TCP versus Unix-socket assumptions without disabling protections.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Policy/path corrected",
+        "nextNodeId": "conn-verify"
+      },
+      {
+        "id": "unknown",
+        "label": "Ownership is unclear",
+        "nextNodeId": "conn-escalate"
+      }
+    ]
+  },
+  {
+    "id": "conn-dns",
+    "nodeKind": "interpretation",
+    "title": "Continue with DNS resolution diagnosis",
+    "summary": "Correct the destination identity before changing listeners or firewall policy.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "done",
+        "label": "DNS corrected",
+        "nextNodeId": "conn-verify"
+      },
+      {
+        "id": "unknown",
+        "label": "DNS remains unclear",
+        "nextNodeId": "conn-escalate"
+      }
+    ]
+  },
+  {
+    "id": "conn-container-fix",
+    "nodeKind": "action",
+    "title": "Correct the confirmed Docker port or network configuration",
+    "summary": "Change only the intended mapping/network and preserve the previous configuration.",
+    "risk": "moderate-risk",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Docker path corrected",
+        "nextNodeId": "conn-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Network exposure is unclear",
+        "nextNodeId": "conn-escalate"
+      }
+    ],
+    "prerequisites": [
+      "Container listener confirmed",
+      "Intended host/container ports known"
+    ],
+    "rollback": "Restore the previous Compose/run configuration and redeploy the last known-good mapping.",
+    "verification": [
+      "Connection succeeds from the actual client context."
+    ]
+  },
+  {
+    "id": "conn-k8s-fix",
+    "nodeKind": "action",
+    "title": "Correct the confirmed Service selector or target port",
+    "summary": "Review workload labels and target ports before changing production routing.",
+    "risk": "high-risk",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Service path corrected",
+        "nextNodeId": "conn-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Traffic impact is unclear",
+        "nextNodeId": "conn-escalate"
+      }
+    ],
+    "prerequisites": [
+      "Service and EndpointSlice inspected",
+      "Expected workload labels and ports confirmed"
+    ],
+    "rollback": "Restore the previous Service selector/port configuration.",
+    "verification": [
+      "Ready endpoints appear and application-level health succeeds."
+    ]
+  },
+  {
+    "id": "conn-verify",
+    "nodeKind": "verification",
+    "title": "Verify transport and application health",
+    "summary": "A successful TCP connection alone may not prove the application works.",
+    "risk": "read-only",
+    "verification": [
+      "Connection succeeds from the original client context",
+      "Expected protocol handshake succeeds",
+      "Application health or request succeeds",
+      "Security exposure remains appropriate"
+    ],
+    "choices": [
+      {
+        "id": "complete",
+        "label": "Verification passed",
+        "nextNodeId": "conn-complete"
+      },
+      {
+        "id": "unknown",
+        "label": "Verification is incomplete or regressed",
+        "nextNodeId": "conn-escalate"
+      }
+    ]
+  },
+  {
+    "id": "conn-escalate",
+    "nodeKind": "escalation",
+    "title": "Escalate with source, destination and refusal evidence",
+    "summary": "Record protocol, hostname/IP, port, resolved address, client context, and listener evidence; redact internal identifiers.",
+    "risk": "read-only"
+  },
+  {
+    "id": "conn-complete",
+    "nodeKind": "completion",
+    "title": "Diagnosis complete",
+    "summary": "The reviewed recovery checks passed. Record the cause and prevention step before closing the incident.",
+    "risk": "read-only",
+    "prevention": [
+      "Document the confirmed cause and exact recovery.",
+      "Add monitoring or a regression check where practical."
+    ]
+  }
+]

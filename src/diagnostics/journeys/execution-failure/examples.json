@@ -1,0 +1,11 @@
+[
+  {
+    "id": "shell-permission",
+    "label": "Permission denied",
+    "input": "bash: ./deploy.sh: Permission denied",
+    "fixtureType": "synthetic",
+    "containsRealEnvironmentData": false,
+    "source": "HelpDevOps-authored",
+    "reviewedAt": "2026-07-13"
+  }
+]

@@ -1,0 +1,48 @@
+{
+  "id": "journey-bash-execution-failure",
+  "slug": "execution-failure",
+  "domain": "bash",
+  "title": "Shell command or script will not execute",
+  "summary": "Distinguish permission, PATH, interpreter, format, and automation-context failures without chmod 777 or root shortcuts.",
+  "aliases": [
+    "bash permission denied",
+    "command not found",
+    "bad interpreter",
+    "script will not execute"
+  ],
+  "exactErrors": [
+    "command not found",
+    "bad interpreter",
+    "Exec format error"
+  ],
+  "status": "reviewed",
+  "entryNodeId": "shell-start",
+  "reviewedAt": "2026-07-13",
+  "reviewDue": "2026-10-13",
+  "riskProfile": "read-only-first",
+  "compatibility": {
+    "technology": "Bash",
+    "appliesGenerally": true,
+    "reviewedAgainst": [
+      "Current stable command-line behavior and official operational guidance"
+    ],
+    "limitations": [
+      "Shell behavior, security policy and filesystem semantics vary by platform.",
+      "This journey does not execute commands or change permissions."
+    ]
+  },
+  "whatItDoesNotProve": [
+    "The symptom alone does not identify one root cause.",
+    "HelpDevOps does not inspect or change a live environment."
+  ],
+  "firstChecks": [
+    "Capture the exact error",
+    "Confirm the real execution user and context",
+    "Inspect command resolution or script metadata"
+  ],
+  "relatedToolIds": [],
+  "references": [
+    "bash-man",
+    "execve-man"
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "id": "journey-networking-dns-resolution",
+  "slug": "dns-resolution",
+  "domain": "networking",
+  "title": "DNS name does not resolve",
+  "summary": "Separate NXDOMAIN, SERVFAIL, timeout, wrong-answer, and execution-context failures before changing DNS.",
+  "aliases": [
+    "dns not resolving",
+    "could not resolve host",
+    "temporary failure in name resolution"
+  ],
+  "exactErrors": [
+    "NXDOMAIN",
+    "SERVFAIL",
+    "Could not resolve host",
+    "Temporary failure in name resolution"
+  ],
+  "status": "reviewed",
+  "entryNodeId": "dns-start",
+  "reviewedAt": "2026-07-13",
+  "reviewDue": "2026-10-13",
+  "riskProfile": "read-only-first",
+  "compatibility": {
+    "technology": "Networking",
+    "appliesGenerally": true,
+    "reviewedAgainst": [
+      "Current stable command-line behavior and official operational guidance"
+    ],
+    "limitations": [
+      "Resolver tools and configuration differ by platform.",
+      "This journey does not query live DNS or validate DNSSEC."
+    ]
+  },
+  "whatItDoesNotProve": [
+    "The symptom alone does not identify one root cause.",
+    "HelpDevOps does not inspect or change a live environment."
+  ],
+  "firstChecks": [
+    "Identify the exact failure response",
+    "Test the resolver from the failing execution context",
+    "Confirm the queried name and record type"
+  ],
+  "relatedToolIds": [],
+  "references": [
+    "dns-rfc",
+    "resolvectl"
+  ]
+}

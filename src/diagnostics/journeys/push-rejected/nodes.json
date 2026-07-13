@@ -1,0 +1,233 @@
+[
+  {
+    "id": "git-start",
+    "nodeKind": "question",
+    "title": "What did the remote reject?",
+    "summary": "Identify the exact branch, remote, and rejection before integrating or rewriting history.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "git status -sb",
+        "purpose": "Show current branch and divergence."
+      },
+      {
+        "command": "git remote -v",
+        "purpose": "Confirm fetch and push destinations."
+      },
+      {
+        "command": "git branch --show-current",
+        "purpose": "Confirm the local branch."
+      }
+    ],
+    "choices": [
+      {
+        "id": "non-fast-forward",
+        "label": "non-fast-forward or fetch first",
+        "nextNodeId": "git-inspect"
+      },
+      {
+        "id": "protected",
+        "label": "Protected branch or policy rejection",
+        "nextNodeId": "git-protected"
+      },
+      {
+        "id": "wrong-target",
+        "label": "Wrong remote, branch, or repository suspected",
+        "nextNodeId": "git-target"
+      },
+      {
+        "id": "unknown",
+        "label": "The message is unclear",
+        "nextNodeId": "git-escalate"
+      }
+    ]
+  },
+  {
+    "id": "git-inspect",
+    "nodeKind": "question",
+    "title": "Should remote commits be preserved?",
+    "summary": "Fetch and inspect both histories before choosing merge, rebase, or guarded replacement.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "git fetch <remote>",
+        "purpose": "Update remote-tracking references without modifying the working tree."
+      },
+      {
+        "command": "git log --oneline --graph --decorate --all -n 30",
+        "purpose": "Compare local and remote history."
+      }
+    ],
+    "choices": [
+      {
+        "id": "preserve",
+        "label": "Preserve and integrate remote commits",
+        "nextNodeId": "git-integrate"
+      },
+      {
+        "id": "replace",
+        "label": "History rewrite is intentional",
+        "nextNodeId": "git-rewrite"
+      },
+      {
+        "id": "unknown",
+        "label": "Collaboration intent is unclear",
+        "nextNodeId": "git-escalate"
+      }
+    ]
+  },
+  {
+    "id": "git-integrate",
+    "nodeKind": "action",
+    "title": "Integrate remote history safely",
+    "summary": "Use the team-approved merge or rebase workflow, resolve conflicts, then push normally.",
+    "risk": "moderate-risk",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Integration completed",
+        "nextNodeId": "git-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Conflicts or policy are unclear",
+        "nextNodeId": "git-escalate"
+      }
+    ],
+    "prerequisites": [
+      "Correct repository, remote and branch confirmed",
+      "Remote commits reviewed",
+      "Working tree changes protected"
+    ],
+    "rollback": "Abort the in-progress merge or rebase before retrying; retain recoverable commits and reflog history.",
+    "verification": [
+      "Expected local and remote commits remain reachable."
+    ]
+  },
+  {
+    "id": "git-rewrite",
+    "nodeKind": "action",
+    "title": "Guard an intentional history rewrite",
+    "summary": "Use force-with-lease only when the remote history was inspected and collaboration policy permits replacement.",
+    "risk": "high-risk",
+    "commands": [
+      {
+        "command": "git push --force-with-lease <remote> <branch>",
+        "purpose": "Refuse replacement when the remote changed since it was inspected."
+      }
+    ],
+    "choices": [
+      {
+        "id": "done",
+        "label": "Guarded push completed",
+        "nextNodeId": "git-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Any precondition is uncertain",
+        "nextNodeId": "git-escalate"
+      }
+    ],
+    "prerequisites": [
+      "Correct remote and branch confirmed",
+      "Remote history inspected",
+      "Team/branch policy allows rewriting",
+      "Collaborators informed where required"
+    ],
+    "rollback": "Restore the displaced remote tip from reflog or recorded commit ID and coordinate recovery before further pushes.",
+    "verification": [
+      "Remote branch contains the intended commits and no collaborator work was lost."
+    ]
+  },
+  {
+    "id": "git-protected",
+    "nodeKind": "interpretation",
+    "title": "Repository policy rejected the update",
+    "summary": "Branch protection, review, or permission policy must be satisfied rather than bypassed.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "review",
+        "label": "Use the approved pull-request or permission workflow",
+        "nextNodeId": "git-verify"
+      },
+      {
+        "id": "unknown",
+        "label": "Policy ownership is unclear",
+        "nextNodeId": "git-escalate"
+      }
+    ]
+  },
+  {
+    "id": "git-target",
+    "nodeKind": "question",
+    "title": "Confirm repository and upstream mapping",
+    "summary": "A valid push to the wrong target is more dangerous than a rejected push.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "git remote get-url --all <remote>",
+        "purpose": "Inspect configured target URLs."
+      },
+      {
+        "command": "git branch -vv",
+        "purpose": "Inspect upstream tracking."
+      }
+    ],
+    "choices": [
+      {
+        "id": "fixed",
+        "label": "Target corrected",
+        "nextNodeId": "git-verify"
+      },
+      {
+        "id": "unknown",
+        "label": "Repository identity remains uncertain",
+        "nextNodeId": "git-escalate"
+      }
+    ]
+  },
+  {
+    "id": "git-verify",
+    "nodeKind": "verification",
+    "title": "Verify the intended remote history",
+    "summary": "Confirm the correct branch advanced without losing expected commits.",
+    "risk": "read-only",
+    "verification": [
+      "Correct remote branch updated",
+      "Expected commits remain reachable",
+      "Working tree status is understood",
+      "No unintended force update occurred"
+    ],
+    "choices": [
+      {
+        "id": "complete",
+        "label": "Verification passed",
+        "nextNodeId": "git-complete"
+      },
+      {
+        "id": "unknown",
+        "label": "Verification is incomplete or regressed",
+        "nextNodeId": "git-escalate"
+      }
+    ]
+  },
+  {
+    "id": "git-escalate",
+    "nodeKind": "escalation",
+    "title": "Pause before changing shared history",
+    "summary": "Record the rejection, branch, remote, and commit graph; ask the repository owner or collaborator before rewriting history.",
+    "risk": "read-only"
+  },
+  {
+    "id": "git-complete",
+    "nodeKind": "completion",
+    "title": "Diagnosis complete",
+    "summary": "The reviewed recovery checks passed. Record the cause and prevention step before closing the incident.",
+    "risk": "read-only",
+    "prevention": [
+      "Document the confirmed cause and exact recovery.",
+      "Add monitoring or a regression check where practical."
+    ]
+  }
+]

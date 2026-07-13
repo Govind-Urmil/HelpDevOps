@@ -1,0 +1,49 @@
+{
+  "id": "journey-git-push-rejected",
+  "slug": "push-rejected",
+  "domain": "git",
+  "title": "Git push rejected or non-fast-forward",
+  "summary": "Inspect repository identity and divergence before integrating or rewriting shared history.",
+  "aliases": [
+    "git push rejected",
+    "non fast forward",
+    "failed to push refs"
+  ],
+  "exactErrors": [
+    "non-fast-forward",
+    "failed to push some refs",
+    "fetch first"
+  ],
+  "status": "reviewed",
+  "entryNodeId": "git-start",
+  "reviewedAt": "2026-07-13",
+  "reviewDue": "2026-10-13",
+  "riskProfile": "read-only-first",
+  "compatibility": {
+    "technology": "Git",
+    "appliesGenerally": true,
+    "reviewedAgainst": [
+      "Current stable command-line behavior and official operational guidance"
+    ],
+    "limitations": [
+      "Server policies and hosting platforms vary.",
+      "This journey does not resolve repository permissions or execute Git commands."
+    ]
+  },
+  "whatItDoesNotProve": [
+    "The symptom alone does not identify one root cause.",
+    "HelpDevOps does not inspect or change a live environment."
+  ],
+  "firstChecks": [
+    "git status -sb",
+    "git remote -v",
+    "git fetch <remote>"
+  ],
+  "relatedToolIds": [
+    "git-reference"
+  ],
+  "references": [
+    "git-push-doc",
+    "git-fetch-doc"
+  ]
+}

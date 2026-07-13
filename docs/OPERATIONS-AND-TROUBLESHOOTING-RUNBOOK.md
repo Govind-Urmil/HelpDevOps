@@ -241,3 +241,6 @@ Treat unsafe unlock, destructive cleanup, weakened probes/security, or misleadin
 
 ## EP-009 Evidence Interpreter Foundation
 Five bounded, browser-local evidence interpreters connect supported command output to observations, interpretations, unknowns, safe next checks, and reviewed diagnostic journeys. Raw evidence is not saved automatically. Routine wording, examples, references, limitations, and fixtures remain resource-maintained.
+
+## EP-010 resource incidents
+If an operational journey gives a misleading result, preserve the input/path, disable or roll back the affected reviewed resource, add a regression fixture, rerun diagnostic validation, tests, build, and browser verification.

@@ -87,3 +87,6 @@ Purpose: Expand to eight reviewed journeys with CrashLoopBackOff, Terraform lock
 
 ## EP-009 Evidence Interpreter Foundation
 Five bounded, browser-local evidence interpreters connect supported command output to observations, interpretations, unknowns, safe next checks, and reviewed diagnostic journeys. Raw evidence is not saved automatically. Routine wording, examples, references, limitations, and fixtures remain resource-maintained.
+
+## EP-010 / v0.10.0
+Operational coverage candidate: six reviewed journeys; pending final approval and commit.

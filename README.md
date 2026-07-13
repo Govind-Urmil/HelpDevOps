@@ -44,3 +44,6 @@ Routine resource maintenance is documented in `docs/RESOURCE-MAINTENANCE-GUIDE.m
 
 ## EP-009 Evidence Interpreter Foundation
 Five bounded, browser-local evidence interpreters connect supported command output to observations, interpretations, unknowns, safe next checks, and reviewed diagnostic journeys. Raw evidence is not saved automatically. Routine wording, examples, references, limitations, and fixtures remain resource-maintained.
+
+## EP-010 operational coverage
+Reviewed troubleshooting now includes Git push rejection, Jenkins agent offline, DNS resolution, connection refused, cron jobs, and shell execution failures.

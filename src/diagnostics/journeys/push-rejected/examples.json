@@ -1,0 +1,11 @@
+[
+  {
+    "id": "git-nff",
+    "label": "Non-fast-forward",
+    "input": "! [rejected] main -> main (non-fast-forward)",
+    "fixtureType": "synthetic",
+    "containsRealEnvironmentData": false,
+    "source": "HelpDevOps-authored",
+    "reviewedAt": "2026-07-13"
+  }
+]

@@ -28,3 +28,6 @@ The platform contains eight reviewed, static, browser-local, risk-rated journeys
 
 ## EP-009 Evidence Interpreter Foundation
 Five bounded, browser-local evidence interpreters connect supported command output to observations, interpretations, unknowns, safe next checks, and reviewed diagnostic journeys. Raw evidence is not saved automatically. Routine wording, examples, references, limitations, and fixtures remain resource-maintained.
+
+## EP-010 operational coverage
+The diagnostic platform now covers Git push rejection, Jenkins agents, DNS, refused connections, cron execution, and shell execution failures.

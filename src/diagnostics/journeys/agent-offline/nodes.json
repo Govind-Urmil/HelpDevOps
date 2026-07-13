@@ -1,0 +1,587 @@
+[
+  {
+    "id": "jenkins-start",
+    "nodeKind": "question",
+    "title": "What offline reason does Jenkins display?",
+    "summary": "Triage manual and monitor-driven offline states before changing launch, network, runtime, or credentials.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "manual",
+        "label": "Manually or temporarily marked offline",
+        "nextNodeId": "jenkins-manual-offline"
+      },
+      {
+        "id": "monitor",
+        "label": "A node monitor took the agent offline",
+        "nextNodeId": "jenkins-monitor-offline"
+      },
+      {
+        "id": "channel",
+        "label": "Connection or channel disconnected",
+        "nextNodeId": "jenkins-launch-method"
+      },
+      {
+        "id": "launch",
+        "label": "Agent launch failed",
+        "nextNodeId": "jenkins-launch-method"
+      },
+      {
+        "id": "unknown",
+        "label": "Offline reason is unavailable or unclear",
+        "nextNodeId": "jenkins-escalate"
+      }
+    ]
+  },
+  {
+    "id": "jenkins-manual-offline",
+    "nodeKind": "question",
+    "title": "Was the offline state intentional?",
+    "summary": "A user with the required Jenkins permission may deliberately mark an agent temporarily offline. Confirm intent before reconnecting it.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "intentional",
+        "label": "Yes, maintenance or another approved reason is active",
+        "nextNodeId": "jenkins-manual-wait"
+      },
+      {
+        "id": "ready",
+        "label": "No, the authorized owner confirms it should return",
+        "nextNodeId": "jenkins-manual-enable"
+      },
+      {
+        "id": "unknown",
+        "label": "Intent or ownership is unclear",
+        "nextNodeId": "jenkins-escalate"
+      }
+    ]
+  },
+  {
+    "id": "jenkins-manual-wait",
+    "nodeKind": "interpretation",
+    "title": "Keep the intentional offline boundary in place",
+    "summary": "Do not override a deliberate maintenance or safety decision. Confirm the planned return condition with the owner.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "ready",
+        "label": "Authorized owner confirms the agent can return",
+        "nextNodeId": "jenkins-manual-enable"
+      },
+      {
+        "id": "pending",
+        "label": "Maintenance or safety condition remains active",
+        "nextNodeId": "jenkins-escalate"
+      }
+    ]
+  },
+  {
+    "id": "jenkins-manual-enable",
+    "nodeKind": "action",
+    "title": "Return the agent only with authorized confirmation",
+    "summary": "Use Jenkins to remove the temporary-offline state only after the owner confirms maintenance, capacity, and workload-safety conditions are satisfied.",
+    "risk": "moderate-risk",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Authorized re-enable completed",
+        "nextNodeId": "jenkins-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Permission or intent remains uncertain",
+        "nextNodeId": "jenkins-escalate"
+      }
+    ],
+    "prerequisites": [
+      "Agent owner or authorized operator confirmed",
+      "Maintenance or safety reason resolved",
+      "Expected workload impact reviewed"
+    ],
+    "rollback": "Mark the agent temporarily offline again if validation fails or the maintenance condition returns.",
+    "verification": [
+      "Agent is online for the intended reason and accepts only appropriate workloads."
+    ]
+  },
+  {
+    "id": "jenkins-monitor-offline",
+    "nodeKind": "question",
+    "title": "Which monitor took the agent offline?",
+    "summary": "Inspect the exact monitor and underlying condition. Do not disable monitors to make the status disappear.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "disk",
+        "label": "Disk or temporary-space monitor",
+        "nextNodeId": "jenkins-monitor-storage"
+      },
+      {
+        "id": "clock",
+        "label": "Clock synchronization monitor",
+        "nextNodeId": "jenkins-monitor-clock"
+      },
+      {
+        "id": "swap",
+        "label": "Swap or memory-pressure monitor",
+        "nextNodeId": "jenkins-monitor-resource"
+      },
+      {
+        "id": "response",
+        "label": "Response-time, health, or plugin-specific monitor",
+        "nextNodeId": "jenkins-monitor-health"
+      },
+      {
+        "id": "unknown",
+        "label": "Monitor reason is unclear",
+        "nextNodeId": "jenkins-escalate"
+      }
+    ]
+  },
+  {
+    "id": "jenkins-monitor-storage",
+    "nodeKind": "interpretation",
+    "title": "Resolve the measured storage condition",
+    "summary": "Inspect the affected filesystem or temporary directory, ownership, and growth source. Keep the monitor enabled while correcting the underlying condition.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "fixed",
+        "label": "Underlying storage condition corrected",
+        "nextNodeId": "jenkins-monitor-recheck"
+      },
+      {
+        "id": "unclear",
+        "label": "Storage ownership or cleanup safety is unclear",
+        "nextNodeId": "jenkins-escalate"
+      }
+    ]
+  },
+  {
+    "id": "jenkins-monitor-clock",
+    "nodeKind": "interpretation",
+    "title": "Correct clock synchronization evidence",
+    "summary": "Confirm controller and agent time sources, drift, and synchronization health before reconnecting the agent.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "fixed",
+        "label": "Clock synchronization corrected",
+        "nextNodeId": "jenkins-monitor-recheck"
+      },
+      {
+        "id": "unclear",
+        "label": "Time-source ownership is unclear",
+        "nextNodeId": "jenkins-escalate"
+      }
+    ]
+  },
+  {
+    "id": "jenkins-monitor-resource",
+    "nodeKind": "interpretation",
+    "title": "Resolve the measured resource pressure",
+    "summary": "Inspect memory, swap, and workload pressure. Do not disable the monitor or run the agent as root to bypass the condition.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "fixed",
+        "label": "Resource condition corrected",
+        "nextNodeId": "jenkins-monitor-recheck"
+      },
+      {
+        "id": "unclear",
+        "label": "Capacity or workload ownership is unclear",
+        "nextNodeId": "jenkins-escalate"
+      }
+    ]
+  },
+  {
+    "id": "jenkins-monitor-health",
+    "nodeKind": "interpretation",
+    "title": "Inspect the exact health or plugin monitor",
+    "summary": "Use the monitor message and plugin documentation to verify the measured condition. Do not disable the monitor as a routine fix.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "fixed",
+        "label": "Monitor condition corrected",
+        "nextNodeId": "jenkins-monitor-recheck"
+      },
+      {
+        "id": "unclear",
+        "label": "Plugin-specific behavior remains unclear",
+        "nextNodeId": "jenkins-escalate"
+      }
+    ]
+  },
+  {
+    "id": "jenkins-monitor-recheck",
+    "nodeKind": "verification",
+    "title": "Verify the monitor clears for the right reason",
+    "summary": "Confirm the measured value is healthy and Jenkins no longer keeps the agent offline. If manual intervention is required, use an authorized path.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "online",
+        "label": "Monitor healthy and agent online",
+        "nextNodeId": "jenkins-verify"
+      },
+      {
+        "id": "still",
+        "label": "Monitor remains unhealthy or reappears",
+        "nextNodeId": "jenkins-escalate"
+      }
+    ],
+    "verification": [
+      "The exact monitor reports a healthy value",
+      "The agent is no longer held offline by that monitor",
+      "The condition does not immediately recur"
+    ]
+  },
+  {
+    "id": "jenkins-launch-method",
+    "nodeKind": "question",
+    "title": "How is the agent launched?",
+    "summary": "For genuine connection or launch failures, the safest evidence depends on whether the controller connects outward or the agent connects inward.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "ssh",
+        "label": "SSH-launched agent",
+        "nextNodeId": "jenkins-controller"
+      },
+      {
+        "id": "inbound",
+        "label": "Inbound or WebSocket agent",
+        "nextNodeId": "jenkins-agent"
+      },
+      {
+        "id": "service",
+        "label": "systemd or Windows service",
+        "nextNodeId": "jenkins-service"
+      },
+      {
+        "id": "container",
+        "label": "Docker or Kubernetes agent",
+        "nextNodeId": "jenkins-container"
+      },
+      {
+        "id": "unknown",
+        "label": "Launch method is unknown",
+        "nextNodeId": "jenkins-escalate"
+      }
+    ]
+  },
+  {
+    "id": "jenkins-controller",
+    "nodeKind": "question",
+    "title": "What does the Jenkins agent log report?",
+    "summary": "Inspect the controller-side launch log before changing credentials or networking.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "dns",
+        "label": "Name resolution failure",
+        "nextNodeId": "jenkins-dns"
+      },
+      {
+        "id": "refused",
+        "label": "Connection refused or unreachable",
+        "nextNodeId": "jenkins-network"
+      },
+      {
+        "id": "auth",
+        "label": "Authentication or host-key failure",
+        "nextNodeId": "jenkins-auth"
+      },
+      {
+        "id": "unknown",
+        "label": "No clear cause",
+        "nextNodeId": "jenkins-escalate"
+      }
+    ]
+  },
+  {
+    "id": "jenkins-agent",
+    "nodeKind": "question",
+    "title": "Can the agent reach the controller endpoint?",
+    "summary": "Inbound agents depend on controller URL, secret, Java/Remoting compatibility, and network policy.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "network",
+        "label": "DNS, TLS, proxy, or connection failure",
+        "nextNodeId": "jenkins-network"
+      },
+      {
+        "id": "runtime",
+        "label": "Java or Remoting incompatibility",
+        "nextNodeId": "jenkins-runtime"
+      },
+      {
+        "id": "secret",
+        "label": "Secret or identity failure",
+        "nextNodeId": "jenkins-auth"
+      },
+      {
+        "id": "unknown",
+        "label": "No clear cause",
+        "nextNodeId": "jenkins-escalate"
+      }
+    ]
+  },
+  {
+    "id": "jenkins-service",
+    "nodeKind": "question",
+    "title": "Is the agent process or service running?",
+    "summary": "A stopped local process should be diagnosed in its own execution context.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "stopped",
+        "label": "Service/process is stopped or failed",
+        "nextNodeId": "jenkins-service-fix"
+      },
+      {
+        "id": "running",
+        "label": "Process runs but Jenkins shows offline",
+        "nextNodeId": "jenkins-network"
+      },
+      {
+        "id": "unknown",
+        "label": "State cannot be inspected",
+        "nextNodeId": "jenkins-escalate"
+      }
+    ]
+  },
+  {
+    "id": "jenkins-container",
+    "nodeKind": "question",
+    "title": "What happened to the container or Pod?",
+    "summary": "Ephemeral agents may terminate, remain Pending, or fail before connecting.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "pending",
+        "label": "Pod is Pending",
+        "nextNodeId": "jenkins-k8s"
+      },
+      {
+        "id": "crash",
+        "label": "Container/Pod exits or restarts",
+        "nextNodeId": "jenkins-crash"
+      },
+      {
+        "id": "running",
+        "label": "Workload runs but remains offline",
+        "nextNodeId": "jenkins-network"
+      },
+      {
+        "id": "unknown",
+        "label": "State is unclear",
+        "nextNodeId": "jenkins-escalate"
+      }
+    ]
+  },
+  {
+    "id": "jenkins-dns",
+    "nodeKind": "interpretation",
+    "title": "Resolve the controller or agent hostname in the real execution context",
+    "summary": "Do not substitute a public resolver or hosts entry before identifying the DNS layer.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "done",
+        "label": "DNS cause corrected",
+        "nextNodeId": "jenkins-verify"
+      },
+      {
+        "id": "unknown",
+        "label": "Resolution remains unclear",
+        "nextNodeId": "jenkins-escalate"
+      }
+    ]
+  },
+  {
+    "id": "jenkins-network",
+    "nodeKind": "interpretation",
+    "title": "Inspect the exact controller-agent network path",
+    "summary": "Confirm source, destination, port, proxy, TLS, and firewall behavior without broadly opening access.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Path corrected",
+        "nextNodeId": "jenkins-verify"
+      },
+      {
+        "id": "unknown",
+        "label": "Network ownership is unclear",
+        "nextNodeId": "jenkins-escalate"
+      }
+    ]
+  },
+  {
+    "id": "jenkins-auth",
+    "nodeKind": "action",
+    "title": "Correct only the confirmed identity or credential issue",
+    "summary": "Rotate or replace secrets only after the authentication failure and affected identity are confirmed.",
+    "risk": "moderate-risk",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Authentication corrected",
+        "nextNodeId": "jenkins-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Credential scope is uncertain",
+        "nextNodeId": "jenkins-escalate"
+      }
+    ],
+    "prerequisites": [
+      "Agent identity confirmed",
+      "Failure proves authentication or trust issue",
+      "Replacement secret handled securely"
+    ],
+    "rollback": "Restore the previous known-good agent configuration if the replacement cannot connect; revoke exposed credentials.",
+    "verification": [
+      "Agent connects with intended identity and permissions."
+    ]
+  },
+  {
+    "id": "jenkins-runtime",
+    "nodeKind": "action",
+    "title": "Align Java and Remoting compatibility",
+    "summary": "Use Jenkins-supported runtime versions and preserve the previous working runtime for rollback.",
+    "risk": "moderate-risk",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Runtime aligned",
+        "nextNodeId": "jenkins-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Compatibility remains uncertain",
+        "nextNodeId": "jenkins-escalate"
+      }
+    ],
+    "prerequisites": [
+      "Controller and agent versions recorded",
+      "Official compatibility checked"
+    ],
+    "rollback": "Restore the previous working runtime and agent package.",
+    "verification": [
+      "Remoting handshake succeeds and agent stays connected."
+    ]
+  },
+  {
+    "id": "jenkins-service-fix",
+    "nodeKind": "action",
+    "title": "Repair the confirmed local service failure",
+    "summary": "Fix the service-specific cause rather than repeatedly restarting it.",
+    "risk": "moderate-risk",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Service repaired",
+        "nextNodeId": "jenkins-verify"
+      },
+      {
+        "id": "unknown",
+        "label": "Cause remains unclear",
+        "nextNodeId": "jenkins-escalate"
+      }
+    ],
+    "prerequisites": [
+      "Service logs reviewed",
+      "User, paths, Java and disk checked"
+    ],
+    "rollback": "Revert the configuration or unit change and restore the last known-good service definition.",
+    "verification": [
+      "Process remains stable and Jenkins reports the agent online."
+    ]
+  },
+  {
+    "id": "jenkins-k8s",
+    "nodeKind": "interpretation",
+    "title": "Continue with Kubernetes scheduling evidence",
+    "summary": "A Pending ephemeral agent must be diagnosed from Pod events and scheduling constraints.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Scheduling cause corrected",
+        "nextNodeId": "jenkins-verify"
+      },
+      {
+        "id": "unknown",
+        "label": "Cluster behavior is unsupported",
+        "nextNodeId": "jenkins-escalate"
+      }
+    ]
+  },
+  {
+    "id": "jenkins-crash",
+    "nodeKind": "interpretation",
+    "title": "Continue with container termination evidence",
+    "summary": "Inspect current/previous logs, termination state, and workload configuration before recreating the agent.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Crash cause corrected",
+        "nextNodeId": "jenkins-verify"
+      },
+      {
+        "id": "unknown",
+        "label": "Failure remains unclear",
+        "nextNodeId": "jenkins-escalate"
+      }
+    ]
+  },
+  {
+    "id": "jenkins-verify",
+    "nodeKind": "verification",
+    "title": "Verify stable agent availability",
+    "summary": "Confirm both connection and actual executor behavior.",
+    "risk": "read-only",
+    "verification": [
+      "Agent remains online",
+      "Expected labels/executors are available",
+      "A representative safe job can run",
+      "No repeated reconnect loop occurs"
+    ],
+    "choices": [
+      {
+        "id": "complete",
+        "label": "Verification passed",
+        "nextNodeId": "jenkins-complete"
+      },
+      {
+        "id": "unknown",
+        "label": "Verification is incomplete or regressed",
+        "nextNodeId": "jenkins-escalate"
+      }
+    ]
+  },
+  {
+    "id": "jenkins-escalate",
+    "nodeKind": "escalation",
+    "title": "Escalate with launch method and connection evidence",
+    "summary": "Preserve the agent log, controller version, launch method, runtime version, and network symptoms without sharing secrets.",
+    "risk": "read-only"
+  },
+  {
+    "id": "jenkins-complete",
+    "nodeKind": "completion",
+    "title": "Diagnosis complete",
+    "summary": "The reviewed recovery checks passed. Record the cause and prevention step before closing the incident.",
+    "risk": "read-only",
+    "prevention": [
+      "Document the confirmed cause and exact recovery.",
+      "Add monitoring or a regression check where practical."
+    ]
+  }
+]

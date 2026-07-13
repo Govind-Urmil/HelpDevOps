@@ -1,0 +1,11 @@
+[
+  {
+    "id": "conn-refused",
+    "label": "Refused connection",
+    "input": "curl: (7) Failed to connect to api.internal port 8443: Connection refused",
+    "fixtureType": "synthetic",
+    "containsRealEnvironmentData": false,
+    "source": "HelpDevOps-authored",
+    "reviewedAt": "2026-07-13"
+  }
+]

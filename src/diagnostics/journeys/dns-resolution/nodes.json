@@ -1,0 +1,374 @@
+[
+  {
+    "id": "dns-start",
+    "nodeKind": "question",
+    "title": "What exact resolver result do you see?",
+    "summary": "NXDOMAIN, SERVFAIL, timeout, refusal, and a wrong answer require different investigation.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "getent hosts <name>",
+        "purpose": "Test the operating-system resolver path where available."
+      },
+      {
+        "command": "dig <name>",
+        "purpose": "Inspect DNS response details where dig is available."
+      }
+    ],
+    "choices": [
+      {
+        "id": "nxdomain",
+        "label": "NXDOMAIN or name not found",
+        "nextNodeId": "dns-nxdomain"
+      },
+      {
+        "id": "servfail",
+        "label": "SERVFAIL",
+        "nextNodeId": "dns-servfail"
+      },
+      {
+        "id": "timeout",
+        "label": "Timeout or no response",
+        "nextNodeId": "dns-timeout"
+      },
+      {
+        "id": "wrong",
+        "label": "Wrong or inconsistent answer",
+        "nextNodeId": "dns-wrong"
+      },
+      {
+        "id": "context",
+        "label": "Works in one context but not another",
+        "nextNodeId": "dns-context"
+      },
+      {
+        "id": "unknown",
+        "label": "Result is unclear",
+        "nextNodeId": "dns-escalate"
+      }
+    ]
+  },
+  {
+    "id": "dns-nxdomain",
+    "nodeKind": "question",
+    "title": "Is the queried name and DNS search context correct?",
+    "summary": "NXDOMAIN means the resolver reported that the queried name does not exist, but the wrong suffix or namespace can create the same symptom.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "wrong-name",
+        "label": "Name, namespace, or suffix is wrong",
+        "nextNodeId": "dns-correct-record"
+      },
+      {
+        "id": "expected",
+        "label": "Name should exist",
+        "nextNodeId": "dns-authority"
+      },
+      {
+        "id": "unknown",
+        "label": "Authority is unknown",
+        "nextNodeId": "dns-escalate"
+      }
+    ]
+  },
+  {
+    "id": "dns-servfail",
+    "nodeKind": "question",
+    "title": "Does a specific resolver or authoritative path fail?",
+    "summary": "SERVFAIL can reflect DNSSEC, delegation, recursion, or authoritative-server failure.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "resolver",
+        "label": "One resolver fails",
+        "nextNodeId": "dns-resolver"
+      },
+      {
+        "id": "all",
+        "label": "Multiple resolvers fail",
+        "nextNodeId": "dns-authority"
+      },
+      {
+        "id": "unknown",
+        "label": "Comparison is unavailable",
+        "nextNodeId": "dns-escalate"
+      }
+    ]
+  },
+  {
+    "id": "dns-timeout",
+    "nodeKind": "question",
+    "title": "Can the client reach its configured resolver?",
+    "summary": "A timeout is a reachability or response problem, not proof the name is absent.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "unreachable",
+        "label": "Resolver path is unreachable",
+        "nextNodeId": "dns-network"
+      },
+      {
+        "id": "reachable",
+        "label": "Resolver responds to other names",
+        "nextNodeId": "dns-authority"
+      },
+      {
+        "id": "unknown",
+        "label": "Network evidence is unclear",
+        "nextNodeId": "dns-escalate"
+      }
+    ]
+  },
+  {
+    "id": "dns-wrong",
+    "nodeKind": "question",
+    "title": "Where does the answer diverge?",
+    "summary": "Compare the application context, OS resolver, recursive resolver, and authoritative answer.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "cache",
+        "label": "Stale cache or TTL behavior",
+        "nextNodeId": "dns-cache"
+      },
+      {
+        "id": "record",
+        "label": "Authoritative record is wrong",
+        "nextNodeId": "dns-correct-record"
+      },
+      {
+        "id": "split",
+        "label": "Split-horizon or context-specific DNS",
+        "nextNodeId": "dns-context"
+      },
+      {
+        "id": "unknown",
+        "label": "Source is unclear",
+        "nextNodeId": "dns-escalate"
+      }
+    ]
+  },
+  {
+    "id": "dns-context",
+    "nodeKind": "question",
+    "title": "Which execution context fails?",
+    "summary": "Hosts, containers, Pods, VPNs, and applications may use different resolver settings and search domains.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "container",
+        "label": "Container or Pod only",
+        "nextNodeId": "dns-container"
+      },
+      {
+        "id": "app",
+        "label": "Application only",
+        "nextNodeId": "dns-app"
+      },
+      {
+        "id": "host",
+        "label": "Host resolver only",
+        "nextNodeId": "dns-resolver"
+      },
+      {
+        "id": "unknown",
+        "label": "Context cannot be isolated",
+        "nextNodeId": "dns-escalate"
+      }
+    ]
+  },
+  {
+    "id": "dns-authority",
+    "nodeKind": "interpretation",
+    "title": "Inspect delegation and authoritative records",
+    "summary": "Verify the intended zone owner, record type, and authoritative response before editing production DNS.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Authority or record corrected",
+        "nextNodeId": "dns-verify"
+      },
+      {
+        "id": "unknown",
+        "label": "Zone ownership is unclear",
+        "nextNodeId": "dns-escalate"
+      }
+    ]
+  },
+  {
+    "id": "dns-resolver",
+    "nodeKind": "interpretation",
+    "title": "Inspect the configured recursive or stub resolver",
+    "summary": "Compare resolvers without permanently bypassing organizational DNS or DNSSEC.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Resolver issue corrected",
+        "nextNodeId": "dns-verify"
+      },
+      {
+        "id": "unknown",
+        "label": "Resolver ownership is unclear",
+        "nextNodeId": "dns-escalate"
+      }
+    ]
+  },
+  {
+    "id": "dns-network",
+    "nodeKind": "interpretation",
+    "title": "Inspect resolver reachability and policy",
+    "summary": "Confirm route, firewall, VPN, and transport behavior without broadly opening DNS traffic.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Reachability corrected",
+        "nextNodeId": "dns-verify"
+      },
+      {
+        "id": "unknown",
+        "label": "Network path remains unclear",
+        "nextNodeId": "dns-escalate"
+      }
+    ]
+  },
+  {
+    "id": "dns-cache",
+    "nodeKind": "action",
+    "title": "Refresh only the confirmed stale cache layer",
+    "summary": "Flush or restart only the identified client/stub/resolver cache after verifying the authoritative answer.",
+    "risk": "moderate-risk",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Cache refreshed",
+        "nextNodeId": "dns-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Cache ownership is unclear",
+        "nextNodeId": "dns-escalate"
+      }
+    ],
+    "prerequisites": [
+      "Authoritative answer verified",
+      "Affected cache layer identified"
+    ],
+    "rollback": "Restore the previous resolver configuration; allow normal TTL behavior if manual cache changes cause wider impact.",
+    "verification": [
+      "The actual application context receives the intended answer."
+    ]
+  },
+  {
+    "id": "dns-correct-record",
+    "nodeKind": "action",
+    "title": "Correct the authoritative record carefully",
+    "summary": "Change only the confirmed record in the authoritative zone and account for TTL/caching.",
+    "risk": "high-risk",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Record corrected",
+        "nextNodeId": "dns-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Authority or blast radius is uncertain",
+        "nextNodeId": "dns-escalate"
+      }
+    ],
+    "prerequisites": [
+      "Authoritative zone confirmed",
+      "Current and desired records reviewed",
+      "Rollback value recorded"
+    ],
+    "rollback": "Restore the prior record value and verify authoritative propagation.",
+    "verification": [
+      "Authoritative and application-context lookups return the intended answer."
+    ]
+  },
+  {
+    "id": "dns-container",
+    "nodeKind": "interpretation",
+    "title": "Inspect container or Kubernetes DNS context",
+    "summary": "Review resolver configuration, namespace/FQDN, search domains, CoreDNS health, and network policy without assuming host DNS applies.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Context issue corrected",
+        "nextNodeId": "dns-verify"
+      },
+      {
+        "id": "unknown",
+        "label": "Platform-specific behavior is unclear",
+        "nextNodeId": "dns-escalate"
+      }
+    ]
+  },
+  {
+    "id": "dns-app",
+    "nodeKind": "interpretation",
+    "title": "Inspect application resolver behavior",
+    "summary": "Check cached connections, proxy settings, runtime DNS behavior, and actual name used by the application.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "done",
+        "label": "Application context corrected",
+        "nextNodeId": "dns-verify"
+      },
+      {
+        "id": "unknown",
+        "label": "Runtime behavior remains unclear",
+        "nextNodeId": "dns-escalate"
+      }
+    ]
+  },
+  {
+    "id": "dns-verify",
+    "nodeKind": "verification",
+    "title": "Verify DNS through the real client path",
+    "summary": "Confirm the intended answer remains stable in the context that originally failed.",
+    "risk": "read-only",
+    "verification": [
+      "Intended resolver returns the expected answer",
+      "Application/container/Pod resolves successfully",
+      "No unsafe resolver bypass remains",
+      "TTL/cache behavior is understood"
+    ],
+    "choices": [
+      {
+        "id": "complete",
+        "label": "Verification passed",
+        "nextNodeId": "dns-complete"
+      },
+      {
+        "id": "unknown",
+        "label": "Verification is incomplete or regressed",
+        "nextNodeId": "dns-escalate"
+      }
+    ]
+  },
+  {
+    "id": "dns-escalate",
+    "nodeKind": "escalation",
+    "title": "Escalate with exact DNS response and context",
+    "summary": "Record the name, type, resolver, execution context, and response code; redact internal names before sharing.",
+    "risk": "read-only"
+  },
+  {
+    "id": "dns-complete",
+    "nodeKind": "completion",
+    "title": "Diagnosis complete",
+    "summary": "The reviewed recovery checks passed. Record the cause and prevention step before closing the incident.",
+    "risk": "read-only",
+    "prevention": [
+      "Document the confirmed cause and exact recovery.",
+      "Add monitoring or a regression check where practical."
+    ]
+  }
+]

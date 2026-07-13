@@ -133,5 +133,107 @@
     "domain": "linux",
     "summary": "Use service state, journal, effective unit and dependencies before restarting or weakening controls.",
     "path": "/troubleshoot/linux/service-wont-start/"
+  },
+  {
+    "id": "journey-git-push-rejected",
+    "title": "Git push rejected or non-fast-forward",
+    "aliases": [
+      "git push rejected",
+      "non fast forward",
+      "failed to push refs"
+    ],
+    "exactErrors": [
+      "non-fast-forward",
+      "failed to push some refs",
+      "fetch first"
+    ],
+    "domain": "git",
+    "summary": "Inspect repository identity and divergence before integrating or rewriting shared history.",
+    "path": "/troubleshoot/git/push-rejected/"
+  },
+  {
+    "id": "journey-jenkins-agent-offline",
+    "title": "Jenkins agent is offline",
+    "aliases": [
+      "jenkins agent offline",
+      "jenkins node offline",
+      "jenkins remoting agent disconnected"
+    ],
+    "exactErrors": [
+      "Jenkins agent is offline",
+      "Jenkins node is offline",
+      "Agent disconnected from Jenkins"
+    ],
+    "domain": "jenkins",
+    "summary": "Identify the launch method and controller-agent boundary before changing credentials, Java, networking, or workloads.",
+    "path": "/troubleshoot/jenkins/agent-offline/"
+  },
+  {
+    "id": "journey-networking-dns-resolution",
+    "title": "DNS name does not resolve",
+    "aliases": [
+      "dns not resolving",
+      "could not resolve host",
+      "temporary failure in name resolution"
+    ],
+    "exactErrors": [
+      "NXDOMAIN",
+      "SERVFAIL",
+      "Could not resolve host",
+      "Temporary failure in name resolution"
+    ],
+    "domain": "networking",
+    "summary": "Separate NXDOMAIN, SERVFAIL, timeout, wrong-answer, and execution-context failures before changing DNS.",
+    "path": "/troubleshoot/networking/dns-resolution/"
+  },
+  {
+    "id": "journey-networking-connection-refused",
+    "title": "Connection refused",
+    "aliases": [
+      "connection refused",
+      "ECONNREFUSED",
+      "port refused"
+    ],
+    "exactErrors": [
+      "Connection refused",
+      "ECONNREFUSED"
+    ],
+    "domain": "networking",
+    "summary": "Identify the source/destination boundary, listener, binding, and policy without disabling network controls.",
+    "path": "/troubleshoot/networking/connection-refused/"
+  },
+  {
+    "id": "journey-cron-job-not-running",
+    "title": "Cron job does not run",
+    "aliases": [
+      "cron job not running",
+      "crontab not working",
+      "scheduled job did not run"
+    ],
+    "exactErrors": [
+      "CRON job failed",
+      "cron: command not found"
+    ],
+    "domain": "cron",
+    "summary": "Separate scheduler launch, schedule, execution context, and application failures before changing permissions or running as root.",
+    "path": "/troubleshoot/cron/job-not-running/"
+  },
+  {
+    "id": "journey-bash-execution-failure",
+    "title": "Shell command or script will not execute",
+    "aliases": [
+      "bash permission denied",
+      "command not found",
+      "bad interpreter",
+      "script will not execute"
+    ],
+    "exactErrors": [
+      "command not found",
+      "bad interpreter",
+      "Exec format error"
+    ],
+    "domain": "bash",
+    "summary": "Distinguish permission, PATH, interpreter, format, and automation-context failures without chmod 777 or root shortcuts.",
+    "path": "/troubleshoot/bash/execution-failure/"
   }
 ]

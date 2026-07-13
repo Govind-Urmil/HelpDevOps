@@ -392,5 +392,285 @@
     "path": "/troubleshoot/linux/service-wont-start/",
     "nodeCount": 12,
     "referenceCount": 3
+  },
+  {
+    "id": "journey-git-push-rejected",
+    "slug": "push-rejected",
+    "domain": "git",
+    "title": "Git push rejected or non-fast-forward",
+    "summary": "Inspect repository identity and divergence before integrating or rewriting shared history.",
+    "aliases": [
+      "git push rejected",
+      "non fast forward",
+      "failed to push refs"
+    ],
+    "exactErrors": [
+      "non-fast-forward",
+      "failed to push some refs",
+      "fetch first"
+    ],
+    "status": "reviewed",
+    "entryNodeId": "git-start",
+    "reviewedAt": "2026-07-13",
+    "reviewDue": "2026-10-13",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "Git",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current stable command-line behavior and official operational guidance"
+      ],
+      "limitations": [
+        "Server policies and hosting platforms vary.",
+        "This journey does not resolve repository permissions or execute Git commands."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not identify one root cause.",
+      "HelpDevOps does not inspect or change a live environment."
+    ],
+    "firstChecks": [
+      "git status -sb",
+      "git remote -v",
+      "git fetch <remote>"
+    ],
+    "relatedToolIds": [
+      "git-reference"
+    ],
+    "path": "/troubleshoot/git/push-rejected/",
+    "nodeCount": 9,
+    "referenceCount": 2
+  },
+  {
+    "id": "journey-jenkins-agent-offline",
+    "slug": "agent-offline",
+    "domain": "jenkins",
+    "title": "Jenkins agent is offline",
+    "summary": "Identify the launch method and controller-agent boundary before changing credentials, Java, networking, or workloads.",
+    "aliases": [
+      "jenkins agent offline",
+      "jenkins node offline",
+      "jenkins remoting agent disconnected"
+    ],
+    "exactErrors": [
+      "Jenkins agent is offline",
+      "Jenkins node is offline",
+      "Agent disconnected from Jenkins"
+    ],
+    "status": "reviewed",
+    "entryNodeId": "jenkins-start",
+    "reviewedAt": "2026-07-13",
+    "reviewDue": "2026-10-13",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "Jenkins",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current stable command-line behavior and official operational guidance"
+      ],
+      "limitations": [
+        "Plugins and managed agent providers can add launch-specific behavior.",
+        "This journey does not access a Jenkins controller or agent."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not identify one root cause.",
+      "HelpDevOps does not inspect or change a live environment."
+    ],
+    "firstChecks": [
+      "Identify the launch method",
+      "Inspect the Jenkins agent/computer log",
+      "Check the agent process and network path"
+    ],
+    "relatedToolIds": [],
+    "path": "/troubleshoot/jenkins/agent-offline/",
+    "nodeCount": 25,
+    "referenceCount": 2
+  },
+  {
+    "id": "journey-networking-dns-resolution",
+    "slug": "dns-resolution",
+    "domain": "networking",
+    "title": "DNS name does not resolve",
+    "summary": "Separate NXDOMAIN, SERVFAIL, timeout, wrong-answer, and execution-context failures before changing DNS.",
+    "aliases": [
+      "dns not resolving",
+      "could not resolve host",
+      "temporary failure in name resolution"
+    ],
+    "exactErrors": [
+      "NXDOMAIN",
+      "SERVFAIL",
+      "Could not resolve host",
+      "Temporary failure in name resolution"
+    ],
+    "status": "reviewed",
+    "entryNodeId": "dns-start",
+    "reviewedAt": "2026-07-13",
+    "reviewDue": "2026-10-13",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "Networking",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current stable command-line behavior and official operational guidance"
+      ],
+      "limitations": [
+        "Resolver tools and configuration differ by platform.",
+        "This journey does not query live DNS or validate DNSSEC."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not identify one root cause.",
+      "HelpDevOps does not inspect or change a live environment."
+    ],
+    "firstChecks": [
+      "Identify the exact failure response",
+      "Test the resolver from the failing execution context",
+      "Confirm the queried name and record type"
+    ],
+    "relatedToolIds": [],
+    "path": "/troubleshoot/networking/dns-resolution/",
+    "nodeCount": 16,
+    "referenceCount": 2
+  },
+  {
+    "id": "journey-networking-connection-refused",
+    "slug": "connection-refused",
+    "domain": "networking",
+    "title": "Connection refused",
+    "summary": "Identify the source/destination boundary, listener, binding, and policy without disabling network controls.",
+    "aliases": [
+      "connection refused",
+      "ECONNREFUSED",
+      "port refused"
+    ],
+    "exactErrors": [
+      "Connection refused",
+      "ECONNREFUSED"
+    ],
+    "status": "reviewed",
+    "entryNodeId": "conn-start",
+    "reviewedAt": "2026-07-13",
+    "reviewDue": "2026-10-13",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "Networking",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current stable command-line behavior and official operational guidance"
+      ],
+      "limitations": [
+        "Refusal behavior can be produced by platform-specific proxies or policies.",
+        "This journey does not scan ports or change firewalls."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not identify one root cause.",
+      "HelpDevOps does not inspect or change a live environment."
+    ],
+    "firstChecks": [
+      "Confirm hostname/IP and port",
+      "Identify the client execution context",
+      "Inspect the intended listener"
+    ],
+    "relatedToolIds": [],
+    "path": "/troubleshoot/networking/connection-refused/",
+    "nodeCount": 14,
+    "referenceCount": 2
+  },
+  {
+    "id": "journey-cron-job-not-running",
+    "slug": "job-not-running",
+    "domain": "cron",
+    "title": "Cron job does not run",
+    "summary": "Separate scheduler launch, schedule, execution context, and application failures before changing permissions or running as root.",
+    "aliases": [
+      "cron job not running",
+      "crontab not working",
+      "scheduled job did not run"
+    ],
+    "exactErrors": [
+      "CRON job failed",
+      "cron: command not found"
+    ],
+    "status": "reviewed",
+    "entryNodeId": "cron-start",
+    "reviewedAt": "2026-07-13",
+    "reviewDue": "2026-10-13",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "Cron",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current stable command-line behavior and official operational guidance"
+      ],
+      "limitations": [
+        "Cron implementations, service names, logging and timezones vary.",
+        "This journey does not execute or install scheduled jobs."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not identify one root cause.",
+      "HelpDevOps does not inspect or change a live environment."
+    ],
+    "firstChecks": [
+      "Identify user versus system crontab",
+      "Check whether execution was attempted",
+      "Compare the scheduled execution context"
+    ],
+    "relatedToolIds": [
+      "cron"
+    ],
+    "path": "/troubleshoot/cron/job-not-running/",
+    "nodeCount": 18,
+    "referenceCount": 2
+  },
+  {
+    "id": "journey-bash-execution-failure",
+    "slug": "execution-failure",
+    "domain": "bash",
+    "title": "Shell command or script will not execute",
+    "summary": "Distinguish permission, PATH, interpreter, format, and automation-context failures without chmod 777 or root shortcuts.",
+    "aliases": [
+      "bash permission denied",
+      "command not found",
+      "bad interpreter",
+      "script will not execute"
+    ],
+    "exactErrors": [
+      "command not found",
+      "bad interpreter",
+      "Exec format error"
+    ],
+    "status": "reviewed",
+    "entryNodeId": "shell-start",
+    "reviewedAt": "2026-07-13",
+    "reviewDue": "2026-10-13",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "Bash",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current stable command-line behavior and official operational guidance"
+      ],
+      "limitations": [
+        "Shell behavior, security policy and filesystem semantics vary by platform.",
+        "This journey does not execute commands or change permissions."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not identify one root cause.",
+      "HelpDevOps does not inspect or change a live environment."
+    ],
+    "firstChecks": [
+      "Capture the exact error",
+      "Confirm the real execution user and context",
+      "Inspect command resolution or script metadata"
+    ],
+    "relatedToolIds": [],
+    "path": "/troubleshoot/bash/execution-failure/",
+    "nodeCount": 18,
+    "referenceCount": 2
   }
 ]

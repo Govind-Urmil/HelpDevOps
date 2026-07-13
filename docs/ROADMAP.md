@@ -81,3 +81,6 @@ Implementation candidate for v0.8.0 with five high-intent reviewed journeys.
 
 ## EP-009 Evidence Interpreter Foundation
 Five bounded, browser-local evidence interpreters connect supported command output to observations, interpretations, unknowns, safe next checks, and reviewed diagnostic journeys. Raw evidence is not saved automatically. Routine wording, examples, references, limitations, and fixtures remain resource-maintained.
+
+## EP-010 — Operational Coverage Completion
+Adds six reviewed journeys across Git, Jenkins, networking, cron, and Bash.

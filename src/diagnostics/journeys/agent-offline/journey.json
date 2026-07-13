@@ -1,0 +1,47 @@
+{
+  "id": "journey-jenkins-agent-offline",
+  "slug": "agent-offline",
+  "domain": "jenkins",
+  "title": "Jenkins agent is offline",
+  "summary": "Identify the launch method and controller-agent boundary before changing credentials, Java, networking, or workloads.",
+  "aliases": [
+    "jenkins agent offline",
+    "jenkins node offline",
+    "jenkins remoting agent disconnected"
+  ],
+  "exactErrors": [
+    "Jenkins agent is offline",
+    "Jenkins node is offline",
+    "Agent disconnected from Jenkins"
+  ],
+  "status": "reviewed",
+  "entryNodeId": "jenkins-start",
+  "reviewedAt": "2026-07-13",
+  "reviewDue": "2026-10-13",
+  "riskProfile": "read-only-first",
+  "compatibility": {
+    "technology": "Jenkins",
+    "appliesGenerally": true,
+    "reviewedAgainst": [
+      "Current stable command-line behavior and official operational guidance"
+    ],
+    "limitations": [
+      "Plugins and managed agent providers can add launch-specific behavior.",
+      "This journey does not access a Jenkins controller or agent."
+    ]
+  },
+  "whatItDoesNotProve": [
+    "The symptom alone does not identify one root cause.",
+    "HelpDevOps does not inspect or change a live environment."
+  ],
+  "firstChecks": [
+    "Identify the launch method",
+    "Inspect the Jenkins agent/computer log",
+    "Check the agent process and network path"
+  ],
+  "relatedToolIds": [],
+  "references": [
+    "jenkins-agents",
+    "jenkins-nodes"
+  ]
+}

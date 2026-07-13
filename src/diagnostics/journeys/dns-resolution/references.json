@@ -1,0 +1,14 @@
+[
+  {
+    "id": "dns-rfc",
+    "title": "DNS concepts and implementation",
+    "url": "https://www.rfc-editor.org/rfc/rfc1034",
+    "type": "standard"
+  },
+  {
+    "id": "resolvectl",
+    "title": "systemd-resolved resolvectl",
+    "url": "https://www.freedesktop.org/software/systemd/man/latest/resolvectl.html",
+    "type": "official"
+  }
+]

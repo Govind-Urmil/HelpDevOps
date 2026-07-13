@@ -1,0 +1,14 @@
+[
+  {
+    "id": "git-push-doc",
+    "title": "Git push documentation",
+    "url": "https://git-scm.com/docs/git-push",
+    "type": "official"
+  },
+  {
+    "id": "git-fetch-doc",
+    "title": "Git fetch documentation",
+    "url": "https://git-scm.com/docs/git-fetch",
+    "type": "official"
+  }
+]

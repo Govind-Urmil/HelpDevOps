@@ -100,3 +100,6 @@ Update `src/diagnostics/journeys/<journey>/`, keep aliases conservative and refe
 
 ## EP-009 Evidence Interpreter Foundation
 Five bounded, browser-local evidence interpreters connect supported command output to observations, interpretations, unknowns, safe next checks, and reviewed diagnostic journeys. Raw evidence is not saved automatically. Routine wording, examples, references, limitations, and fixtures remain resource-maintained.
+
+## EP-010 journeys
+Routine wording, aliases, references, review dates, and branches are maintained in `src/diagnostics/journeys/`; code changes are unnecessary unless the schema/runtime changes.
