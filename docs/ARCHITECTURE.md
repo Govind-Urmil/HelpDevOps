@@ -22,3 +22,7 @@ Navigation, SEO/structured data, search input/results and Result Contract respon
 ## EP-003 resource and analysis layer
 
 The centralized tool registry drives discovery and status. Domain-owned JSON resources contain maintainable wording, examples, references, and limitations. Domain analyzers remain small JavaScript modules. Universal Input routes supported input through deterministic parsing and renders the shared Result Contract. YAML parsing is local and uses the pinned `yaml` dependency with bounded alias handling.
+
+## Operations and launch gate
+
+Operational knowledge is maintained in `OPERATIONS-AND-TROUBLESHOOTING-RUNBOOK.md`; release actions are summarized in `PRODUCTION-CHECKLIST.md`. Every EP introducing a new operational failure mode must update the runbook. Public launch is blocked until both documents are verified against the real deployed infrastructure.

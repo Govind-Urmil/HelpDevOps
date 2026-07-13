@@ -11,7 +11,9 @@ Trusted, free, privacy-first, browser-based DevOps workspace.
 
 ## Current release candidate
 
-EP-003 / v0.3.0 activates the Deterministic Core Tool Platform. It adds a centralized tool registry, versioned resource packs, resource validation, real Universal Input analysis, a Cron Analyzer, a JSON & YAML Inspector, classification-only Docker Compose and Kubernetes signals, local tool search, transparent Result Contracts, expanded tests, and maintenance documentation.
+EP-004 / v0.4.0 adds four deterministic Developer Essentials: Encoding & Hash, IPv4 CIDR, Linux Permissions, and Git Reference tools. It also extends conservative Universal Input routing, versioned resources, validation, discovery, and regression coverage without changing the local-only static architecture.
+
+EP-003 / v0.3.0 remains the deterministic core-tool baseline.
 
 EP-002 / v0.2.0 remains the completed platform-shell and Obsidian Signal baseline.
 

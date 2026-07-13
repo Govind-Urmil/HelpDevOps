@@ -24,10 +24,22 @@ Next: Completed in v0.2.0.
 
 ## EP-003 — Deterministic Core Tool Platform
 
-Status: Implementation candidate; pending independent audit and Product Owner approval.
+Status: Completed baseline for EP-004 development.
 
 Version: v0.3.0.
 
 Purpose: Activate deterministic Universal Input, centralized tool discovery, versioned resource packs, resource validation, a production Cron Analyzer, and a production JSON/YAML Inspector while preserving truthful classification-only boundaries for Compose and Kubernetes.
 
-Next: Independent audit, at most one narrow remediation pass if a genuine blocker exists, then commit and push.
+Next: Superseded by EP-004 implementation.
+
+## EP-004 — Developer Essentials
+
+Status: Implementation candidate; pending independent audit and Product Owner approval.
+
+Version: v0.4.0.
+
+Purpose: Add deterministic Encoding & Hash, IPv4 CIDR, Linux Permissions, and Git Reference utilities with conservative Universal Input routing, resource-driven domain data, truthful capability boundaries, and expanded regression evidence.
+
+Next: Independent audit, at most one narrow remediation pass if a genuine blocker exists, then owner-controlled commit and push.
+
+Operational completion rule: every EP that introduces a new operational failure mode must update the Operations & Troubleshooting Runbook before it can be complete.

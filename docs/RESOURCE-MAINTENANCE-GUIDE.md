@@ -64,6 +64,8 @@ Requires code and tests:
 
 Never edit a released historical Git commit. Make a new commit.
 
+If a resource change introduces a new operational failure mode, update the Operations & Troubleshooting Runbook in the same EP. HelpDevOps cannot go live until that runbook and the Production Checklist are verified against real infrastructure.
+
 ## Validation commands
 
 ```bash

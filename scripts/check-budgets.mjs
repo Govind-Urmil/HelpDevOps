@@ -1,6 +1,17 @@
 import fs from 'node:fs'; import path from 'node:path'; import zlib from 'node:zlib';
-const walk=d=>fs.readdirSync(d,{withFileTypes:true}).flatMap(e=>e.isDirectory()?walk(path.join(d,e.name)):path.join(d,e.name));const files=walk('dist');
-const compressed=ext=>files.filter(f=>f.endsWith(ext)).reduce((n,f)=>n+zlib.gzipSync(fs.readFileSync(f)).length,0);
-const js=compressed('.js'),css=compressed('.css');const home=fs.statSync('dist/index.html').size+js+css;const html=fs.readFileSync('dist/index.html','utf8');const resources=[...html.matchAll(/<(?:script|img)[^>]+src="([^"]+)"|<link[^>]+rel="stylesheet"[^>]+href="([^"]+)"/g)].map(m=>m[1]||m[2]);const requests=1+resources.length;
-const failures=[];if(js>40*1024)failures.push(`JS ${js} > 40KB`);if(css>35*1024)failures.push(`CSS ${css} > 35KB`);if(home>250*1024)failures.push(`Homepage ${home} > 250KB`);if(requests>15)failures.push(`Homepage requests ${requests} > 15`);if(resources.some(url=>/^https?:\/\//.test(url)&&!url.startsWith('https://helpdevops.example')))failures.push('Third-party script, image, or stylesheet found');
-if(failures.length)throw new Error(failures.join('\n'));console.log(`Budgets passed: JS ${(js/1024).toFixed(1)}KB gzip; CSS ${(css/1024).toFixed(1)}KB gzip; homepage ${(home/1024).toFixed(1)}KB; requests ${requests}.`);
+const walk=(dir)=>fs.readdirSync(dir,{withFileTypes:true}).flatMap(entry=>entry.isDirectory()?walk(path.join(dir,entry.name)):path.join(dir,entry.name));
+const htmlFiles=walk('dist').filter(file=>file.endsWith('.html')), failures=[], results=[];
+for(const file of htmlFiles){
+  const html=fs.readFileSync(file,'utf8');
+  const urls=[...html.matchAll(/<(?:script|img)[^>]+src="([^"]+)"|<link[^>]+rel="stylesheet"[^>]+href="([^"]+)"/g)].map(match=>match[1]||match[2]);
+  const local=[...new Set(urls.filter(url=>url.startsWith('/')).map(url=>path.join('dist',url.split(/[?#]/)[0].replace(/^\//,''))).filter(fs.existsSync))];
+  const js=local.filter(asset=>asset.endsWith('.js')).reduce((size,asset)=>size+zlib.gzipSync(fs.readFileSync(asset)).length,0);
+  const css=local.filter(asset=>asset.endsWith('.css')).reduce((size,asset)=>size+zlib.gzipSync(fs.readFileSync(asset)).length,0);
+  const transfer=fs.statSync(file).size+js+css, requests=1+urls.length, route=path.relative('dist',file);
+  if(js>40*1024)failures.push(`${route}: JS ${js} > 40KB`); if(css>35*1024)failures.push(`${route}: CSS ${css} > 35KB`); if(transfer>250*1024)failures.push(`${route}: transfer ${transfer} > 250KB`); if(requests>15)failures.push(`${route}: requests ${requests} > 15`);
+  if(urls.some(url=>/^https?:\/\//.test(url)&&!url.startsWith('https://helpdevops.example')))failures.push(`${route}: third-party runtime asset found`);
+  results.push({route,js,css,transfer,requests});
+}
+if(failures.length)throw new Error(failures.join('\n'));
+const peak=(key)=>results.reduce((best,item)=>item[key]>best[key]?item:best,results[0]);
+console.log(`Budgets passed for ${results.length} routes. Peak JS ${(peak('js').js/1024).toFixed(1)}KB gzip; peak CSS ${(peak('css').css/1024).toFixed(1)}KB gzip; peak transfer ${(peak('transfer').transfer/1024).toFixed(1)}KB; peak requests ${peak('requests').requests}.`);

@@ -12,7 +12,7 @@ Implementation status: Completed and approved in v0.2.0.
 Status: implementation candidate for v0.3.0. Centralized tool registry, resource validation, active Universal Input, production Cron and JSON/YAML utilities, transparent Result Contracts, and classification-only Compose/Kubernetes signals.
 
 ## EP-004 — Developer Essentials
-High-value configuration, encoding, Linux, Git and networking utilities; stronger search/categories, local favorites/recent usage and regression coverage.
+Status: implementation candidate for v0.4.0. Encoding/hash, IPv4 CIDR, Linux permission and Git reference utilities; conservative Universal Input, resource-driven classifications and expanded regression coverage.
 
 ## EP-005 — DevOps Workspace
 Shared editors, safe local persistence, import/export, comparison and approved tool chaining to reduce context switching.
@@ -31,5 +31,7 @@ Trustworthy guides/references, mature information architecture/search, SEO/conte
 
 ## EP-010 — Production Hardening & Launch
 Full audits, deployment hardening, dormant monetization readiness, release cleanup and public-launch verification.
+
+Launch gate: the Operations & Troubleshooting Runbook and Production Checklist must be verified against the actual repository, deployment provider/workflow, production branch, domain, DNS, TLS, rollback process and production tools.
 
 Roadmap scope may be refined through research, but the ten-EP target is preferred.
