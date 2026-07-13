@@ -1,0 +1,465 @@
+[
+  {
+    "id": "k8s-start",
+    "nodeKind": "question",
+    "title": "What do the Pod scheduling events report?",
+    "summary": "Inspect the Pod and its events before changing requests, taints, selectors, or cluster capacity.",
+    "why": "The scheduler records why no feasible node was selected.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "kubectl get pod <pod> -n <namespace> -o wide",
+        "purpose": "Confirm status, age, scheduler assignment, and node."
+      },
+      {
+        "command": "kubectl describe pod <pod> -n <namespace>",
+        "purpose": "Inspect scheduling events and configuration."
+      }
+    ],
+    "choices": [
+      {
+        "id": "cpu",
+        "label": "Insufficient CPU",
+        "nextNodeId": "k8s-resources"
+      },
+      {
+        "id": "memory",
+        "label": "Insufficient memory",
+        "nextNodeId": "k8s-resources"
+      },
+      {
+        "id": "taint",
+        "label": "Untolerated taint",
+        "nextNodeId": "k8s-taint"
+      },
+      {
+        "id": "selector",
+        "label": "Node selector or affinity mismatch",
+        "nextNodeId": "k8s-placement"
+      },
+      {
+        "id": "pvc",
+        "label": "PVC or volume is unavailable",
+        "nextNodeId": "k8s-pvc"
+      },
+      {
+        "id": "port",
+        "label": "Host port conflict",
+        "nextNodeId": "k8s-hostport"
+      },
+      {
+        "id": "topology",
+        "label": "Topology constraint cannot be satisfied",
+        "nextNodeId": "k8s-placement"
+      },
+      {
+        "id": "quota",
+        "label": "Quota or limit-related event",
+        "nextNodeId": "k8s-quota"
+      },
+      {
+        "id": "none",
+        "label": "No useful scheduling event",
+        "nextNodeId": "k8s-no-event"
+      },
+      {
+        "id": "unknown",
+        "label": "The event is provider-specific or unclear",
+        "nextNodeId": "k8s-escalate"
+      }
+    ]
+  },
+  {
+    "id": "k8s-resources",
+    "nodeKind": "question",
+    "title": "Do Pod requests exceed currently feasible allocatable resources?",
+    "summary": "Compare requests, node allocatable capacity, and other scheduled workloads.",
+    "why": "The scheduler uses requests, not current usage alone, when checking resource fit.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "kubectl get pod <pod> -n <namespace> -o jsonpath='{.spec.containers[*].resources.requests}'",
+        "purpose": "Review Pod resource requests."
+      },
+      {
+        "command": "kubectl describe nodes",
+        "purpose": "Review allocatable resources and allocation summaries."
+      }
+    ],
+    "choices": [
+      {
+        "id": "oversized",
+        "label": "Requests appear larger than intended",
+        "nextNodeId": "k8s-resource-action"
+      },
+      {
+        "id": "capacity",
+        "label": "Requests are intentional but cluster capacity is insufficient",
+        "nextNodeId": "k8s-capacity-action"
+      },
+      {
+        "id": "unclear",
+        "label": "Fit remains unclear",
+        "nextNodeId": "k8s-escalate"
+      }
+    ]
+  },
+  {
+    "id": "k8s-taint",
+    "nodeKind": "question",
+    "title": "Is the taint intentional and should this workload tolerate it?",
+    "summary": "Compare node taints with Pod tolerations and workload policy.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "kubectl get nodes -o custom-columns=NAME:.metadata.name,TAINTS:.spec.taints",
+        "purpose": "Review node taints."
+      }
+    ],
+    "choices": [
+      {
+        "id": "should-tolerate",
+        "label": "The workload is approved for those nodes",
+        "nextNodeId": "k8s-taint-action"
+      },
+      {
+        "id": "should-not",
+        "label": "The taint correctly protects the nodes",
+        "nextNodeId": "k8s-placement"
+      },
+      {
+        "id": "unknown",
+        "label": "Placement policy is unclear",
+        "nextNodeId": "k8s-escalate"
+      }
+    ]
+  },
+  {
+    "id": "k8s-placement",
+    "nodeKind": "question",
+    "title": "Do node labels satisfy selector, affinity, and topology requirements?",
+    "summary": "Compare requested placement constraints with actual labels and available topology.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "kubectl get nodes --show-labels",
+        "purpose": "Review node labels."
+      }
+    ],
+    "choices": [
+      {
+        "id": "wrong-rule",
+        "label": "A placement rule is incorrect or obsolete",
+        "nextNodeId": "k8s-placement-action"
+      },
+      {
+        "id": "no-nodes",
+        "label": "No nodes intentionally satisfy the rule",
+        "nextNodeId": "k8s-capacity-action"
+      },
+      {
+        "id": "unclear",
+        "label": "Constraints remain unclear",
+        "nextNodeId": "k8s-escalate"
+      }
+    ]
+  },
+  {
+    "id": "k8s-pvc",
+    "nodeKind": "question",
+    "title": "What is the PersistentVolumeClaim status?",
+    "summary": "A Pod may remain unscheduled while a required claim is Pending or unbound.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "kubectl get pvc -n <namespace>",
+        "purpose": "Review claim status."
+      },
+      {
+        "command": "kubectl describe pvc <claim> -n <namespace>",
+        "purpose": "Inspect binding and provisioning events."
+      }
+    ],
+    "choices": [
+      {
+        "id": "pending",
+        "label": "The claim is Pending or provisioning failed",
+        "nextNodeId": "k8s-pvc-interim"
+      },
+      {
+        "id": "bound",
+        "label": "The claim is Bound",
+        "nextNodeId": "k8s-escalate"
+      },
+      {
+        "id": "unknown",
+        "label": "Storage evidence is unclear",
+        "nextNodeId": "k8s-escalate"
+      }
+    ]
+  },
+  {
+    "id": "k8s-hostport",
+    "nodeKind": "question",
+    "title": "Is the requested hostPort already allocated on feasible nodes?",
+    "summary": "Host ports constrain placement and can prevent otherwise suitable nodes from hosting the Pod.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "conflict",
+        "label": "The hostPort conflicts with existing workloads",
+        "nextNodeId": "k8s-hostport-action"
+      },
+      {
+        "id": "no-conflict",
+        "label": "No conflict is clear",
+        "nextNodeId": "k8s-escalate"
+      },
+      {
+        "id": "unknown",
+        "label": "The evidence is unclear",
+        "nextNodeId": "k8s-escalate"
+      }
+    ]
+  },
+  {
+    "id": "k8s-quota",
+    "nodeKind": "question",
+    "title": "Which quota or limit object blocks admission or scheduling?",
+    "summary": "Review namespace quota and limit-range evidence before changing policy.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "kubectl describe resourcequota -n <namespace> && kubectl describe limitrange -n <namespace>",
+        "purpose": "Review namespace resource policy."
+      }
+    ],
+    "choices": [
+      {
+        "id": "policy",
+        "label": "The workload exceeds an intentional policy",
+        "nextNodeId": "k8s-escalate"
+      },
+      {
+        "id": "wrong",
+        "label": "The configuration appears incorrect",
+        "nextNodeId": "k8s-resource-action"
+      },
+      {
+        "id": "unknown",
+        "label": "The policy impact is unclear",
+        "nextNodeId": "k8s-escalate"
+      }
+    ]
+  },
+  {
+    "id": "k8s-no-event",
+    "nodeKind": "question",
+    "title": "Is a scheduler assigned and operational?",
+    "summary": "No scheduling event can indicate a custom scheduler, scheduling gate, control-plane issue, or recently created Pod.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "kubectl get pod <pod> -n <namespace> -o jsonpath='{.spec.schedulerName} {.spec.schedulingGates}'",
+        "purpose": "Review scheduler selection and scheduling gates."
+      }
+    ],
+    "choices": [
+      {
+        "id": "custom",
+        "label": "A custom scheduler or gate is configured",
+        "nextNodeId": "k8s-escalate"
+      },
+      {
+        "id": "default",
+        "label": "Default scheduler with no clear event",
+        "nextNodeId": "k8s-escalate"
+      },
+      {
+        "id": "unknown",
+        "label": "Evidence is unavailable",
+        "nextNodeId": "k8s-escalate"
+      }
+    ]
+  },
+  {
+    "id": "k8s-resource-action",
+    "nodeKind": "action",
+    "title": "Review workload requests before changing them",
+    "summary": "Correct an accidental request only with application-owner input and non-production validation.",
+    "risk": "high-risk",
+    "prerequisites": [
+      "Confirm observed demand and workload SLOs.",
+      "Review autoscaling and eviction implications."
+    ],
+    "rollback": "Restore the previous manifest and rollout.",
+    "choices": [
+      {
+        "id": "done",
+        "label": "A reviewed request correction was deployed",
+        "nextNodeId": "k8s-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "The request is intentional or uncertain",
+        "nextNodeId": "k8s-escalate"
+      }
+    ]
+  },
+  {
+    "id": "k8s-capacity-action",
+    "nodeKind": "action",
+    "title": "Review capacity or approved placement changes",
+    "summary": "Adding capacity, changing pools, or relaxing placement affects cost and workload isolation.",
+    "risk": "expert-review-required",
+    "prerequisites": [
+      "Confirm capacity planning and cluster policy.",
+      "Review autoscaler/provider behavior."
+    ],
+    "rollback": "Use the approved node-pool or capacity rollback procedure.",
+    "choices": [
+      {
+        "id": "done",
+        "label": "An approved capacity/placement change completed",
+        "nextNodeId": "k8s-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Expert review is required",
+        "nextNodeId": "k8s-escalate"
+      }
+    ]
+  },
+  {
+    "id": "k8s-taint-action",
+    "nodeKind": "action",
+    "title": "Add only an approved toleration",
+    "summary": "Do not remove protective taints or add broad tolerations without understanding isolation policy.",
+    "risk": "high-risk",
+    "prerequisites": [
+      "Confirm workload is permitted on tainted nodes.",
+      "Use the narrowest toleration."
+    ],
+    "rollback": "Restore the previous workload manifest.",
+    "choices": [
+      {
+        "id": "done",
+        "label": "An approved toleration was deployed",
+        "nextNodeId": "k8s-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Placement policy is uncertain",
+        "nextNodeId": "k8s-escalate"
+      }
+    ]
+  },
+  {
+    "id": "k8s-placement-action",
+    "nodeKind": "action",
+    "title": "Correct the narrow placement rule",
+    "summary": "Update an obsolete selector or affinity rule only after confirming intended topology and failure-domain behavior.",
+    "risk": "moderate-risk",
+    "prerequisites": [
+      "Confirm current node labels and intended placement."
+    ],
+    "rollback": "Restore the previous manifest.",
+    "choices": [
+      {
+        "id": "done",
+        "label": "A reviewed placement correction was deployed",
+        "nextNodeId": "k8s-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "The intended placement is uncertain",
+        "nextNodeId": "k8s-escalate"
+      }
+    ]
+  },
+  {
+    "id": "k8s-pvc-interim",
+    "nodeKind": "escalation",
+    "title": "Continue with storage evidence",
+    "summary": "Preserve PVC events, StorageClass, access mode, requested capacity, and provisioner evidence. A dedicated PVC Pending journey is planned; do not treat it as available yet.",
+    "risk": "read-only"
+  },
+  {
+    "id": "k8s-hostport-action",
+    "nodeKind": "action",
+    "title": "Review whether hostPort is necessary",
+    "summary": "Changing hostPort or workload placement can affect connectivity and scheduling.",
+    "risk": "moderate-risk",
+    "prerequisites": [
+      "Confirm the service exposure design and existing port users."
+    ],
+    "rollback": "Restore the previous manifest and service configuration.",
+    "choices": [
+      {
+        "id": "done",
+        "label": "A reviewed port/placement change completed",
+        "nextNodeId": "k8s-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "The networking design is uncertain",
+        "nextNodeId": "k8s-escalate"
+      }
+    ]
+  },
+  {
+    "id": "k8s-verify",
+    "nodeKind": "verification",
+    "title": "Verify scheduling and workload readiness",
+    "summary": "Confirm the Pod is scheduled and the workload becomes healthy, not merely assigned to a node.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "kubectl get pod <pod> -n <namespace> -w",
+        "purpose": "Observe scheduling and readiness transitions."
+      }
+    ],
+    "verification": [
+      "The Pod is assigned to an intended node.",
+      "Scheduling events no longer show the original failure.",
+      "Containers become Ready or provide a new, distinct diagnostic signal.",
+      "The change did not violate placement or resource policy."
+    ],
+    "choices": [
+      {
+        "id": "resolved",
+        "label": "Scheduling and readiness are healthy",
+        "nextNodeId": "k8s-complete"
+      },
+      {
+        "id": "new-failure",
+        "label": "A new status such as ImagePullBackOff or CrashLoopBackOff appears",
+        "nextNodeId": "k8s-escalate"
+      },
+      {
+        "id": "not-resolved",
+        "label": "The Pod remains Pending",
+        "nextNodeId": "k8s-escalate"
+      }
+    ]
+  },
+  {
+    "id": "k8s-complete",
+    "nodeKind": "completion",
+    "title": "Recovery verified",
+    "summary": "Record the scheduler evidence, actual cause, policy decision, and prevention improvement.",
+    "risk": "read-only",
+    "prevention": [
+      "Review resource requests and capacity trends.",
+      "Test placement rules and storage dependencies before production rollout.",
+      "Alert on prolonged Pending and FailedScheduling events."
+    ]
+  },
+  {
+    "id": "k8s-escalate",
+    "nodeKind": "escalation",
+    "title": "Escalate with scheduling evidence",
+    "summary": "Share redacted Pod spec, scheduler name, describe events, relevant node labels/taints, resource requests, and storage status with the platform owner.",
+    "risk": "read-only"
+  }
+]

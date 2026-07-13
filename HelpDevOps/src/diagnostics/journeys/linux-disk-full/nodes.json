@@ -1,0 +1,291 @@
+[
+  {
+    "id": "linux-start",
+    "nodeKind": "question",
+    "title": "What does the affected filesystem show?",
+    "summary": "Start with read-only capacity and inode checks on the filesystem used by the failing application.",
+    "why": "Byte exhaustion and inode exhaustion produce similar application symptoms but require different investigation.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "df -h",
+        "purpose": "Show filesystem block usage in human-readable units."
+      },
+      {
+        "command": "df -i",
+        "purpose": "Show inode usage."
+      }
+    ],
+    "choices": [
+      {
+        "id": "blocks",
+        "label": "Block usage is near 100%",
+        "nextNodeId": "linux-blocks"
+      },
+      {
+        "id": "inodes",
+        "label": "Inode usage is near 100%",
+        "nextNodeId": "linux-inodes"
+      },
+      {
+        "id": "both-ok",
+        "label": "Both look healthy",
+        "nextNodeId": "linux-mount-check"
+      },
+      {
+        "id": "unknown",
+        "label": "The output is unclear or unavailable",
+        "nextNodeId": "linux-escalate"
+      }
+    ]
+  },
+  {
+    "id": "linux-blocks",
+    "nodeKind": "question",
+    "title": "Does directory usage explain the filesystem usage?",
+    "summary": "Compare directory totals without crossing into other filesystems.",
+    "why": "A large difference between filesystem usage and visible files can indicate deleted-but-open files, reserved blocks, snapshots, or hidden mounts.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "du -x -h --max-depth=1 <mount-point> 2>/dev/null | sort -h",
+        "purpose": "Compare top-level directory usage on one filesystem. Results may be incomplete when permissions prevent traversal."
+      }
+    ],
+    "choices": [
+      {
+        "id": "large-tree",
+        "label": "A directory tree explains the growth",
+        "nextNodeId": "linux-growth"
+      },
+      {
+        "id": "gap",
+        "label": "Visible files are much smaller than df usage",
+        "nextNodeId": "linux-open-deleted"
+      },
+      {
+        "id": "unknown",
+        "label": "The result is unclear",
+        "nextNodeId": "linux-escalate"
+      }
+    ]
+  },
+  {
+    "id": "linux-inodes",
+    "nodeKind": "interpretation",
+    "title": "Inode exhaustion is likely",
+    "summary": "Many small files can exhaust inodes while substantial byte capacity remains.",
+    "why": "Creating new files requires free inodes as well as free blocks.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "find <mount-point> -xdev -printf '%h\\n' 2>/dev/null | sort | uniq -c | sort -n | tail",
+        "purpose": "Locate directories with unusually many entries; review scope before running on very large filesystems. Results may be incomplete without sufficient permissions."
+      }
+    ],
+    "choices": [
+      {
+        "id": "found",
+        "label": "A high-file-count directory is identified",
+        "nextNodeId": "linux-cleanup-review"
+      },
+      {
+        "id": "unknown",
+        "label": "No safe cause is clear",
+        "nextNodeId": "linux-escalate"
+      }
+    ]
+  },
+  {
+    "id": "linux-mount-check",
+    "nodeKind": "question",
+    "title": "Are you checking the same mount the application writes to?",
+    "summary": "Confirm the application path and its backing filesystem.",
+    "why": "Bind mounts, container layers, temporary filesystems, and separate data volumes can make the wrong filesystem appear healthy.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "findmnt -T <application-path>",
+        "purpose": "Show the filesystem backing the actual application path."
+      }
+    ],
+    "choices": [
+      {
+        "id": "different",
+        "label": "The path maps to another full filesystem",
+        "nextNodeId": "linux-start"
+      },
+      {
+        "id": "same",
+        "label": "The expected filesystem is healthy",
+        "nextNodeId": "linux-escalate"
+      },
+      {
+        "id": "unknown",
+        "label": "The mapping is unclear",
+        "nextNodeId": "linux-escalate"
+      }
+    ]
+  },
+  {
+    "id": "linux-open-deleted",
+    "nodeKind": "question",
+    "title": "Are deleted files still held open?",
+    "summary": "A process can retain disk blocks after a pathname is deleted.",
+    "why": "Space is released only after the last open file descriptor is closed.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "lsof +L1",
+        "purpose": "List open files whose link count is below one. Sufficient privileges may be required to see files held by other users or services."
+      }
+    ],
+    "choices": [
+      {
+        "id": "found",
+        "label": "A process holds a large deleted file",
+        "nextNodeId": "linux-restart-review"
+      },
+      {
+        "id": "none",
+        "label": "No meaningful deleted-open files appear",
+        "nextNodeId": "linux-escalate"
+      },
+      {
+        "id": "unknown",
+        "label": "lsof is unavailable or unclear",
+        "nextNodeId": "linux-escalate"
+      }
+    ]
+  },
+  {
+    "id": "linux-growth",
+    "nodeKind": "question",
+    "title": "What type of data is growing?",
+    "summary": "Identify ownership, retention policy, and service impact before cleanup.",
+    "why": "Size alone does not determine whether data can be safely removed.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "logs",
+        "label": "Logs or journals",
+        "nextNodeId": "linux-cleanup-review"
+      },
+      {
+        "id": "container",
+        "label": "Container or image storage",
+        "nextNodeId": "linux-cleanup-review"
+      },
+      {
+        "id": "application",
+        "label": "Application data",
+        "nextNodeId": "linux-escalate"
+      },
+      {
+        "id": "unknown",
+        "label": "Unknown ownership",
+        "nextNodeId": "linux-escalate"
+      }
+    ]
+  },
+  {
+    "id": "linux-cleanup-review",
+    "nodeKind": "action",
+    "title": "Review a scoped cleanup or retention fix",
+    "summary": "Use the owning service\u2019s retention, rotation, pruning, or archival mechanism rather than deleting unfamiliar files blindly.",
+    "why": "Direct deletion can break recovery, audit, database, or service assumptions.",
+    "risk": "high-risk",
+    "prerequisites": [
+      "Confirm ownership and retention requirements.",
+      "Confirm backup or rollback path.",
+      "Assess service impact."
+    ],
+    "rollback": "Restore from backup or reverse the service-specific retention change where possible.",
+    "choices": [
+      {
+        "id": "done",
+        "label": "A reviewed cleanup or retention change was completed",
+        "nextNodeId": "linux-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "The change is not clearly safe",
+        "nextNodeId": "linux-escalate"
+      }
+    ]
+  },
+  {
+    "id": "linux-restart-review",
+    "nodeKind": "action",
+    "title": "Review whether the owning process can be safely restarted",
+    "summary": "Closing the final file descriptor releases deleted-file space, but restarting a production process may cause service impact.",
+    "why": "The process, not the deleted pathname, currently owns the allocated blocks.",
+    "risk": "moderate-risk",
+    "prerequisites": [
+      "Identify the process and service owner.",
+      "Confirm restart procedure and expected impact."
+    ],
+    "rollback": "Use the service rollback/failover procedure if the restart causes degradation.",
+    "choices": [
+      {
+        "id": "done",
+        "label": "The process safely released the file",
+        "nextNodeId": "linux-verify"
+      },
+      {
+        "id": "unsafe",
+        "label": "Restart is unsafe or ownership is unclear",
+        "nextNodeId": "linux-escalate"
+      }
+    ]
+  },
+  {
+    "id": "linux-verify",
+    "nodeKind": "verification",
+    "title": "Verify capacity and service recovery",
+    "summary": "Confirm the original symptom is resolved and capacity remains stable.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "df -h && df -i",
+        "purpose": "Confirm both block and inode availability."
+      }
+    ],
+    "verification": [
+      "Free blocks or inodes increased as expected.",
+      "The affected application can create or write files again.",
+      "Filesystem growth is stable during an observation period."
+    ],
+    "choices": [
+      {
+        "id": "resolved",
+        "label": "Capacity and service behavior are healthy",
+        "nextNodeId": "linux-complete"
+      },
+      {
+        "id": "not-resolved",
+        "label": "The symptom remains",
+        "nextNodeId": "linux-escalate"
+      }
+    ]
+  },
+  {
+    "id": "linux-complete",
+    "nodeKind": "completion",
+    "title": "Recovery verified",
+    "summary": "Record the growth source, retention gap, monitoring gap, and prevention action.",
+    "risk": "read-only",
+    "prevention": [
+      "Alert on both block and inode consumption.",
+      "Review log/data retention and container cleanup policies.",
+      "Monitor growth rate, not only static thresholds."
+    ]
+  },
+  {
+    "id": "linux-escalate",
+    "nodeKind": "escalation",
+    "title": "Escalate with preserved evidence",
+    "summary": "Do not delete data blindly. Share filesystem, mount, inode, directory-usage, and open-file evidence with the system or application owner.",
+    "risk": "read-only"
+  }
+]

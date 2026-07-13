@@ -1,0 +1,31 @@
+# Dependencies and framework caches
+node_modules/
+.astro/
+
+# Generated build and test output
+dist/
+playwright-report/
+test-results/
+coverage/
+lighthouse-report.json
+
+# Temporary browser profiles, logs, and release staging
+.tmp/
+*.log
+*.zip
+
+# Local environment files; documented examples remain allowed
+.env
+.env.*
+!.env.example
+
+# OS and editor artifacts
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Generated local verification evidence
+# Keep concise verification summaries in docs/, not raw reports/screenshots.
+evidence/

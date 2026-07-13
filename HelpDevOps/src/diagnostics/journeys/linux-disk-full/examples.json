@@ -1,0 +1,11 @@
+[
+  {
+    "id": "linux-enospc",
+    "label": "No space left on device",
+    "input": "write failed: No space left on device",
+    "fixtureType": "synthetic",
+    "containsRealEnvironmentData": false,
+    "source": "HelpDevOps-authored",
+    "reviewedAt": "2026-07-13"
+  }
+]

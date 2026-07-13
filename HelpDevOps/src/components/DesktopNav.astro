@@ -1,0 +1,5 @@
+---
+import { navigation, isCurrentRoute } from '../config/site.js';
+const { pathname } = Astro.props;
+---
+<nav class="desktop-nav" aria-label="Primary">{navigation.map(item => <a href={item.href} aria-current={isCurrentRoute(pathname,item.href)?'page':undefined}>{item.label}{item.status && <span class="nav-dot" title={item.status}></span>}</a>)}</nav>

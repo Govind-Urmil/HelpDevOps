@@ -1,0 +1,150 @@
+[
+  {
+    "id": "journey-linux-disk-full",
+    "slug": "disk-full",
+    "domain": "linux",
+    "title": "Linux disk appears full",
+    "summary": "Distinguish exhausted filesystem blocks, inode exhaustion, deleted-but-open files, and misleading mount assumptions before changing data.",
+    "aliases": [
+      "disk full",
+      "no space left on device",
+      "filesystem full",
+      "inode full"
+    ],
+    "exactErrors": [
+      "no space left on device",
+      "ENOSPC"
+    ],
+    "status": "reviewed",
+    "entryNodeId": "linux-start",
+    "reviewedAt": "2026-07-13",
+    "reviewDue": "2026-10-13",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "Linux",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "GNU coreutils df/du",
+        "Linux open-file semantics"
+      ],
+      "limitations": [
+        "Filesystem tools and reserved-space behavior vary by filesystem and operating system.",
+        "This journey does not inspect a live host or decide what data is safe to delete."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "A full-looking filesystem does not identify which data is safe to remove.",
+      "An application error may refer to a different mount or inode exhaustion rather than byte capacity."
+    ],
+    "firstChecks": [
+      "df -h",
+      "df -i"
+    ],
+    "relatedToolIds": [
+      "linux-permissions"
+    ],
+    "path": "/troubleshoot/linux/disk-full/",
+    "nodeCount": 11,
+    "referenceCount": 3
+  },
+  {
+    "id": "journey-docker-container-exits",
+    "slug": "container-exits-immediately",
+    "domain": "docker",
+    "title": "Docker container exits immediately",
+    "summary": "Use container state, exit code, logs, and configured process evidence to distinguish expected completion from startup failure.",
+    "aliases": [
+      "container exits",
+      "docker container stops",
+      "container restart loop",
+      "docker exited"
+    ],
+    "exactErrors": [
+      "exited (1)",
+      "exited (0)"
+    ],
+    "status": "reviewed",
+    "entryNodeId": "docker-start",
+    "reviewedAt": "2026-07-13",
+    "reviewDue": "2026-10-13",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "Docker Engine",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Docker Engine CLI current documentation"
+      ],
+      "limitations": [
+        "Logging-driver configuration can limit available logs.",
+        "Orchestrators and Compose may add restart or dependency behavior not visible from one container."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "A stopped container is not necessarily broken; one-shot jobs can complete successfully.",
+      "A restart policy does not fix the process or configuration that caused an unexpected exit."
+    ],
+    "firstChecks": [
+      "docker ps -a",
+      "docker logs <container>",
+      "docker inspect <container>"
+    ],
+    "relatedToolIds": [
+      "dockerfile",
+      "docker-compose"
+    ],
+    "path": "/troubleshoot/docker/container-exits-immediately/",
+    "nodeCount": 13,
+    "referenceCount": 3
+  },
+  {
+    "id": "journey-kubernetes-pod-pending",
+    "slug": "pod-pending",
+    "domain": "kubernetes",
+    "title": "Kubernetes Pod remains Pending",
+    "summary": "Use Pod scheduling events and related evidence to distinguish resource, placement, storage, port, and scheduler constraints.",
+    "aliases": [
+      "pod pending",
+      "pod stuck pending",
+      "failedscheduling",
+      "pod not scheduled"
+    ],
+    "exactErrors": [
+      "FailedScheduling",
+      "0/",
+      "pod pending"
+    ],
+    "status": "reviewed",
+    "entryNodeId": "k8s-start",
+    "reviewedAt": "2026-07-13",
+    "reviewDue": "2026-09-13",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "Kubernetes",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "1.34",
+        "1.35",
+        "1.36"
+      ],
+      "limitations": [
+        "Managed platforms may add provider-specific scheduler messages.",
+        "Custom schedulers can produce different evidence.",
+        "No cluster-side, admission, or CRD validation is performed."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "Pending does not by itself identify one cause.",
+      "A scheduler event describes a current scheduling barrier but may not reveal every policy or provider constraint."
+    ],
+    "firstChecks": [
+      "kubectl get pod <pod> -n <namespace> -o wide",
+      "kubectl describe pod <pod> -n <namespace>"
+    ],
+    "relatedToolIds": [
+      "kubernetes-manifest"
+    ],
+    "path": "/troubleshoot/kubernetes/pod-pending/",
+    "nodeCount": 17,
+    "referenceCount": 3
+  }
+]

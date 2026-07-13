@@ -1,0 +1,11 @@
+[
+  {
+    "id": "docker-exit-one",
+    "label": "Exited with code 1",
+    "input": "my-app Exited (1) 10 seconds ago",
+    "fixtureType": "synthetic",
+    "containsRealEnvironmentData": false,
+    "source": "HelpDevOps-authored",
+    "reviewedAt": "2026-07-13"
+  }
+]

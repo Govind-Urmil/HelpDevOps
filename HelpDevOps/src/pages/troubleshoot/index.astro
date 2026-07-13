@@ -1,0 +1,8 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';import PageHeader from '../../components/PageHeader.astro';import {publishedJourneys,diagnosticDomains} from '../../diagnostics/registry.js';
+const meta={path:'/troubleshoot/',title:'DevOps Troubleshooting | HelpDevOps',description:'Start reviewed, evidence-first diagnostic journeys for Linux, Docker, and Kubernetes problems.'};
+---
+<BaseLayout {...meta} breadcrumbs={[{label:'Home',href:'/'},{label:'Troubleshoot',href:'/troubleshoot/'}]}>
+<PageHeader eyebrow="DIAGNOSTIC PLATFORM · PILOT" title="Find the safest next check" description="Start with a symptom, collect the minimum useful evidence, and move through reviewed diagnostic steps without sending input to a server." />
+<section class="section"><div class="container"><div class="diagnostic-hubs">{diagnosticDomains.map(domain=><a class="quick-card" href={`/troubleshoot/${domain}/`}><span class="eyebrow">{domain}</span><h2>{domain[0].toUpperCase()+domain.slice(1)} troubleshooting</h2><p>Browse reviewed journeys.</p></a>)}</div><div class="tool-grid">{publishedJourneys.map(journey=><article class="tool-card"><span class="eyebrow">{journey.domain} · {journey.status === 'reviewed' ? 'reviewed' : 'technical review'}</span><h2><a href={journey.path}>{journey.title}</a></h2><p>{journey.summary}</p><a class="button secondary" href={journey.path}>Start diagnosis</a></article>)}</div></div></section>
+</BaseLayout>

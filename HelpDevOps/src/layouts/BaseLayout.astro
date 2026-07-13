@@ -1,0 +1,37 @@
+---
+import '../styles/global.css';
+import SiteHeader from '../components/SiteHeader.astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import SearchDialog from '../components/SearchDialog.astro';
+import SessionDockShell from '../components/SessionDockShell.astro';
+import SEOHead from '../components/SEOHead.astro';import OpenGraphMeta from '../components/OpenGraphMeta.astro';import StructuredData from '../components/StructuredData.astro';
+import { site } from '../config/site.js';
+interface Breadcrumb { label: string; href: string }
+const { title, description, path, robots = 'index,follow', breadcrumbs = [] } = Astro.props as { title: string; description: string; path: string; robots?: string; breadcrumbs?: Breadcrumb[] };
+const canonical = new URL(path, site.url).href;
+const structured = [
+  { '@context':'https://schema.org', '@type':'WebSite', name:site.name, url:site.url, description:site.description },
+  { '@context':'https://schema.org', '@type':'Organization', name:site.name, url:site.url },
+  ...(breadcrumbs.length ? [{ '@context':'https://schema.org', '@type':'BreadcrumbList', itemListElement: breadcrumbs.map((item, index) => ({ '@type':'ListItem', position:index + 1, name:item.label, item:new URL(item.href, site.url).href })) }] : [])
+];
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <SEOHead {title} {description} {canonical} {robots}/><OpenGraphMeta {title} {description} {canonical}/>
+    <meta name="theme-color" content="#030A08" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <StructuredData data={structured}/>
+  </head>
+  <body>
+    <a class="skip-link" href="#main-content">Skip to main content</a>
+    <SiteHeader />
+    <main id="main-content" tabindex="-1"><slot /></main>
+    <SiteFooter />
+    <SearchDialog />
+    <SessionDockShell />
+    <script is:inline src="/scripts/ui.js"></script>
+  </body>
+</html>

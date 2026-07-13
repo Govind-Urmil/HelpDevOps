@@ -1,0 +1,8 @@
+[
+  {"id":"draft","publish":false},
+  {"id":"technical-review","publish":false},
+  {"id":"reviewed","publish":true},
+  {"id":"needs-review","publish":false},
+  {"id":"deprecated","publish":false},
+  {"id":"archived","publish":false}
+]

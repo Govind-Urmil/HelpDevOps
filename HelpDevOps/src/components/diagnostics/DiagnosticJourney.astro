@@ -1,0 +1,68 @@
+---
+// @ts-nocheck
+import Badge from '../Badge.astro';
+const {journey}=Astro.props;
+const nodeMap=Object.fromEntries(journey.nodes.map(node=>[node.id,node]));
+const entry=nodeMap[journey.entryNodeId];
+---
+<section class="diagnostic-shell" data-diagnostic-root data-tool-root data-workspace-entity data-workspace-id={journey.id} data-workspace-entity-title={journey.title} data-workspace-path={journey.path} data-journey={JSON.stringify(journey)}>
+  <div class="diagnostic-overview">
+    <div><span class="eyebrow">GUIDED DIAGNOSIS</span><h2>{journey.title}</h2><p>{journey.summary}</p></div>
+    <Badge label={journey.status === 'reviewed' ? 'REVIEWED' : 'TECHNICAL REVIEW CANDIDATE'} tone={journey.status === 'reviewed' ? 'success' : 'warning'} />
+  </div>
+  <div class="diagnostic-mode-row" role="group" aria-label="Diagnostic view">
+    <button class="button secondary" type="button" data-mode="guided" aria-pressed="true">Guided diagnosis</button>
+    <button class="button ghost" type="button" data-mode="emergency" aria-pressed="false">Emergency view</button>
+  </div>
+  <div class="diagnostic-context">
+    <section><h3>What this does not prove</h3><ul>{journey.whatItDoesNotProve.map(item=><li>{item}</li>)}</ul></section>
+    <section><h3>Reviewed compatibility</h3><p>{journey.compatibility.technology}: {journey.compatibility.reviewedAgainst?.join(', ') || 'general guidance'}</p><ul>{journey.compatibility.limitations.map(item=><li>{item}</li>)}</ul></section>
+  </div>
+  <input type="hidden" name="journeyId" value={journey.id} data-journey-id />
+  <input type="hidden" name="currentNodeId" value={journey.entryNodeId} data-current-node />
+  <input type="hidden" name="answers" value="[]" data-answer-state />
+  <article class="diagnostic-step" tabindex="-1" data-diagnostic-step>
+    <div class="diagnostic-step-head"><span class="eyebrow" data-step-kind>{entry.nodeKind}</span><span class="risk-badge" data-risk={entry.risk}>{entry.risk.replaceAll('-',' ')}</span></div>
+    <h2 data-step-title>{entry.title}</h2>
+    <p class="diagnostic-summary" data-step-summary>{entry.summary}</p>
+    <p class="diagnostic-why" data-step-why hidden></p>
+    <div data-command-list></div>
+    <div class="diagnostic-prerequisites" data-prerequisites hidden></div>
+    <div class="diagnostic-choices" data-choice-list></div>
+    <div class="diagnostic-terminal" data-terminal hidden></div>
+  </article>
+  <div class="diagnostic-controls">
+    <button class="button ghost" type="button" data-step-back disabled>Previous step</button>
+    <button class="button ghost" type="button" data-step-restart>Restart journey</button>
+    <button class="button secondary" type="button" data-save-current-tool>Save journey explicitly</button>
+  </div>
+  <p class="diagnostic-status" data-diagnostic-status aria-live="polite">Journey state stays in memory unless you explicitly save a workspace.</p>
+</section>
+<script>
+  // @ts-nocheck
+  const root=document.querySelector('[data-diagnostic-root]');
+  if(root){
+    const journey=JSON.parse(root.dataset.journey); const nodes=Object.fromEntries(journey.nodes.map(node=>[node.id,node]));
+    const current=root.querySelector('[data-current-node]'), answersInput=root.querySelector('[data-answer-state]'), step=root.querySelector('[data-diagnostic-step]');
+    let history=[]; let answers=[]; let emergency=false;
+    const el=s=>root.querySelector(s); const text=(s,v='')=>{el(s).textContent=v};
+    const renderList=(container,items,title)=>{container.replaceChildren(); if(!items?.length)return; const h=document.createElement('h3');h.textContent=title;container.append(h);const ul=document.createElement('ul');for(const item of items){const li=document.createElement('li');li.textContent=item;ul.append(li)}container.append(ul)};
+    function render(id,{focus=true}={}){
+      const node=nodes[id]||nodes[journey.entryNodeId]; current.value=node.id; answersInput.value=JSON.stringify(answers);
+      text('[data-step-kind]',node.nodeKind.toUpperCase()); text('[data-step-title]',node.title); text('[data-step-summary]',node.summary||'');
+      const risk=el('[data-risk]');risk.dataset.risk=node.risk;risk.textContent=node.risk.replaceAll('-',' ');
+      const why=el('[data-step-why]');why.hidden=emergency||!node.why;why.textContent=node.why?`Why this matters: ${node.why}`:'';
+      const commands=el('[data-command-list]');commands.replaceChildren();
+      if(node.commands?.length){const h=document.createElement('h3');h.textContent='Safe next check';commands.append(h);for(const item of node.commands){const card=document.createElement('div');card.className='diagnostic-command';const code=document.createElement('code');code.textContent=item.command;const p=document.createElement('p');p.textContent=item.purpose;const b=document.createElement('button');b.type='button';b.className='button ghost';b.textContent='Copy';b.onclick=async()=>{try{await navigator.clipboard.writeText(item.command);el('[data-diagnostic-status]').textContent='Command copied.'}catch{el('[data-diagnostic-status]').textContent='Copy unavailable; select the command manually.'}};card.append(code,p,b);commands.append(card)}}
+      const prereq=el('[data-prerequisites]');prereq.hidden=!node.prerequisites?.length&&!node.rollback;prereq.replaceChildren();if(!prereq.hidden){renderList(prereq,node.prerequisites,'Before changing anything');if(node.rollback){const p=document.createElement('p');p.textContent=`Rollback: ${node.rollback}`;prereq.append(p)}}
+      const choices=el('[data-choice-list]');choices.replaceChildren();const terminal=el('[data-terminal]');terminal.hidden=true;terminal.replaceChildren();
+      if(node.choices?.length){const h=document.createElement('h3');h.textContent='Choose the observed evidence';choices.append(h);for(const choice of node.choices){const b=document.createElement('button');b.type='button';b.className='diagnostic-choice';b.textContent=choice.label;b.onclick=()=>{history.push(node.id);answers.push({nodeId:node.id,choiceId:choice.id,label:choice.label});render(choice.nextNodeId)};choices.append(b)}}else{terminal.hidden=false;renderList(terminal,node.verification,'Verification');renderList(terminal,node.prevention,'Prevention');const p=document.createElement('p');p.textContent=node.nodeKind==='completion'?'Journey complete. Verify the result before closing the incident.':'This path needs human or platform-owner review. Preserve the evidence collected so far.';terminal.append(p)}
+      el('[data-step-back]').disabled=!history.length; if(focus)step.focus();
+    }
+    el('[data-step-back]').onclick=()=>{if(!history.length)return;answers.pop();render(history.pop())};
+    el('[data-step-restart]').onclick=()=>{history=[];answers=[];render(journey.entryNodeId);el('[data-diagnostic-status]').textContent='Journey restarted; no evidence was saved.'};
+    root.querySelectorAll('[data-mode]').forEach(button=>button.onclick=()=>{emergency=button.dataset.mode==='emergency';root.dataset.emergency=String(emergency);root.querySelectorAll('[data-mode]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));render(current.value,{focus:false})});
+    window.addEventListener('load',()=>{let restored=[];try{restored=JSON.parse(answersInput.value||'[]')}catch{};answers=Array.isArray(restored)?restored:[];history=answers.map(item=>item.nodeId);render(current.value,{focus:false})},{once:true});
+    render(current.value,{focus:false});
+  }
+</script>

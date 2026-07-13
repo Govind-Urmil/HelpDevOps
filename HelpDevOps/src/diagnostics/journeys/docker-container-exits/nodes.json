@@ -1,0 +1,330 @@
+[
+  {
+    "id": "docker-start",
+    "nodeKind": "question",
+    "title": "What state and exit code does Docker report?",
+    "summary": "List stopped containers and inspect the selected container before restarting it.",
+    "why": "Exit code and state narrow whether the process completed, failed, was killed, or never started correctly.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "docker ps -a --no-trunc",
+        "purpose": "List running and stopped containers."
+      },
+      {
+        "command": "docker inspect <container>",
+        "purpose": "Inspect state, exit code, error, command, and restart policy. Output may include environment or configuration values; do not share it without redaction."
+      }
+    ],
+    "choices": [
+      {
+        "id": "zero",
+        "label": "Exit code 0",
+        "nextNodeId": "docker-zero"
+      },
+      {
+        "id": "nonzero",
+        "label": "Non-zero exit code",
+        "nextNodeId": "docker-logs"
+      },
+      {
+        "id": "oom",
+        "label": "OOMKilled or signal termination",
+        "nextNodeId": "docker-oom"
+      },
+      {
+        "id": "restarting",
+        "label": "The container is restarting repeatedly",
+        "nextNodeId": "docker-logs"
+      },
+      {
+        "id": "unknown",
+        "label": "State or exit code is unclear",
+        "nextNodeId": "docker-escalate"
+      }
+    ]
+  },
+  {
+    "id": "docker-zero",
+    "nodeKind": "question",
+    "title": "Was this container intended to be a long-running service?",
+    "summary": "Exit code 0 means the configured process completed successfully, not that the desired service remained available.",
+    "why": "Containers stop when their main process exits.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "job",
+        "label": "It is a one-shot job or expected task",
+        "nextNodeId": "docker-complete-job"
+      },
+      {
+        "id": "service",
+        "label": "It should stay running",
+        "nextNodeId": "docker-command"
+      },
+      {
+        "id": "unknown",
+        "label": "The intended lifecycle is unclear",
+        "nextNodeId": "docker-escalate"
+      }
+    ]
+  },
+  {
+    "id": "docker-logs",
+    "nodeKind": "question",
+    "title": "What do the container logs show near startup?",
+    "summary": "Read the failure output before changing restart behavior.",
+    "why": "Application logs often identify missing configuration, permissions, dependency failure, or command errors.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "docker logs --tail 200 <container>",
+        "purpose": "Retrieve recent container logs."
+      }
+    ],
+    "choices": [
+      {
+        "id": "config",
+        "label": "Missing or invalid configuration",
+        "nextNodeId": "docker-config"
+      },
+      {
+        "id": "permission",
+        "label": "Permission denied",
+        "nextNodeId": "docker-permission"
+      },
+      {
+        "id": "dependency",
+        "label": "Dependency unavailable",
+        "nextNodeId": "docker-dependency"
+      },
+      {
+        "id": "command",
+        "label": "Executable or command not found",
+        "nextNodeId": "docker-command"
+      },
+      {
+        "id": "none",
+        "label": "Logs are empty or inconclusive",
+        "nextNodeId": "docker-inspect-detail"
+      },
+      {
+        "id": "unknown",
+        "label": "The output is unclear",
+        "nextNodeId": "docker-escalate"
+      }
+    ]
+  },
+  {
+    "id": "docker-inspect-detail",
+    "nodeKind": "question",
+    "title": "Do inspect details show an engine or startup error?",
+    "summary": "Review State.Error, Path, Args, mounts, environment names, and restart count without exposing secret values.",
+    "why": "Some failures occur before application logging starts.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "docker inspect --format '{{json .State}}' <container>",
+        "purpose": "Inspect container state fields."
+      }
+    ],
+    "choices": [
+      {
+        "id": "error",
+        "label": "State.Error identifies a startup problem",
+        "nextNodeId": "docker-command"
+      },
+      {
+        "id": "none",
+        "label": "No useful error appears",
+        "nextNodeId": "docker-escalate"
+      },
+      {
+        "id": "unknown",
+        "label": "The output is unclear",
+        "nextNodeId": "docker-escalate"
+      }
+    ]
+  },
+  {
+    "id": "docker-command",
+    "nodeKind": "action",
+    "title": "Review image command and entrypoint",
+    "summary": "Compare the image configuration and runtime override with the executable actually present in the image.",
+    "why": "A wrong command, shell assumption, path, or entrypoint override can make the main process exit immediately.",
+    "risk": "moderate-risk",
+    "prerequisites": [
+      "Review Dockerfile CMD/ENTRYPOINT and runtime overrides.",
+      "Test changes in a non-production environment."
+    ],
+    "rollback": "Restore the previous image or runtime command.",
+    "choices": [
+      {
+        "id": "fixed",
+        "label": "A reviewed command/image fix was deployed",
+        "nextNodeId": "docker-verify"
+      },
+      {
+        "id": "unclear",
+        "label": "The correct command remains unclear",
+        "nextNodeId": "docker-escalate"
+      }
+    ]
+  },
+  {
+    "id": "docker-config",
+    "nodeKind": "action",
+    "title": "Correct required configuration safely",
+    "summary": "Review required environment, mounted files, working directory, and application configuration without exposing secret values.",
+    "risk": "moderate-risk",
+    "prerequisites": [
+      "Confirm the expected configuration contract.",
+      "Use the approved secret/configuration mechanism."
+    ],
+    "rollback": "Restore the previous deployment configuration.",
+    "choices": [
+      {
+        "id": "fixed",
+        "label": "Configuration was corrected",
+        "nextNodeId": "docker-verify"
+      },
+      {
+        "id": "unclear",
+        "label": "Configuration ownership is unclear",
+        "nextNodeId": "docker-escalate"
+      }
+    ]
+  },
+  {
+    "id": "docker-permission",
+    "nodeKind": "action",
+    "title": "Review user, ownership, and mounted-path access",
+    "summary": "Determine which UID/GID runs the process and whether mounted paths permit the required access.",
+    "risk": "moderate-risk",
+    "prerequisites": [
+      "Inspect image user and host/volume ownership.",
+      "Avoid generic 777 permission changes."
+    ],
+    "rollback": "Restore previous ownership or permission settings.",
+    "choices": [
+      {
+        "id": "fixed",
+        "label": "A scoped permission fix was applied",
+        "nextNodeId": "docker-verify"
+      },
+      {
+        "id": "unclear",
+        "label": "The correct ownership model is unclear",
+        "nextNodeId": "docker-escalate"
+      }
+    ]
+  },
+  {
+    "id": "docker-dependency",
+    "nodeKind": "question",
+    "title": "Is the dependency addressable and ready from the container context?",
+    "summary": "Confirm names, ports, network attachment, credentials, and readiness assumptions.",
+    "risk": "read-only",
+    "choices": [
+      {
+        "id": "fixed",
+        "label": "A dependency or startup-order issue was corrected",
+        "nextNodeId": "docker-verify"
+      },
+      {
+        "id": "not-fixed",
+        "label": "The dependency still fails",
+        "nextNodeId": "docker-escalate"
+      },
+      {
+        "id": "unknown",
+        "label": "The evidence is unclear",
+        "nextNodeId": "docker-escalate"
+      }
+    ]
+  },
+  {
+    "id": "docker-oom",
+    "nodeKind": "action",
+    "title": "Review memory usage and limits before restarting",
+    "summary": "OOM termination requires understanding workload demand and configured limits, not only adding a restart policy.",
+    "risk": "high-risk",
+    "prerequisites": [
+      "Confirm OOM evidence and current memory limits.",
+      "Review application memory behavior and host capacity."
+    ],
+    "rollback": "Restore prior limits or image if a change worsens stability.",
+    "choices": [
+      {
+        "id": "fixed",
+        "label": "A reviewed memory fix was applied",
+        "nextNodeId": "docker-verify"
+      },
+      {
+        "id": "unclear",
+        "label": "Memory behavior requires deeper review",
+        "nextNodeId": "docker-escalate"
+      }
+    ]
+  },
+  {
+    "id": "docker-verify",
+    "nodeKind": "verification",
+    "title": "Verify process and application health",
+    "summary": "Confirm more than a running container state.",
+    "risk": "read-only",
+    "commands": [
+      {
+        "command": "docker ps --filter name=<container> && docker logs --tail 100 <container>",
+        "purpose": "Confirm runtime state and recent logs."
+      }
+    ],
+    "verification": [
+      "The intended process remains running for an appropriate observation period.",
+      "The original error is absent from logs.",
+      "The application endpoint or job result behaves as expected.",
+      "No restart loop is occurring."
+    ],
+    "choices": [
+      {
+        "id": "resolved",
+        "label": "Health is verified",
+        "nextNodeId": "docker-complete"
+      },
+      {
+        "id": "not-resolved",
+        "label": "The container still exits or is unhealthy",
+        "nextNodeId": "docker-escalate"
+      }
+    ]
+  },
+  {
+    "id": "docker-complete-job",
+    "nodeKind": "completion",
+    "title": "Expected one-shot completion",
+    "summary": "The container completed with exit code 0. Verify the job output rather than forcing it to stay running.",
+    "risk": "read-only",
+    "prevention": [
+      "Document expected lifecycle and success criteria."
+    ]
+  },
+  {
+    "id": "docker-complete",
+    "nodeKind": "completion",
+    "title": "Recovery verified",
+    "summary": "Record the actual cause and add health, configuration, or resource checks that would detect recurrence earlier.",
+    "risk": "read-only",
+    "prevention": [
+      "Use health checks where appropriate.",
+      "Validate required configuration before startup.",
+      "Monitor restart count and termination reasons."
+    ]
+  },
+  {
+    "id": "docker-escalate",
+    "nodeKind": "escalation",
+    "title": "Escalate with state, logs, and image context",
+    "summary": "Share redacted inspect state, exit code, recent logs, image digest, and runtime command with the image or service owner.",
+    "risk": "read-only"
+  }
+]

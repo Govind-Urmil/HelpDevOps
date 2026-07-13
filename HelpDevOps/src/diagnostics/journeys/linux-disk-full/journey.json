@@ -1,0 +1,50 @@
+{
+  "id": "journey-linux-disk-full",
+  "slug": "disk-full",
+  "domain": "linux",
+  "title": "Linux disk appears full",
+  "summary": "Distinguish exhausted filesystem blocks, inode exhaustion, deleted-but-open files, and misleading mount assumptions before changing data.",
+  "aliases": [
+    "disk full",
+    "no space left on device",
+    "filesystem full",
+    "inode full"
+  ],
+  "exactErrors": [
+    "no space left on device",
+    "ENOSPC"
+  ],
+  "status": "reviewed",
+  "entryNodeId": "linux-start",
+  "reviewedAt": "2026-07-13",
+  "reviewDue": "2026-10-13",
+  "riskProfile": "read-only-first",
+  "compatibility": {
+    "technology": "Linux",
+    "appliesGenerally": true,
+    "reviewedAgainst": [
+      "GNU coreutils df/du",
+      "Linux open-file semantics"
+    ],
+    "limitations": [
+      "Filesystem tools and reserved-space behavior vary by filesystem and operating system.",
+      "This journey does not inspect a live host or decide what data is safe to delete."
+    ]
+  },
+  "whatItDoesNotProve": [
+    "A full-looking filesystem does not identify which data is safe to remove.",
+    "An application error may refer to a different mount or inode exhaustion rather than byte capacity."
+  ],
+  "firstChecks": [
+    "df -h",
+    "df -i"
+  ],
+  "relatedToolIds": [
+    "linux-permissions"
+  ],
+  "references": [
+    "linux-df",
+    "linux-unlink",
+    "linux-lsof"
+  ]
+}

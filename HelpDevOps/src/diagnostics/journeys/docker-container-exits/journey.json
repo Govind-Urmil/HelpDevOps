@@ -1,0 +1,51 @@
+{
+  "id": "journey-docker-container-exits",
+  "slug": "container-exits-immediately",
+  "domain": "docker",
+  "title": "Docker container exits immediately",
+  "summary": "Use container state, exit code, logs, and configured process evidence to distinguish expected completion from startup failure.",
+  "aliases": [
+    "container exits",
+    "docker container stops",
+    "container restart loop",
+    "docker exited"
+  ],
+  "exactErrors": [
+    "exited (1)",
+    "exited (0)"
+  ],
+  "status": "reviewed",
+  "entryNodeId": "docker-start",
+  "reviewedAt": "2026-07-13",
+  "reviewDue": "2026-10-13",
+  "riskProfile": "read-only-first",
+  "compatibility": {
+    "technology": "Docker Engine",
+    "appliesGenerally": true,
+    "reviewedAgainst": [
+      "Docker Engine CLI current documentation"
+    ],
+    "limitations": [
+      "Logging-driver configuration can limit available logs.",
+      "Orchestrators and Compose may add restart or dependency behavior not visible from one container."
+    ]
+  },
+  "whatItDoesNotProve": [
+    "A stopped container is not necessarily broken; one-shot jobs can complete successfully.",
+    "A restart policy does not fix the process or configuration that caused an unexpected exit."
+  ],
+  "firstChecks": [
+    "docker ps -a",
+    "docker logs <container>",
+    "docker inspect <container>"
+  ],
+  "relatedToolIds": [
+    "dockerfile",
+    "docker-compose"
+  ],
+  "references": [
+    "docker-logs",
+    "docker-run-exit",
+    "docker-inspect"
+  ]
+}

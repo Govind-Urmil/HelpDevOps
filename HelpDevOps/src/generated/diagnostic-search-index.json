@@ -1,0 +1,54 @@
+[
+  {
+    "id": "journey-linux-disk-full",
+    "title": "Linux disk appears full",
+    "aliases": [
+      "disk full",
+      "no space left on device",
+      "filesystem full",
+      "inode full"
+    ],
+    "exactErrors": [
+      "no space left on device",
+      "ENOSPC"
+    ],
+    "domain": "linux",
+    "summary": "Distinguish exhausted filesystem blocks, inode exhaustion, deleted-but-open files, and misleading mount assumptions before changing data.",
+    "path": "/troubleshoot/linux/disk-full/"
+  },
+  {
+    "id": "journey-docker-container-exits",
+    "title": "Docker container exits immediately",
+    "aliases": [
+      "container exits",
+      "docker container stops",
+      "container restart loop",
+      "docker exited"
+    ],
+    "exactErrors": [
+      "exited (1)",
+      "exited (0)"
+    ],
+    "domain": "docker",
+    "summary": "Use container state, exit code, logs, and configured process evidence to distinguish expected completion from startup failure.",
+    "path": "/troubleshoot/docker/container-exits-immediately/"
+  },
+  {
+    "id": "journey-kubernetes-pod-pending",
+    "title": "Kubernetes Pod remains Pending",
+    "aliases": [
+      "pod pending",
+      "pod stuck pending",
+      "failedscheduling",
+      "pod not scheduled"
+    ],
+    "exactErrors": [
+      "FailedScheduling",
+      "0/",
+      "pod pending"
+    ],
+    "domain": "kubernetes",
+    "summary": "Use Pod scheduling events and related evidence to distinguish resource, placement, storage, port, and scheduler constraints.",
+    "path": "/troubleshoot/kubernetes/pod-pending/"
+  }
+]

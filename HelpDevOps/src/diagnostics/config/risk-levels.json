@@ -1,0 +1,7 @@
+[
+  {"id":"read-only","label":"Read-only","rank":1,"description":"Inspects state without an intended change."},
+  {"id":"low-risk","label":"Low risk","rank":2,"description":"Small, reversible, narrowly scoped change."},
+  {"id":"moderate-risk","label":"Moderate risk","rank":3,"description":"May affect a workload, service, or limited production scope."},
+  {"id":"high-risk","label":"High risk","rank":4,"description":"May cause outage, data loss, or broad production impact."},
+  {"id":"expert-review-required","label":"Expert review required","rank":5,"description":"Context-dependent or destructive action that should not be followed blindly."}
+]

@@ -1,0 +1,11 @@
+[
+  {
+    "id": "k8s-failed-scheduling",
+    "label": "FailedScheduling insufficient memory",
+    "input": "0/3 nodes are available: 3 Insufficient memory.",
+    "fixtureType": "synthetic",
+    "containsRealEnvironmentData": false,
+    "source": "HelpDevOps-authored",
+    "reviewedAt": "2026-07-13"
+  }
+]

@@ -1,0 +1,20 @@
+[
+  {
+    "id": "k8s-debug-pods",
+    "title": "Kubernetes: Debug Pods",
+    "url": "https://kubernetes.io/docs/tasks/debug/debug-application/debug-pods/",
+    "type": "official"
+  },
+  {
+    "id": "k8s-resources",
+    "title": "Kubernetes: Resource Management for Pods and Containers",
+    "url": "https://kubernetes.io/docs/concepts/configuration/manage-resources-containers/",
+    "type": "official"
+  },
+  {
+    "id": "k8s-scheduler",
+    "title": "Kubernetes Scheduler",
+    "url": "https://kubernetes.io/docs/concepts/scheduling-eviction/kube-scheduler/",
+    "type": "official"
+  }
+]

@@ -1,0 +1,10 @@
+---
+import ResultSummary from './ResultSummary.astro';import ReasonPanel from './ReasonPanel.astro';import ActionPanel from './ActionPanel.astro';import CoveragePanel from './CoveragePanel.astro';import LimitationsPanel from './LimitationsPanel.astro';import RelatedActions from './RelatedActions.astro';
+---
+<article class="result-preview">
+  <div class="preview-head"><span class="eyebrow">RESULT CONTRACT · ACTIVE</span><span class="badge warning">DETERMINISTIC</span></div>
+  <h2>Results that show their work</h2><p>Cron, JSON, and YAML results now follow the same transparent path—from outcome to evidence, coverage, limitations, and the next safe action.</p>
+  <div class="result-grid">
+    <ResultSummary/><ReasonPanel/><ActionPanel/><CoveragePanel/><LimitationsPanel/><RelatedActions/>
+  </div>
+</article>

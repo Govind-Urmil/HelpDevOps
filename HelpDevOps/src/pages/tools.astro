@@ -1,0 +1,11 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHeader from '../components/PageHeader.astro';
+import ToolCard from '../components/ToolCard.astro';
+import {tools} from '../config/tools.js';
+import {pageMetadata as m} from '../config/pages.js';
+---
+<BaseLayout {...m.tools} breadcrumbs={[{label:'Home',href:'/'},{label:'Tools',href:'/tools/'}]}>
+  <PageHeader eyebrow="TOOLS" title="DevOps tools" description="Deterministic, browser-first utilities that show their evidence and limitations." />
+  <section class="section tool-directory"><div class="container"><div class="tool-grid">{tools.map(tool=><ToolCard {tool}/>)}</div></div></section>
+</BaseLayout>

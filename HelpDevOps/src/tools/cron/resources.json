@@ -1,0 +1,6 @@
+{
+  "schemaVersion":"1.0.0","resourceVersion":"1.0.0","tool":"cron",
+  "messages":{"unsupported":"This expression may use a cron dialect that HelpDevOps does not fully support."},
+  "references":[{"id":"posix-crontab","publisher":"The Open Group","title":"crontab utility specification","sourceType":"standard","url":"https://pubs.opengroup.org/onlinepubs/9799919799/utilities/crontab.html"}],
+  "limitations":["No timezone or daylight-saving behavior was evaluated.","Command execution, permissions, and safety were not checked.","Quartz, Jenkins H, AWS EventBridge, seconds, and year fields are not supported." ]
+}
