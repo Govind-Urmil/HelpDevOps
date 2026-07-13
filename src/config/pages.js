@@ -1,7 +1,7 @@
 export const pageMetadata = {
   home: { path: '/', title: 'HelpDevOps — Your DevOps command center', description: 'Work through DevOps tasks with private browser-first tools, transparent guidance, and workflow continuity.' },
   tools: { path: '/tools/', title: 'Tools | HelpDevOps', description: 'Use browser-first Cron, JSON, and YAML tools with deterministic analysis, visible evidence, and transparent limits.' },
-  workspace: { path: '/workspace/', title: 'Workspace | HelpDevOps', description: 'A truthful preview of the future HelpDevOps workspace and local workflow continuity.' },
+  workspace: { path: '/workspace/', title: 'Workspace | HelpDevOps', description: 'Manage browser-local favorites, recent tools, and explicitly saved HelpDevOps workspaces without an account.' },
   preflight: { path: '/preflight/', title: 'Preflight | HelpDevOps', description: 'Preview the planned cross-file DevOps Preflight workflow. The capability is in development.' },
   guides: { path: '/guides/', title: 'Guides | HelpDevOps', description: 'Discover the planned problem-first HelpDevOps guide library.' },
   references: { path: '/references/', title: 'References | HelpDevOps', description: 'Discover the planned concise DevOps reference library.' },

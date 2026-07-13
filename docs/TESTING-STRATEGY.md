@@ -10,3 +10,7 @@ ChatGPT Work provides evidence-based results and explicitly identifies untested 
 ## EP-003 coverage
 
 Resource validation, Cron parsing, JSON/YAML parsing, registry integrity, input limits, Compose/Kubernetes classification, Universal Input behavior, search discovery, tool routes, accessibility, and reflow are included in the verification strategy. Browser claims are made only when required browser binaries execute.
+
+## EP-005 coverage
+
+Workspace testing includes preference normalization, favorites/recent metadata boundaries, schema/version validation, revision conflict protection, sensitive-content warnings, import/export validation, unknown tool rejection and size/count limits. Browser verification must cover explicit save/reopen, refresh persistence, local export/import, clear-all, storage denial, cross-tab notifications, mobile/reflow, keyboard/accessibility, and confirmation that core tools remain usable when persistence fails.

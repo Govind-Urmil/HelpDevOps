@@ -8,7 +8,7 @@ const meta={path:'/tools/structured-data/',title:'JSON & YAML Inspector | HelpDe
 ---
 <BaseLayout {...meta} breadcrumbs={[{label:'Home',href:'/'},{label:'Tools',href:'/tools/'},{label:'JSON & YAML Inspector',href:'/tools/structured-data/'}]}>
   <PageHeader eyebrow="CONFIGURATION · AVAILABLE" title="JSON & YAML Inspector" description="Parse, inspect, and safely format structured data locally in your browser." />
-  <section class="section"><div class="container tool-workspace" data-structured-root>
+  <section class="section"><div class="container tool-workspace" data-structured-root data-tool-root>
     <div class="tool-input-panel"><label for="structured-input">JSON or YAML</label><textarea id="structured-input" rows="12" data-structured-input placeholder="Paste JSON or YAML…"></textarea><div class="example-row">{examples.map(example=><button type="button" data-example={example.input}>{example.label}</button>)}</div><div class="tool-actions"><button class="button primary" type="button" data-inspect>Inspect</button><button class="button secondary" type="button" data-minify>Minify JSON</button><button class="button ghost" type="button" data-clear>Clear</button></div></div>
     <AnalysisResult />
     <aside class="reference-panel"><h2>Local analysis</h2><p>Input stays in this browser tab and is not stored or uploaded.</p><h3>Visible limitations</h3><ul>{resources.limitations.map(item=><li>{item}</li>)}</ul></aside>

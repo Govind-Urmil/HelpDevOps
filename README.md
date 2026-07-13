@@ -11,7 +11,7 @@ Trusted, free, privacy-first, browser-based DevOps workspace.
 
 ## Current release candidate
 
-EP-004 / v0.4.0 adds four deterministic Developer Essentials: Encoding & Hash, IPv4 CIDR, Linux Permissions, and Git Reference tools. It also extends conservative Universal Input routing, versioned resources, validation, discovery, and regression coverage without changing the local-only static architecture.
+EP-005 / v0.5.0 adds privacy-first local continuity: favorites, recent tool navigation, explicit saved workspaces, versioned local import/export, sensitive-content warnings, cross-tab refresh, and clear local-data controls. Core analysis remains browser-local and works without storage.
 
 EP-003 / v0.3.0 remains the deterministic core-tool baseline.
 

@@ -1,37 +1,75 @@
 # HelpDevOps Roadmap
 
-## EP-001 — Consolidated Foundation Baseline
-Governance, strategy, architecture, design, testing, SEO, security/privacy, monetization guardrails, Website Factory standards, ChatGPT Work workflow and release discipline.
+The roadmap is phased and evidence-driven. Later EPs may be refined after major phase reviews, but changes require Govind’s approval.
 
-## EP-002 — Production Platform Shell
-Real runnable homepage, approved design system, responsive navigation, shared components/page shells, metadata system, test harness and quality checks.
+## Foundation
 
-Implementation status: Completed and approved in v0.2.0.
+### EP-001 — Consolidated Foundation Baseline
+Completed. Governance, architecture, security/privacy, SEO, testing, Website Factory and release discipline.
 
-## EP-003 — Deterministic Core Tool Platform
-Status: implementation candidate for v0.3.0. Centralized tool registry, resource validation, active Universal Input, production Cron and JSON/YAML utilities, transparent Result Contracts, and classification-only Compose/Kubernetes signals.
+### EP-002 — Production Platform Shell
+Completed. Static Astro shell, Obsidian Signal, responsive navigation, metadata and quality gates.
 
-## EP-004 — Developer Essentials
-Status: implementation candidate for v0.4.0. Encoding/hash, IPv4 CIDR, Linux permission and Git reference utilities; conservative Universal Input, resource-driven classifications and expanded regression coverage.
+### EP-003 — Deterministic Core Tool Platform
+Completed. Universal Input, resource validation, Cron and JSON/YAML tools.
 
-## EP-005 — DevOps Workspace
-Shared editors, safe local persistence, import/export, comparison and approved tool chaining to reduce context switching.
+### EP-004 — Developer Essentials Toolkit
+Completed, audited, remediated and committed. Encoding/Hash, IPv4 CIDR, Linux Permissions, Git Reference, owner runbook and production checklist.
 
-## EP-006 — Docker & Kubernetes Engineering Tools
-Researched trustworthy container and Kubernetes utilities with transparent limits and troubleshooting integration.
+### EP-005 — Privacy-First DevOps Workspace
+Implementation candidate for v0.5.0. Session Dock, favorites, recent tool metadata, explicit saved workspaces, local import/export, sensitive-content warnings, cross-tab refresh and local-data controls.
 
-## EP-007 — DevOps Preflight v1
-Flagship local multi-file compatibility checks for an explicitly researched subset of Dockerfile, Compose, environment and Kubernetes relationships.
+## Defining product
 
-## EP-008 — Preflight Maturity & Troubleshooting
-Carefully expand Preflight, explainability, troubleshooting flows, references and cross-linking.
+### EP-006 — Docker & Kubernetes Engineering Tools
+Deterministic container/Kubernetes utilities that reuse existing evidence, resources and truthful limits.
 
-## EP-009 — Knowledge, Discovery & Growth
-Trustworthy guides/references, mature information architecture/search, SEO/content quality, accessibility, testing and performance.
+### EP-007 — Diagnostic Platform Foundation
+Diagnostic schemas, stable IDs, typed relationships, safety/risk model, provenance, compatibility, validators, crawlable routes and journey runtime.
 
-## EP-010 — Production Hardening & Launch
-Full audits, deployment hardening, dormant monetization readiness, release cleanup and public-launch verification.
+### EP-008 — First Diagnostic Journeys
+Five deep pilots: Kubernetes Pod Pending, Linux disk appears full, HTTP 502, Docker container exits immediately and Terraform state lock.
 
-Launch gate: the Operations & Troubleshooting Runbook and Production Checklist must be verified against the actual repository, deployment provider/workflow, production branch, domain, DNS, TLS, rollback process and production tools.
+### EP-009 — Exact Error & Output Intelligence
+Exact-error discovery, selected deterministic command-output interpreters, evidence extraction and safe next-command guidance.
 
-Roadmap scope may be refined through research, but the ten-EP target is preferred.
+### EP-010 — Preflight & Change Safety
+Deployment readiness, change verification and bounded Docker/Kubernetes/Terraform/CI checks.
+
+## Content, traffic and scale
+
+### EP-011 — Diagnostic Expansion I
+Expand high-intent Linux, networking, Docker, Kubernetes and Terraform journeys after pilot validation.
+
+### EP-012 — Traffic & Discovery Engine
+Troubleshooting hubs, error indexes, topic clusters, internal linking, crawlable resource assembly and SEO infrastructure without shallow mass publishing.
+
+### EP-013 — Diagnostic Expansion II
+Jenkins, Git, Bash, CI/CD, DNS, TLS, networking and selected cloud journeys.
+
+### EP-014 — Incident & Recovery Workspace
+Emergency mode, evidence reports, handover packets, continue-troubleshooting and recovery verification.
+
+### EP-015 — Learning & Career Intelligence
+Incident-based learning, diagnosis scenarios and interview simulation without becoming a generic course platform.
+
+### EP-016 — Scale, Trust & Resource Operations
+Provenance, compatibility, correction history, review scheduling, stale-resource detection and owner maintenance workflows.
+
+## Launch, growth and ethical monetization
+
+### EP-017 — Public Launch Readiness
+Comprehensive security, privacy, accessibility, performance, SEO, Cloudflare/domain/TLS/rollback and operations validation.
+
+### EP-018 — Traffic Growth Foundation
+GitHub/community discovery through safe public assets, backlink-worthy resources, sharing, Search Console and measured organic growth.
+
+### EP-019 — Monetization Readiness
+Dormant restrained ad placement and ethical contextual affiliate framework. Nothing activates without Govind’s explicit approval.
+
+### EP-020 — Measured Optimization
+Use real traffic, returning-user, search and revenue evidence to decide the next investment.
+
+## Permanent launch gate
+
+HelpDevOps cannot go live until the Operations & Troubleshooting Runbook and Production Checklist are verified against the actual private repository, deployment provider/workflow, production branch, domain, DNS, TLS, rollback process and production tools.

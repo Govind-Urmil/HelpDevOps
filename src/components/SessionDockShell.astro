@@ -1,5 +1,13 @@
-<aside class="session-dock" data-session-dock aria-labelledby="session-title" hidden>
-  <div><span class="eyebrow">SESSION DOCK · PREVIEW</span><h2 id="session-title">Your working session</h2></div>
-  <button type="button" data-session-close aria-label="Close session dock">×</button>
-  <p>No session items yet. Future tools can send work here without uploading it.</p>
+<aside class="session-dock" data-session-dock aria-labelledby="session-title" hidden tabindex="-1">
+  <div><span class="eyebrow">SESSION DOCK · LOCAL</span><h2 id="session-title">Your browser workspace</h2></div>
+  <div class="dock-buttons"><button type="button" data-dock-collapse aria-label="Collapse or expand session details">−</button><button type="button" data-session-close aria-label="Close session dock">×</button></div>
+  <div class="dock-detail">
+    <p data-dock-favorites>0 favorite tools</p><p data-dock-recent>0 recent tools</p><p data-dock-workspaces>0 saved workspaces</p>
+    <label for="dock-workspace-title">Workspace title</label><input id="dock-workspace-title" data-workspace-title maxlength="120" placeholder="Example: Production subnet review"/><div class="tool-actions"><button type="button" class="button primary" data-save-current-tool>Save current tool</button><a class="button secondary" href="/workspace/">Open workspace</a></div>
+    <p class="muted">Tool content is saved only after you choose Save. It stays in this browser profile and is not cloud backup.</p>
+    <p data-workspace-status aria-live="polite"></p>
+  </div>
 </aside>
+<script>
+  import '../scripts/workspace-client.js';
+</script>

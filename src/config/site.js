@@ -1,8 +1,8 @@
 export const site = {
   name: 'HelpDevOps',
   url: 'https://helpdevops.example',
-  version: '0.4.0',
-  ep: 'EP-004',
+  version: '0.5.0',
+  ep: 'EP-005',
   description: 'A privacy-first DevOps task workspace for tools, guidance, references, and transparent engineering workflows.'
 };
 

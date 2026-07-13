@@ -163,3 +163,57 @@ Closed at:
 Every EP that introduces a new operational failure mode must update the Operations & Troubleshooting Runbook before the EP can be considered complete.
 
 HelpDevOps cannot go live until the Operations & Troubleshooting Runbook and Production Checklist reflect and have been verified against the real deployed infrastructure.
+
+## EP-005 local workspace incidents
+
+### Saved workspace is missing — P2/P3
+
+**Likely causes:** browser/site data was cleared, private browsing ended, browser storage was evicted, the user opened another browser profile/device, or the workspace was never explicitly saved.
+
+**OWNER-SAFE:** confirm the same browser profile and origin are in use; open Workspace and check the saved list; import a previously exported HelpDevOps workspace JSON if available. Do not describe browser-local data as backup or cloud sync.
+
+**Verify:** the workspace appears, opens the intended tool state, and current analysis can be rerun.
+
+### Browser workspace storage is unavailable — P2 for continuity, not analysis
+
+Core tools must continue working. Check browser privacy policy, blocked IndexedDB, quota errors, private mode, and other HelpDevOps tabs blocking an upgrade/delete. Close other tabs and retry. Export existing workspaces before risky browser cleanup.
+
+### Private-mode data disappeared — P3
+
+This is expected browser behavior. Explain that private-session storage is temporary. Restore only from an explicit export. Do not claim private-mode detection or guaranteed persistence.
+
+### Quota exceeded or workspace too large — P2/P3
+
+Do not delete existing workspaces automatically. Export important records, remove unneeded workspaces, reduce large raw inputs, and retry. The application limit is 512 KB per workspace, 100 workspaces, and 2 MB per import file; browser quota may be lower or higher.
+
+### Import was rejected — P2/P3
+
+Check JSON syntax, `format`, `formatVersion`, workspace schema version, known tool IDs, record limits, and sensitive-content findings. Existing data must remain unchanged. Never manually strip validation fields simply to force an import.
+
+### Import or migration partially changed data — P1/P2
+
+This should not occur. Preserve the file and browser details, stop further writes, export remaining data if possible, and treat it as a transaction/integrity defect. Add a regression before shipping a fix.
+
+### Cross-tab revision conflict — P2/P3
+
+Do not overwrite silently. Reload the latest workspace or save the local state as a copy. Close stale tabs if necessary. Complex collaborative merge is not supported.
+
+### Clear-all did not complete — P2
+
+Close other HelpDevOps tabs that may hold IndexedDB open, retry from Workspace, and verify favorites, recent tools and saved workspaces are gone. Avoid telling users to clear all browser data as the first-line application workflow.
+
+### Sensitive content was accidentally saved or exported — P1/P2
+
+1. Delete the affected workspace and clear local HelpDevOps data if required.
+2. Delete exported copies from downloads, shared locations and backups under the user’s control.
+3. If the value may have left the local browser or was shared, revoke/rotate it immediately.
+4. Confirm HelpDevOps made no network transmission.
+5. Add or improve a bounded warning regression without claiming complete secret detection.
+
+### New release cannot open older workspace — P2
+
+Do not wipe data. Record the stored schema/export version, preserve an export where possible, and fix the sequential migration or compatibility logic. An older release seeing a newer schema must refuse mutation and offer recovery guidance.
+
+### IndexedDB blocked by another tab — P2/P3
+
+Close other HelpDevOps tabs/windows, retry, and verify the operation. The application must report the block rather than hanging or silently deleting data.

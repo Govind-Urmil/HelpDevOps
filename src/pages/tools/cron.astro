@@ -8,7 +8,7 @@ const meta={path:'/tools/cron/',title:'Cron Analyzer | HelpDevOps',description:'
 ---
 <BaseLayout {...meta} breadcrumbs={[{label:'Home',href:'/'},{label:'Tools',href:'/tools/'},{label:'Cron Analyzer',href:'/tools/cron/'}]}>
   <PageHeader eyebrow="AUTOMATION · AVAILABLE" title="Cron Analyzer" description="Inspect common five-field cron expressions without uploading them." />
-  <section class="section"><div class="container tool-workspace" data-cron-root>
+  <section class="section"><div class="container tool-workspace" data-cron-root data-tool-root>
     <div class="tool-input-panel"><label for="cron-input">Cron expression or user crontab line</label><textarea id="cron-input" rows="7" data-cron-input placeholder="*/5 * * * *"></textarea><div class="example-row">{examples.map(example=><button type="button" data-example={example.input}>{example.label}</button>)}</div><div class="tool-actions"><button class="button primary" type="button" data-cron-analyze>Analyze cron</button><button class="button ghost" type="button" data-clear>Clear</button></div></div>
     <AnalysisResult />
     <aside class="reference-panel"><h2>Supported scope</h2><p>Common five-field schedules, optional commands, lists, ranges, steps, comments, and common macros.</p><h3>Visible limitations</h3><ul>{resources.limitations.map(item=><li>{item}</li>)}</ul><a href={resources.references[0].url} rel="noreferrer">Open the POSIX crontab reference →</a></aside>

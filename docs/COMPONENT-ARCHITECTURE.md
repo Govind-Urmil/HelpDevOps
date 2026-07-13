@@ -30,3 +30,7 @@ These are disclosed consolidations, not claims that every proposed filename exis
 ## EP-003 additions
 
 `AnalysisResult.astro` is the shared production Result Contract. `ToolCard.astro` renders registry entries. Cron and structured-data pages own their input actions while reusing the shared result surface.
+
+## EP-005 additions
+
+`SessionDockShell` is the global explicit-save and local-workspace entry point. The Workspace route owns favorites/recent summaries, import/export, storage controls and destructive actions. `src/workspace/` separates configuration, plain-data models, sensitive-content warnings, import/export validation, storage adapters and cross-tab notifications. `workspace-client.js` coordinates browser-only behavior without making analyzers depend on persistence.

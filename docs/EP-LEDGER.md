@@ -34,12 +34,22 @@ Next: Superseded by EP-004 implementation.
 
 ## EP-004 — Developer Essentials
 
-Status: Implementation candidate; pending independent audit and Product Owner approval.
+Status: Completed, audited, remediated, approved and committed.
 
 Version: v0.4.0.
 
 Purpose: Add deterministic Encoding & Hash, IPv4 CIDR, Linux Permissions, and Git Reference utilities with conservative Universal Input routing, resource-driven domain data, truthful capability boundaries, and expanded regression evidence.
 
-Next: Independent audit, at most one narrow remediation pass if a genuine blocker exists, then owner-controlled commit and push.
+Next: Completed baseline for EP-005 development.
 
 Operational completion rule: every EP that introduces a new operational failure mode must update the Operations & Troubleshooting Runbook before it can be complete.
+
+## EP-005 — Privacy-First DevOps Workspace
+
+Status: Implementation candidate; pending independent browser/Lighthouse verification and Product Owner approval.
+
+Version: v0.5.0.
+
+Purpose: Deliver useful browser-local continuity without automatic raw-input history. Add favorites, recent tool metadata, explicit saved workspaces, versioned import/export, sensitive-content warnings, cross-tab refresh and clear local-data controls while keeping every analysis tool operational when storage is unavailable.
+
+Next: Core implementation verification here, specialized browser/Lighthouse audit by ChatGPT Work, at most one narrow remediation, then owner-controlled commit and push.

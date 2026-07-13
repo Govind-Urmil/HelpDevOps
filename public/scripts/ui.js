@@ -68,5 +68,6 @@ document.addEventListener('keydown', event => {
 });
 
 const dock = $('[data-session-dock]');
-$('[data-session-open]')?.addEventListener('click', () => { dock.hidden = false; dock.focus?.(); });
-$('[data-session-close]')?.addEventListener('click', () => { dock.hidden = true; $('[data-session-open]')?.focus(); });
+let dockPriorFocus;
+$$('[data-session-open]').forEach(button => button.addEventListener('click', () => { dockPriorFocus = button; dock.hidden = false; dock.focus?.(); }));
+$('[data-session-close]')?.addEventListener('click', () => { dock.hidden = true; dockPriorFocus?.focus?.(); });

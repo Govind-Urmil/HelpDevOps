@@ -93,3 +93,17 @@ Owner: Govind. HelpDevOps is not publicly deployed. Replace and verify all `[TOD
 - [ ] Govind gives final approval
 
 HelpDevOps cannot publicly launch until the Operations & Troubleshooting Runbook and Production Checklist reflect and have been verified against the real GitHub repository, Cloudflare project, deployment workflow, production branch, custom domain, DNS, TLS, rollback process and current production tools.
+
+## Local workspace release checks
+
+- [ ] No raw tool input is persisted without explicit Save
+- [ ] Favorites/recent records contain tool metadata only
+- [ ] Core tools work when localStorage or IndexedDB is unavailable
+- [ ] Workspace save, reopen, rename/delete path and result regeneration are verified
+- [ ] Private-key material is blocked before save/import/export
+- [ ] Other sensitive-content warnings are redacted and require acknowledgement
+- [ ] Import validates format, schema, tool IDs, limits and performs atomic merge/replace
+- [ ] Export is local, versioned and revokes temporary Blob URLs
+- [ ] Clear-all removes HelpDevOps preferences and workspace data
+- [ ] Cross-tab refresh/conflict behavior is verified
+- [ ] Privacy/Terms accurately disclose localStorage, IndexedDB, eviction, private mode and no cloud backup

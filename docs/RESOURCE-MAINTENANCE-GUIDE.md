@@ -80,3 +80,7 @@ npm run audit:budgets
 ## Rollback
 
 Use Git history to restore the prior resource file, rerun validation and tests, then commit the rollback. Do not duplicate old resource files inside the repository.
+
+## Workspace configuration maintenance
+
+Workspace namespaces, schema versions and limits live in `src/workspace/config.js`. Changing a user-facing limit or format version requires corresponding schema documentation and tests. Do not rename localStorage/IndexedDB keys casually; treat that as a migration. Sensitive-warning patterns require regression tests for false positives, redaction and unsafe complexity. New tool-state fields must remain plain serializable data and must not store rendered HTML or analyzer functions.
