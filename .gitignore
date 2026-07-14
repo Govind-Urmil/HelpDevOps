@@ -29,3 +29,4 @@ Thumbs.db
 # Generated local verification evidence
 # Keep concise verification summaries in docs/, not raw reports/screenshots.
 evidence/
+release-health/

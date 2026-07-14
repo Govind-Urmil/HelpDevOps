@@ -4,11 +4,12 @@ import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import SearchDialog from '../components/SearchDialog.astro';
 import SessionDockShell from '../components/SessionDockShell.astro';
+import CorrectionReport from '../components/CorrectionReport.astro';
 import SEOHead from '../components/SEOHead.astro';import OpenGraphMeta from '../components/OpenGraphMeta.astro';import StructuredData from '../components/StructuredData.astro';
 import { site } from '../config/site.js';
 interface Breadcrumb { label: string; href: string }
-const { title, description, path, robots = 'index,follow', breadcrumbs = [] } = Astro.props as { title: string; description: string; path: string; robots?: string; breadcrumbs?: Breadcrumb[] };
-const canonical = new URL(path, site.url).href;
+const { title, description, path, canonicalPath = path, robots = 'index,follow', breadcrumbs = [] } = Astro.props as { title: string; description: string; path: string; canonicalPath?: string; robots?: string; breadcrumbs?: Breadcrumb[] };
+const canonical = new URL(canonicalPath, site.url).href;
 const structured = [
   { '@context':'https://schema.org', '@type':'WebSite', name:site.name, url:site.url, description:site.description },
   { '@context':'https://schema.org', '@type':'Organization', name:site.name, url:site.url },
@@ -30,6 +31,7 @@ const structured = [
     <SiteHeader />
     <main id="main-content" tabindex="-1"><slot /></main>
     <SiteFooter />
+    <div class="container site-correction"><CorrectionReport resourceId={path} /></div>
     <SearchDialog />
     <SessionDockShell />
     <script is:inline src="/scripts/ui.js"></script>

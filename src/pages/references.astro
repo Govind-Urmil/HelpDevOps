@@ -1,5 +1,7 @@
 ---
-import StatusPage from '../components/StatusPage.astro'; import {pageMetadata as m} from '../config/pages.js';
-const sections=[{label:'LIBRARY STATUS',title:'Reference publishing has not started',text:'The platform does not claim a reference library before reliable material exists.'},{label:'REFERENCE CONTRACT',title:'Concise, connected, and source-aware',text:'Future references will prioritize scanability, task context, accurate syntax, important caveats, and connections to related tools or guides.'}];
+import BaseLayout from '../layouts/BaseLayout.astro';
+const meta={path:'/references/',title:'Reference Library Moved | HelpDevOps',description:'The reviewed HelpDevOps operational reference library is available at /reference/.',robots:'noindex,follow'};
 ---
-<StatusPage meta={m.references} eyebrow="REFERENCES" title="References" description="Compact DevOps references designed to stay close to the work—not another disconnected documentation index." status="Library pending" sections={sections}/>
+<BaseLayout {...meta} canonicalPath="/reference/" breadcrumbs={[{label:'Home',href:'/'},{label:'References',href:'/reference/'}]}>
+  <section class="page-header"><div class="container reading"><span class="eyebrow">REFERENCE LIBRARY</span><h1>References moved to a reviewed library</h1><p class="lead">HelpDevOps now publishes reviewed operational references at the canonical <code>/reference/</code> route.</p><p><a class="button primary" href="/reference/">Open reviewed references →</a></p></div></section>
+</BaseLayout>

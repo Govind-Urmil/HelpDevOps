@@ -149,7 +149,7 @@ async function renderWorkspaceList() {
     list.innerHTML = records.length ? records.map(item => `
       <article class="workspace-item" data-workspace-id="${item.id}">
         <div><strong>${escapeHTML(item.title)}</strong><p>${item.toolStates.length} tool item(s) · Updated ${new Date(item.updatedAt).toLocaleString()}</p></div>
-        <div class="workspace-item-actions"><button class="button secondary" data-workspace-open="${item.id}">Open</button><button class="button ghost" data-workspace-rename="${item.id}">Rename</button><button class="button ghost" data-workspace-duplicate="${item.id}">Duplicate</button><button class="button ghost" data-workspace-export="${item.id}">Export</button><button class="button ghost" data-workspace-delete="${item.id}">Delete</button></div>
+        <div class="workspace-item-actions"><button class="button secondary" data-workspace-open="${item.id}">Open</button><button class="button ghost" data-workspace-rename="${item.id}">Rename</button><button class="button ghost" data-workspace-duplicate="${item.id}">Duplicate</button><button class="button ghost" data-workspace-export="${item.id}">Export</button><button class="button ghost" data-workspace-brief="${item.id}">Build Brief</button><button class="button ghost" data-workspace-delete="${item.id}">Delete</button></div>
       </article>`).join('') : '<p class="muted">No saved workspaces. Saving is always explicit.</p>';
     $$('[data-workspace-open]', list).forEach(button => button.onclick = () => {
       const record = records.find(item => item.id === button.dataset.workspaceOpen);
@@ -170,6 +170,16 @@ async function renderWorkspaceList() {
       const record = records.find(item => item.id === button.dataset.workspaceDuplicate);
       try { const copy=createWorkspace({id:crypto.randomUUID(),title:`${record.title} (Copy)`,toolStates:record.toolStates,notes:record.notes}); copy.sensitivity=structuredClone(record.sensitivity); await putWorkspace(await db(),copy); channel.post({type:'workspace-created',id:copy.id}); setStatus('Workspace duplicated.', 'success'); refreshWorkspaceUI(); }
       catch(error){ setStatus(error.message || 'Workspace could not be duplicated.', 'error'); }
+    });
+    $$('[data-workspace-brief]', list).forEach(button => button.onclick = () => {
+      const record = records.find(item => item.id === button.dataset.workspaceBrief); const state=record?.toolStates?.[0];
+      if(!state) return setStatus('This workspace has no compatible state for an Incident Brief.', 'warning');
+      const input=state.input||{}; const isEvidence=state.toolId==='evidence-interpreter'; const isDiagnostic=state.options?.entityType==='diagnostic-journey'||String(state.toolId).startsWith('journey-');
+      if(!isEvidence&&!isDiagnostic) return setStatus('Incident Brief transfer is currently supported for diagnostic and evidence workspaces.', 'warning');
+      let observations='',unknowns='',checks='',nextStep='';
+      if(isEvidence&&input['evidence-summary']){try{const parsed=JSON.parse(input['evidence-summary']);observations=(parsed.observations||[]).map(item=>`${item.label}: ${item.value}`).join('\n');unknowns=(parsed.unknowns||[]).join('\n');checks=(parsed.nextChecks||[]).join('\n');nextStep=parsed.relatedJourneyId?`Continue with reviewed journey ${parsed.relatedJourneyId}.`:checks;}catch{}}
+      if(isDiagnostic){let answers=[];try{answers=JSON.parse(input.answers||'[]')}catch{}observations=answers.map(item=>item.label).join('\n');checks=answers.map(item=>`${item.nodeId}: ${item.label}`).join('\n');nextStep=`Resume diagnostic node ${input.currentNodeId||'unknown'}.`;}
+      sessionStorage.setItem('helpdevops.incident-brief-transfer.v1',JSON.stringify({contractVersion:1,source:'saved-workspace',expiresAt:Date.now()+300000,data:{summary:record.title,symptom:isDiagnostic?'Saved diagnostic investigation':'Saved evidence interpretation',context:`Workspace ${record.id} · transferred context is not newly verified`,observations,unknowns,checks,nextStep}})); location.href='/incident-brief/';
     });
     $$('[data-workspace-delete]', list).forEach(button => button.onclick = async () => {
       if (!confirm('Delete this saved workspace from this browser?')) return;
@@ -238,7 +248,7 @@ function applyPendingTransfer() {
   let transfer;
   try { transfer = JSON.parse(sessionStorage.getItem('helpdevops.transfer.v1') || 'null'); } catch { transfer = null; }
   sessionStorage.removeItem('helpdevops.transfer.v1');
-  if (!transfer?.state || transfer.state.toolId !== currentEntity.id) return;
+  if (!transfer?.state || transfer.state.toolId !== currentEntity.id || (transfer.expiresAt && Date.now() > transfer.expiresAt)) return;
   const root = $('[data-tool-root]'); if (!root) return;
   const inputs = transfer.state.input || {};
   $$('input, textarea, select', root).forEach((element,index) => {

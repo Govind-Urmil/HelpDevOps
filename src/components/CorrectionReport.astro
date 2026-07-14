@@ -1,0 +1,6 @@
+---
+import {site} from '../config/site.js';const {resourceId='page'}=Astro.props;const template=`HelpDevOps technical correction\nResource: ${resourceId}\nRelease: ${site.version}\n\nWhat appears incorrect:\n\nSuggested authoritative source:\n\nDo not include logs, credentials, or private operational data.`;
+---
+<details class="correction-report"><summary>Report a technical issue</summary><p>No sending destination is configured. Nothing from this page or your input is attached automatically. Logs may contain secrets.</p><button class="button ghost" type="button" data-copy-correction data-template={template}>Copy safe correction template</button><p data-correction-status aria-live="polite"></p></details>
+<script>// @ts-nocheck
+document.querySelectorAll('[data-copy-correction]').forEach(button=>button.addEventListener('click',async()=>{const status=button.parentElement?.querySelector('[data-correction-status]');try{await navigator.clipboard.writeText(button.dataset.template||'');if(status)status.textContent='Safe correction template copied.'}catch{if(status)status.textContent='Copy unavailable. No information was sent.'}}));</script>

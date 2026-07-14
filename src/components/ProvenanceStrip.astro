@@ -1,0 +1,5 @@
+---
+const {status='reviewed',reviewedAt='',compatibility='',limitationsHref='#limitations',sourcesHref='#sources'}=Astro.props;
+const label=status==='reviewed'?'Reviewed':status==='deprecated'?'Deprecated':status==='needs-review'?'Needs review':'Review due soon';
+---
+<aside class="provenance-strip" aria-label="Trust and provenance"><strong>{label}</strong>{reviewedAt&&<span>Updated {reviewedAt}</span>}<span>Local processing</span>{compatibility&&<span>{compatibility}</span>}<a href={sourcesHref}>Official sources</a><a href={limitationsHref}>View limitations</a></aside>

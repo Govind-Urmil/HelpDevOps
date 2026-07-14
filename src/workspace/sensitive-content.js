@@ -9,6 +9,8 @@ const rules = [
   { id: 'terraform-state-path', severity: 'warn', label: 'Terraform or remote state path', pattern: /(?:\bPath\s*:\s*)?(?:s3:\/\/[^\s"']+|[^\s"']+\.tfstate\b)/i },
   { id: 'ip-address', severity: 'warn', label: 'IP address', pattern: /\b(?:10\.|127\.|169\.254\.|172\.(?:1[6-9]|2\d|3[01])\.|192\.168\.)\d{1,3}\.\d{1,3}\b/ },
   { id: 'internal-hostname', severity: 'warn', label: 'Likely internal hostname', pattern: /\b(?:[a-z0-9-]+\.)+(?:internal|local|lan|corp|cluster\.local)\b/i },
+  { id: 'filesystem-path', severity: 'warn', label: 'Filesystem or state path', pattern: /(?:^|\s)(?:\/[a-z0-9._-]+){3,}(?:\s|$)/i },
+  { id: 'docker-environment', severity: 'warn', label: 'Docker environment value', pattern: /\b(?:Env|environment)\b[\s\S]{0,80}\b[A-Z][A-Z0-9_]{2,}\s*[:=]\s*[^\s,]+/i },
   { id: 'ownership-field', severity: 'warn', label: 'Operational owner or username', pattern: /\b(?:Who|Owner|Username|User)\s*:\s*[^\s,;]+/i }
 ];
 

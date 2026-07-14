@@ -11,14 +11,18 @@ export function buildDiagnosticDiscoveryResult(diagnostic,trimmed){
   return {status:'recognized',kind:`diagnostic:${diagnostic.id}`,title:`${statusLabel} diagnostic journey found: ${diagnostic.title}`,summary:`The text matches a ${statusPhrase} symptom or error entry. It routes to evidence collection; it does not prove one root cause.`,evidence:[{signal:isReviewed?'reviewed-diagnostic-match':'candidate-diagnostic-match',source:'input',excerpt:trimmed.slice(0,180)}],findings:[],actions:[{label:'Open guided diagnosis',type:'link'}],checked:[`${statusLabel} exact-error tokens and symptom aliases`],notChecked:['Live system state, command output context, root cause, and production impact'],nextActions:['Open the journey and begin with the first read-only check.'],related:[diagnostic.path]};
 }
 
-export function analyzeInput(input){
+export function analyzeInput(input, context='auto'){
   const trimmed=input.trim();
+  const validContexts=new Set(['auto','symptom','command-output','configuration','reference']);
+  if(!validContexts.has(context))context='auto';
+  if(context==='reference')return {status:'ambiguous',kind:'reference-lookup',title:'Choose a supported lookup path',summary:'Reference context does not reinterpret this text as evidence. Search the reviewed indexes for an exact supported concept.',evidence:[],findings:[],actions:[{label:'Browse operational references',path:'/reference/'},{label:'Browse errors and symptoms',path:'/errors/'}],checked:['Context hint only'],notChecked:['Live systems, root cause, and unsupported free-form lookup'],nextActions:['Search for a command, error token, or operational concept.'],related:['/reference/','/errors/']};
   if(/^(?:#\s*syntax=.*\n)?\s*(?:ARG\s+[^\n]+\n)?\s*FROM\s+\S+/im.test(input)){const value=analyzeDockerfile(input);return {...value,evidence:[{signal:'dockerfile-from',source:'input',excerpt:'FROM instruction detected'},...(value.evidence||[])]};}
   const normalized=trimmed.toLowerCase().replace(/\s+/g,' ');
   const evidenceResult=interpretEvidence(input);
-  if(['recognized','ambiguous'].includes(evidenceResult.status))return evidenceResult;
+  if(context!=='symptom'&&context!=='configuration'&&['recognized','ambiguous'].includes(evidenceResult.status))return evidenceResult;
+  if(context==='command-output')return {...evidenceResult,status:'unsupported',title:'Command output not recognized',summary:'The context hint narrowed analysis, but this output does not match a supported interpreter. It was not forced into a diagnosis.',nextActions:['Open the interpreter directory or browse troubleshooting by symptom.'],related:['/interpret/','/troubleshoot/']};
   const looksLikeMetaDiscussion=/\b(guide|documentation|docs|article|phrase|term|acronym)\b/.test(normalized) && normalized.split(/\s+/).length>3;
-  const diagnostic=publishedJourneys.find(journey=>
+  const diagnostic=context!=='configuration'&&publishedJourneys.find(journey=>
     (!looksLikeMetaDiscussion && journey.exactErrors.some(token=>token.length>=6&&normalized.includes(token.toLowerCase()))) ||
     journey.aliases.some(alias=>normalized===alias.toLowerCase())
   );

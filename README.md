@@ -4,6 +4,10 @@ Website Factory Project #2.
 
 Trusted, free, privacy-first, browser-based DevOps workspace.
 
+Current release: **EP-012 / v0.12.0**. The product now connects local deterministic analysis to reviewed guidance, explicit browser-local continuity, verification, and privacy-controlled Incident Brief handover.
+
+Owner release gate: `npm run verify:release`. Browser assurance: `npm run verify:browsers`. Recovery guidance: `docs/OWNER-QUICK-RECOVERY.md`.
+
 ## Roles
 - Govind: Product Owner and final approval
 - ChatGPT: primary research, product design, architecture, implementation, core verification, documentation, and commit-ready packaging

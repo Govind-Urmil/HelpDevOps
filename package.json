@@ -1,6 +1,6 @@
 {
   "name": "helpdevops",
-  "version": "0.11.0",
+  "version": "0.12.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -20,7 +20,9 @@
     "validate:diagnostics": "node scripts/validate-diagnostics.mjs",
     "validate:evidence": "node scripts/validate-evidence.mjs",
     "validate:references": "node scripts/validate-references.mjs",
-    "validate:discovery": "node scripts/validate-discovery.mjs"
+    "validate:discovery": "node scripts/validate-discovery.mjs",
+    "verify:release": "node scripts/verify-release.mjs",
+    "verify:browsers": "playwright test"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.6.0",

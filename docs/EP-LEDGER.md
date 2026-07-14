@@ -1,5 +1,9 @@
 # EP Ledger
 
+## EP-012 — Product Cohesion, Trust and Operational Workflow
+
+Status: Implemented for v0.12.0. Connects Analyze → understand → continue → verify → hand over, with local Incident Briefs and owner-controlled release health.
+
 ## EP-001 — Consolidated Foundation Baseline
 
 Status: Completed baseline.

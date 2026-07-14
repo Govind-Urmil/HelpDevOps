@@ -1,29 +1,8 @@
 ---
-import BaseLayout from '../layouts/BaseLayout.astro';
-import UniversalInput from '../components/UniversalInput.astro';
-import PrivacyPulse from '../components/PrivacyPulse.astro';
-import ResultPreview from '../components/ResultPreview.astro';
-import { pageMetadata as meta } from '../config/pages.js';
-const quick = [
-  ['INSPECT','JSON & YAML','Parse, inspect, and format locally','/tools/structured-data/'],
-  ['VALIDATE','Cron schedules','Explain common five-field expressions','/tools/cron/'],
-  ['PLANNED','Containers','Compose and Kubernetes classification','/tools/'],
-  ['PLANNED','More DevOps tools','Git, Bash, Jenkins, Terraform, and more','/tools/']
-];
+import BaseLayout from '../layouts/BaseLayout.astro';import UniversalInput from '../components/UniversalInput.astro';import {pageMetadata as meta} from '../config/pages.js';
 ---
 <BaseLayout {...meta.home}>
-  <section class="hero"><div class="container">
-    <div class="hero-copy"><span class="eyebrow">DEVOPS COMMAND CENTER</span><h1>Stay in the flow.<br/><span>Understand every step.</span></h1><p>One private workspace for DevOps tasks, guidance, references, and clear next actions—built to reduce context switching without hiding the reasoning.</p></div>
-    <UniversalInput /><PrivacyPulse />
-  </div></section>
-  <section class="section"><div class="container"><div class="section-heading"><div><span class="eyebrow">QUICK ACCESS</span><h2>Start from the work in front of you</h2></div><a href="/tools/">View all tools →</a></div>
-    <div class="quick-grid">{quick.map(([cap,title,desc,path]) => <a class="card quick-card" href={path}><span class="capability">{cap}</span><h3>{title}</h3><p>{desc}</p><span class="card-arrow" aria-hidden="true">→</span></a>)}</div>
-  </div></section>
-  <section class="section"><div class="container two-col">
-    <article class="preflight-card"><div><span class="eyebrow">FLAGSHIP WORKFLOW · PREVIEW</span><span class="badge warning">IN DEVELOPMENT</span></div><h2>Will your DevOps files work together?</h2><p>Preflight is planned to inspect relationships across selected Docker, Compose, environment, and Kubernetes files—locally, with every check and limitation visible.</p><ol class="flow"><li><span>1</span>Add files locally</li><li><span>2</span>Inspect relationships</li><li><span>3</span>Explain findings</li></ol><a class="button secondary" href="/preflight/">See the Preflight plan →</a></article>
-    <article class="workspace-card"><span class="eyebrow">WORKFLOW CONTINUITY · AVAILABLE</span><h2>Keep useful context close</h2><p>Favorite tools, revisit recent tools, and explicitly save current tool state in this browser. Raw input is never stored automatically.</p><div class="dock-mock"><span>SESSION DOCK</span><div><b>Explicit local save</b><small>No account or cloud sync</small></div></div><button class="button ghost" type="button" data-session-open>Open Session Dock</button></article>
-  </div></section>
-  <section class="section"><div class="container"><ResultPreview /></div></section>
-  <section class="section trust"><div class="container"><div class="section-heading"><div><span class="eyebrow">BUILT FOR TRUST</span><h2>Engineering help without the black box</h2></div></div><div class="trust-grid"><article><b>01</b><h3>Local where practical</h3><p>Future processing defaults to your browser. Transfers require an approved need and clear disclosure.</p></article><article><b>02</b><h3>Evidence over scores</h3><p>Deterministic signals explain suggestions; arbitrary confidence percentages do not.</p></article><article><b>03</b><h3>Limits stay visible</h3><p>Results name what was checked, what was not, and where independent verification matters.</p></article></div></div></section>
-  <section class="section final-cta"><div class="container"><span class="eyebrow">KNOWLEDGE, CONNECTED</span><h2>Understand the command.<br/>Keep the reference nearby.</h2><p>Reviewed references now connect operational concepts to the relevant tool, interpreter, and diagnostic journey—without turning the platform into a content farm.</p><div><a class="button secondary" href="/guides/">Explore Guides</a><a class="button ghost" href="/reference/">Browse References</a></div></div></section>
+ <section class="hero"><div class="container"><div class="hero-copy"><span class="eyebrow">LOCAL · DETERMINISTIC · REVIEWED PATHS</span><h1>Find the safest next step<br/><span>when DevOps breaks.</span></h1><p>Paste a supported error, command output, configuration, or symptom. HelpDevOps analyzes supported evidence locally and routes you toward reviewed guidance without inventing certainty.</p><div class="tool-actions"><a class="button primary" href="#analyze">Analyze something</a><a class="button secondary" href="/troubleshoot/">Browse troubleshooting</a></div></div><div id="analyze"><UniversalInput /></div></div></section>
+ <section class="section"><div class="container"><div class="section-heading"><div><span class="eyebrow">START WITH WHAT YOU HAVE</span><h2>One workflow, several safe entry points</h2></div></div><div class="quick-grid"><a class="card quick-card" href="/interpret/"><span class="capability">INTERPRET</span><h3>Command output</h3><p>Turn supported operational output into observations, unknowns, and a next check.</p></a><a class="card quick-card" href="/tools/"><span class="capability">ANALYZE</span><h3>Use a deterministic tool</h3><p>Validate supported configuration and calculations with visible limits.</p></a><a class="card quick-card" href="/reference/"><span class="capability">UNDERSTAND</span><h3>Look up a concept</h3><p>Connect reviewed operational distinctions to relevant workflows.</p></a></div></div></section>
+ <section class="section"><div class="container two-col"><article class="workspace-card"><span class="eyebrow">CONTINUE LOCALLY</span><h2>Keep the investigation coherent</h2><p>Explicitly save supported state, then build a privacy-controlled Incident Brief for verification or handover. Browser storage is continuity, not permanent backup.</p><div class="tool-actions"><button class="button ghost" type="button" data-session-open>Open Session Dock</button><a class="button secondary" href="/incident-brief/">Build Incident Brief</a></div></article><article class="preflight-card"><span class="eyebrow">TRUST BOUNDARIES</span><h2>Evidence before certainty</h2><ul><li>Nothing is uploaded or saved automatically.</li><li>Results state what was checked and what remains unknown.</li><li>Private-key-like material is blocked from local saves and briefs.</li></ul><a href="/privacy/">Review privacy boundaries →</a></article></div></section>
 </BaseLayout>

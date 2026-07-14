@@ -4,7 +4,7 @@ import path from 'node:path';
 const root=process.cwd();
 const pkg=JSON.parse(fs.readFileSync(path.join(root,'package.json')));
 const release=JSON.parse(fs.readFileSync(path.join(root,'release-meta.json')));
-if(pkg.version!==release.version||release.version!=='0.11.0'||release.ep!=='EP-011') throw new Error('Release version metadata is inconsistent.');
+if(pkg.version!==release.version||release.version!=='0.12.0'||release.ep!=='EP-012') throw new Error('Release version metadata is inconsistent.');
 const forbidden=['react','vue','svelte','angular','tailwind','analytics'];
 const dependencies=Object.keys({...pkg.dependencies,...pkg.devDependencies}).join(' ').toLowerCase();
 for(const item of forbidden) if(dependencies.includes(item)) throw new Error(`Forbidden dependency: ${item}`);
@@ -30,3 +30,4 @@ console.log('Source and release checks passed.');
 if(process.env.RELEASE_CHANNEL==='production'&&diagnosticJourneys.some(item=>item.status!=='reviewed'))throw new Error('Production release blocked: diagnostic journeys still require technical review.');
 
 for(const required of ['src/references/registry.js','src/references/discovery.js','src/pages/reference/index.astro','src/pages/reference/[slug].astro','src/pages/errors/index.astro','scripts/validate-references.mjs','scripts/validate-discovery.mjs']) if(!fs.existsSync(path.join(root,required))) throw new Error(`EP-011 required file missing: ${required}`);
+for(const required of ['src/pages/incident-brief.astro','src/incident-brief/brief.js','scripts/verify-release.mjs','docs/OWNER-QUICK-RECOVERY.md','docs/CHATGPT-WORK-DEFERRED-VERIFICATION.md']) if(!fs.existsSync(path.join(root,required))) throw new Error(`EP-012 required file missing: ${required}`);

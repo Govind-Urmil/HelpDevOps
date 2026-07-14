@@ -15,7 +15,7 @@ const entry=nodeMap[journey.entryNodeId];
     <button class="button ghost" type="button" data-mode="emergency" aria-pressed="false">Emergency view</button>
   </div>
   <div class="diagnostic-context">
-    <section><h3>What this does not prove</h3><ul>{journey.whatItDoesNotProve.map(item=><li>{item}</li>)}</ul></section>
+    <section id="limitations"><h3>What this does not prove</h3><ul>{journey.whatItDoesNotProve.map(item=><li>{item}</li>)}</ul></section>
     <section><h3>Reviewed compatibility</h3><p>{journey.compatibility.technology}: {journey.compatibility.reviewedAgainst?.join(', ') || 'general guidance'}</p><ul>{journey.compatibility.limitations.map(item=><li>{item}</li>)}</ul></section>
   </div>
   <input type="hidden" name="journeyId" value={journey.id} data-journey-id />
@@ -34,7 +34,7 @@ const entry=nodeMap[journey.entryNodeId];
   <div class="diagnostic-controls">
     <button class="button ghost" type="button" data-step-back disabled>Previous step</button>
     <button class="button ghost" type="button" data-step-restart>Restart journey</button>
-    <button class="button secondary" type="button" data-save-current-tool>Save journey explicitly</button>
+    <button class="button secondary" type="button" data-save-current-tool>Save journey explicitly</button><button class="button ghost" type="button" data-build-incident-brief hidden>Build Incident Brief</button>
   </div>
   <p class="diagnostic-status" data-diagnostic-status aria-live="polite">Journey state stays in memory unless you explicitly save a workspace.</p>
 </section>
@@ -55,12 +55,14 @@ const entry=nodeMap[journey.entryNodeId];
       const commands=el('[data-command-list]');commands.replaceChildren();
       if(node.commands?.length){const h=document.createElement('h3');h.textContent='Safe next check';commands.append(h);for(const item of node.commands){const card=document.createElement('div');card.className='diagnostic-command';const code=document.createElement('code');code.textContent=item.command;const p=document.createElement('p');p.textContent=item.purpose;const b=document.createElement('button');b.type='button';b.className='button ghost';b.textContent='Copy';b.onclick=async()=>{try{await navigator.clipboard.writeText(item.command);el('[data-diagnostic-status]').textContent='Command copied.'}catch{el('[data-diagnostic-status]').textContent='Copy unavailable; select the command manually.'}};card.append(code,p,b);commands.append(card)}}
       const prereq=el('[data-prerequisites]');prereq.hidden=!node.prerequisites?.length&&!node.rollback;prereq.replaceChildren();if(!prereq.hidden){renderList(prereq,node.prerequisites,'Before changing anything');if(node.rollback){const p=document.createElement('p');p.textContent=`Rollback: ${node.rollback}`;prereq.append(p)}}
-      const choices=el('[data-choice-list]');choices.replaceChildren();const terminal=el('[data-terminal]');terminal.hidden=true;terminal.replaceChildren();
-      if(node.choices?.length){const h=document.createElement('h3');h.textContent='Choose the observed evidence';choices.append(h);for(const choice of node.choices){const b=document.createElement('button');b.type='button';b.className='diagnostic-choice';b.textContent=choice.label;b.onclick=()=>{history.push(node.id);answers.push({nodeId:node.id,choiceId:choice.id,label:choice.label});render(choice.nextNodeId)};choices.append(b)}}else{terminal.hidden=false;renderList(terminal,node.verification,'Verification');renderList(terminal,node.prevention,'Prevention');const p=document.createElement('p');p.textContent=node.nodeKind==='completion'?'Journey complete. Verify the result before closing the incident.':'This path needs human or platform-owner review. Preserve the evidence collected so far.';terminal.append(p)}
+      const choices=el('[data-choice-list]');choices.replaceChildren();const terminal=el('[data-terminal]');terminal.hidden=true;terminal.replaceChildren();const briefButton=el('[data-build-incident-brief]');briefButton.hidden=true;
+      if(node.choices?.length){const h=document.createElement('h3');h.textContent='Choose the observed evidence';choices.append(h);for(const choice of node.choices){const b=document.createElement('button');b.type='button';b.className='diagnostic-choice';b.textContent=choice.label;b.onclick=()=>{history.push(node.id);answers.push({nodeId:node.id,choiceId:choice.id,label:choice.label});render(choice.nextNodeId)};choices.append(b)}}else{terminal.hidden=false;briefButton.hidden=false;renderList(terminal,node.verification,'Verification');renderList(terminal,node.prevention,'Prevention');const p=document.createElement('p');p.textContent=node.nodeKind==='completion'?'Journey complete. Verify the result before closing the incident.':'This path needs human or platform-owner review. Preserve the evidence collected so far.';terminal.append(p)}
       el('[data-step-back]').disabled=!history.length; if(focus)step.focus();
     }
     el('[data-step-back]').onclick=()=>{if(!history.length)return;answers.pop();render(history.pop())};
     el('[data-step-restart]').onclick=()=>{history=[];answers=[];render(journey.entryNodeId);el('[data-diagnostic-status]').textContent='Journey restarted; no evidence was saved.'};
+    el('[data-build-incident-brief]').onclick=()=>{const node=nodes[current.value]||nodes[journey.entryNodeId];const observed=answers.map(item=>item.label).join('\n');sessionStorage.setItem('helpdevops.incident-brief-transfer.v1',JSON.stringify({contractVersion:1,source:'diagnostic-journey',expiresAt:Date.now()+300000,data:{summary:journey.title,symptom:journey.summary,context:`${journey.domain} diagnostic · transferred context is not newly verified`,observations:observed,unknowns:(journey.whatItDoesNotProve||[]).join('\n'),checks:answers.map(item=>`${item.nodeId}: ${item.label}`).join('\n'),riskNotes:`Current path risk: ${node.risk}`,verification:(node.verification||[]).join('\n'),nextStep:node.summary||'Continue with the reviewed journey.',escalationQuestions:node.nodeKind==='escalation'?'What platform or service owner can review the preserved evidence?':''}}));location.href='/incident-brief/';};
+
     root.querySelectorAll('[data-mode]').forEach(button=>button.onclick=()=>{emergency=button.dataset.mode==='emergency';root.dataset.emergency=String(emergency);root.querySelectorAll('[data-mode]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));render(current.value,{focus:false})});
     window.addEventListener('load',()=>{let restored=[];try{restored=JSON.parse(answersInput.value||'[]')}catch{};answers=Array.isArray(restored)?restored:[];history=answers.map(item=>item.nodeId);render(current.value,{focus:false})},{once:true});
     render(current.value,{focus:false});
