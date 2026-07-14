@@ -45,9 +45,11 @@ test('export is local and clear-all removes workspace data', async ({ page }) =>
   await page.goto('/tools/ipv4-cidr/');
   await page.locator('header [data-session-open]').click();
   await page.locator('[data-workspace-title-input]').fill('Subnet review');
+  page.once('dialog', dialog => dialog.accept());
   await page.locator('[data-save-current-tool]').click();
   await page.goto('/workspace/');
   const downloadPromise = page.waitForEvent('download');
+  page.once('dialog', async dialog => { expect(dialog.message()).toContain('Possible sensitive content'); await dialog.accept(); });
   await page.locator('[data-export-all]').click();
   const download = await downloadPromise;
   expect(download.suggestedFilename()).toMatch(/helpdevops-workspaces/);

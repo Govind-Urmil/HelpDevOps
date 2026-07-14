@@ -8,6 +8,7 @@ describe('EP-008 release hygiene',()=>{
     expect(fs.readFileSync(path.join(root,'docs/EP-003-SPEC.md'),'utf8')).toMatch(/EP-003/);
   });
   it('prevents the obsolete workflow from returning',()=>expect(fs.existsSync(path.join(root,'docs/CODEX-WORKFLOW.md'))).toBe(false));
+  it('keeps legacy result consumers compatible with the Next Action Layer',()=>{const result=fs.readFileSync(path.join(root,'src/components/results/AnalysisResult.astro'),'utf8');expect(result).toContain('data-result-checked');expect(result).toContain('data-result-meaning');expect(result).toContain('data-result-verification')});
   it('keeps raw ignored evidence out of snapshot requirements',()=>{
     const config=fs.readFileSync(path.join(root,'scripts/snapshot-config.mjs'),'utf8');
     expect(config).not.toMatch(/requiredFiles=.*evidence\//);
