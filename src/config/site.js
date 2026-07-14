@@ -1,8 +1,10 @@
+const configuredUrl = import.meta.env.PUBLIC_SITE_URL || 'https://helpdevops.example';
+
 export const site = {
   name: 'HelpDevOps',
-  url: 'https://helpdevops.example',
-  version: '0.13.0',
-  ep: 'EP-013',
+  url: configuredUrl.replace(/\/$/, ''),
+  version: '0.14.0',
+  ep: 'EP-014',
   description: 'A privacy-first DevOps problem-solving workspace with deterministic tools and reviewed diagnostic journeys.'
 };
 

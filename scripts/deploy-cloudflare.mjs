@@ -4,6 +4,7 @@ import {existsSync,readFileSync} from 'node:fs';
 import {dirname,resolve} from 'node:path';
 import {fileURLToPath,pathToFileURL} from 'node:url';
 import {validateMandatoryBrowserEvidence} from './certification-evidence.mjs';
+import {validateDeploymentEnvironment} from './deployment-environment.mjs';
 
 const root=resolve(dirname(fileURLToPath(import.meta.url)),'..');
 
@@ -30,7 +31,7 @@ export function validateCertificationForDeployment({manifest,release,currentComm
 }
 
 function run(command,args,env={}){
- const result=spawnSync(command,args,{cwd:root,stdio:'inherit',shell:false,env:{...process.env,...env}});
+ const result=spawnSync(command,args,{cwd:root,stdio:'inherit',shell:process.platform==='win32',env:{...process.env,...env}});
  if(result.status!==0)process.exit(result.status||1);
 }
 function git(commandArgs){const result=spawnSync('git',commandArgs,{cwd:root,encoding:'utf8',shell:false});if(result.status!==0)throw new Error(`Git command failed: git ${commandArgs.join(' ')}`);return result.stdout.trim();}
@@ -40,7 +41,10 @@ function main(){
  const manifest=loadCertification(root);
  const currentCommit=git(['rev-parse','HEAD']);const treeClean=git(['status','--porcelain']).length===0;
  validateCertificationForDeployment({manifest,release,currentCommit,treeClean});
- const env={RELEASE_CHANNEL:target};
+ const siteUrl=process.env.PUBLIC_SITE_URL;
+ const deploymentErrors=validateDeploymentEnvironment({channel:target,siteUrl});
+ if(deploymentErrors.length)throw new Error(`Deployment environment rejected: ${deploymentErrors.join('; ')}.`);
+ const env={RELEASE_CHANNEL:target,PUBLIC_SITE_URL:siteUrl};
  run(resolveNpmCommand(),['run','check'],env);run(resolveNpmCommand(),['run','build'],env);
  run(resolveNpmCommand(),['exec','--','wrangler','deploy','--env',target],env);
 }

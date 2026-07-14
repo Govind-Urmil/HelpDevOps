@@ -55,3 +55,7 @@ Reviewed troubleshooting now includes Git push rejection, Jenkins agent offline,
 ## Release certification
 
 Use `npm run verify:release` for fast health checks, `npm run certify:release:core` for strict non-browser gates, and `npm run certify:release` before preview deployment. See `docs/RELEASE-CERTIFICATION.md` and `docs/OWNER-RELEASE-CHECKLIST.md`.
+
+## EP-014 preview workflow
+
+HelpDevOps now supports certification-bound Cloudflare Workers Static Assets preview deployment. Set `PUBLIC_SITE_URL` to the exact HTTPS preview Worker URL, run full certification, deploy with `npm run deploy:preview`, then execute the live HTTP and hosted-browser checks. Production deployment remains blocked until an approved hostname is configured.

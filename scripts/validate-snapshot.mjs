@@ -27,7 +27,7 @@ for(const entry of entries){
 const temporary=fs.mkdtempSync(path.join(os.tmpdir(),'helpdevops-snapshot-'));
 function run(command,args){
  const executable=process.platform==='win32'&&command==='npm'?'npm.cmd':command;
- const result=spawnSync(executable,args,{cwd:temporary,encoding:'utf8',shell:false,env:{...process.env,CI:'1'}});
+ const result=spawnSync(executable,args,{cwd:temporary,encoding:'utf8',shell:process.platform==='win32',env:{...process.env,CI:'1'}});
  if(result.status!==0)errors.push(`Fresh-extraction command failed: ${command} ${args.join(' ')}\n${result.stdout||''}\n${result.stderr||''}`);
 }
 try{
@@ -35,7 +35,7 @@ try{
  for(const required of requiredFiles)if(!fs.existsSync(path.join(temporary,...required.split('/'))))errors.push(`Extracted file missing: ${required}`);
  const pkg=JSON.parse(fs.readFileSync(path.join(temporary,'package.json'),'utf8'));
  const release=JSON.parse(fs.readFileSync(path.join(temporary,'release-meta.json'),'utf8'));
- if(pkg.version!=='0.13.0'||release.version!==pkg.version||release.ep!=='EP-013')errors.push('Extracted release identity mismatch.');
+ if(pkg.version!=='0.14.0'||release.version!==pkg.version||release.ep!=='EP-014')errors.push('Extracted release identity mismatch.');
  if(!errors.length){
   run('npm',['ci']);
   run('npm',['run','audit:dependencies']);

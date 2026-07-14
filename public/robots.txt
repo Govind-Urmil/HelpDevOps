@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://helpdevops.example/sitemap-index.xml

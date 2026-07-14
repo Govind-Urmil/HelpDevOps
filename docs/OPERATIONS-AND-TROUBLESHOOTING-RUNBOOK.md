@@ -252,3 +252,7 @@ If a reference is missing, a search result is wrong, or a link is broken: run re
 ## Certification failure
 
 Open `release-certification/certification.md`, fix the first failed mandatory gate, remove temporary outputs, and rerun. Do not bypass the clean-tree or browser requirements. Use archive mode only for portable recovery checks.
+
+## Preview deployment failures
+
+Confirm a real HTTPS `PUBLIC_SITE_URL`, a clean certified commit, an existing certified ZIP, Wrangler authentication, and the `helpdevops-preview` target. Run the dry-run and live verifier before changing application code. Never store Cloudflare credentials in the repository.

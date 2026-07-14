@@ -102,3 +102,7 @@ Reference library, error/symptom index, unified local discovery, topic hubs and 
 ## EP-013 / v0.13.0
 
 Owner-controlled production hardening and release certification. Status: audit-candidate until technical review and certification evidence pass.
+
+## EP-014 — Cloudflare Preview Deployment and Live Infrastructure Validation
+
+Status: preview candidate. Adds environment-driven site URLs, preview noindex headers, live verification, hosted smoke tests and preview rollback guidance. Production launch is explicitly excluded.

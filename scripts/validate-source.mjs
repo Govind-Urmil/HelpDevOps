@@ -4,14 +4,18 @@ import path from 'node:path';
 const root=process.cwd();
 const pkg=JSON.parse(fs.readFileSync(path.join(root,'package.json')));
 const release=JSON.parse(fs.readFileSync(path.join(root,'release-meta.json')));
-if(pkg.version!==release.version||release.version!=='0.13.0'||release.ep!=='EP-013') throw new Error('Release version metadata is inconsistent.');
+if(pkg.version!==release.version||release.version!=='0.14.0'||release.ep!=='EP-014') throw new Error('Release version metadata is inconsistent.');
 const forbidden=['react','vue','svelte','angular','tailwind','analytics'];
 const dependencies=Object.keys({...pkg.dependencies,...pkg.devDependencies}).join(' ').toLowerCase();
 for(const item of forbidden) if(dependencies.includes(item)) throw new Error(`Forbidden dependency: ${item}`);
 if(pkg.dependencies.astro!=='7.0.7')throw new Error('Astro must remain pinned to the reviewed patched version 7.0.7.');
 for(const specFile of ['EP-002-SPEC.md','EP-003-SPEC.md','EP-004-SPEC.md','EP-005-SPEC.md','EP-006-SPEC.md','EP-007-SPEC.md','EP-008-SPEC.md','EP-009-SPEC.md','EP-011-SPEC.md']){const spec=fs.readFileSync(path.join(root,'docs',specFile),'utf8');if(spec.length<1000||!spec.includes('Acceptance Criteria'))throw new Error(`Authoritative specification is incomplete: ${specFile}`);}
 const required=['src/layouts/BaseLayout.astro','src/layouts/DirectoryLayout.astro','src/layouts/ProductLayout.astro','src/layouts/PolicyLayout.astro','src/components/DesktopNav.astro','src/components/MobileNav.astro','src/config/security.js','.gitignore'];for(const file of required)if(!fs.existsSync(path.join(root,file)))throw new Error(`Required architecture file missing: ${file}`);
-const siteSource=fs.readFileSync(path.join(root,'src','config','site.js'),'utf8');if(process.env.RELEASE_CHANNEL==='production'&&siteSource.includes('.example'))throw new Error('Production release blocked: placeholder .example canonical domain remains.');
+const siteSource=fs.readFileSync(path.join(root,'src','config','site.js'),'utf8');
+if(process.env.RELEASE_CHANNEL==='production'){
+ const configured=process.env.PUBLIC_SITE_URL||'';
+ if(!configured||configured.includes('.example')||!configured.startsWith('https://'))throw new Error('Production release blocked: approved HTTPS PUBLIC_SITE_URL is required.');
+}
 const siteVersion=siteSource.match(/version:\s*'([^']+)'/)?.[1],siteEp=siteSource.match(/ep:\s*'([^']+)'/)?.[1];if(siteVersion!==release.version||siteEp!==release.ep)throw new Error(`Site release metadata is inconsistent: ${siteEp}/${siteVersion} versus ${release.ep}/${release.version}.`);
 const footer=fs.readFileSync(path.join(root,'src','components','SiteFooter.astro'),'utf8');if(!footer.includes('{site.ep}')||!footer.includes('{site.version}'))throw new Error('Footer must render centralized release metadata.');
 if(fs.existsSync(path.join(root,'docs','CODEX-WORKFLOW.md')))throw new Error('Obsolete workflow file must not return; use docs/CHATGPT-WORK-WORKFLOW.md.');
@@ -31,5 +35,8 @@ for(const required of ['src/references/registry.js','src/references/discovery.js
 for(const required of ['src/pages/incident-brief.astro','src/incident-brief/brief.js','scripts/verify-release.mjs','docs/OWNER-QUICK-RECOVERY.md','docs/CHATGPT-WORK-DEFERRED-VERIFICATION.md']) if(!fs.existsSync(path.join(root,required))) throw new Error(`EP-012 required file missing: ${required}`);
 
 for(const required of ['scripts/certify-release.mjs','scripts/validate-certification.mjs','docs/RELEASE-CERTIFICATION.md','docs/ROLLBACK-RUNBOOK.md','docs/CLOUDFLARE-DEPLOYMENT-PREPARATION.md','docs/OWNER-RELEASE-CHECKLIST.md','wrangler.jsonc','scripts/deploy-cloudflare.mjs','releases/manifest.json']) if(!fs.existsSync(path.join(root,required))) throw new Error(`EP-013 required file missing: ${required}`);
+
+
+for(const required of ['scripts/verify-live-preview.mjs','scripts/cloudflare-dry-run.mjs','scripts/run-hosted-browser-tests.mjs','scripts/deployment-environment.mjs','tests/e2e/ep014-hosted-preview.spec.js','src/pages/robots.txt.js','docs/EP-014-SPEC.md','docs/CLOUDFLARE-PREVIEW-VALIDATION.md','docs/LIVE-SMOKE-TESTS.md','docs/PREVIEW-ROLLBACK-DRILL.md']) if(!fs.existsSync(path.join(root,required))) throw new Error(`EP-014 required file missing: ${required}`);
 
 console.log('Source and release checks passed.');

@@ -154,3 +154,13 @@ Five bounded, browser-local evidence interpreters connect supported command outp
 - [ ] Accessibility manual checklist completed.
 - [ ] Rollback candidate and checksum available.
 - [ ] Preview configuration contains no secret, account ID, or production domain.
+
+## EP-014 preview gate
+
+- [ ] Full certification completed from the candidate commit
+- [ ] Preview Worker deployed with exact `PUBLIC_SITE_URL`
+- [ ] HTML and HTTP preview noindex confirmed
+- [ ] Live routes, headers, assets and 404 validated
+- [ ] Hosted browser smoke tests passed
+- [ ] Preview rollback and certified redeploy succeeded
+- [ ] No production Worker, domain or indexing action occurred

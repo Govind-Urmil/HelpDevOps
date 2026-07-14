@@ -43,7 +43,7 @@ export function summarizeBuild(root){
   const files=walk(dist);const html=files.filter(file=>file.endsWith('.html'));
   let hashes=0;
   const headers=path.join(dist,'_headers');
-  if(fs.existsSync(headers))hashes=(fs.readFileSync(headers,'utf8').match(/'sha256-[^']+'/g)||[]).length;
+  if(fs.existsSync(headers))hashes=new Set(fs.readFileSync(headers,'utf8').match(/'sha256-[^']+'/g)||[]).size;
   return {routes:html.length,structuredDataHashes:hashes};
 }
 

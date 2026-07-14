@@ -1,7 +1,7 @@
 import {describe,it,expect} from 'vitest';import fs from 'node:fs';
 const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));const release=JSON.parse(fs.readFileSync('release-meta.json','utf8'));
 describe('EP-013 release certification foundation',()=>{
- it('keeps release identity aligned',()=>{expect(pkg.version).toBe('0.13.0');expect(release.version).toBe(pkg.version);expect(release.ep).toBe('EP-013');});
+ it('keeps current release identity aligned while retaining EP-013 foundations',()=>{expect(release.version).toBe(pkg.version);expect(Number(pkg.version.split('.')[1])).toBeGreaterThanOrEqual(13);expect(fs.existsSync('docs/EP-013-SPEC.md')).toBe(true);});
  it('provides distinct fast and strict owner commands',()=>{expect(pkg.scripts['verify:release']).toBeTruthy();expect(pkg.scripts['certify:release']).toContain('--profile full');expect(pkg.scripts['certify:release:core']).toContain('--profile core');});
  it('provides owner browser workflows',()=>{expect(pkg.scripts['browsers:install']).toBeTruthy();expect(pkg.scripts['verify:browsers']).toBeTruthy();expect(pkg.scripts['verify:browsers:focused']).toBeTruthy();expect(pkg.scripts['verify:browsers:headed']).toBeTruthy();});
  it('keeps generated certification evidence out of source snapshots',()=>{expect(fs.readFileSync('.gitignore','utf8')).toContain('release-certification/');expect(fs.readFileSync('scripts/snapshot-config.mjs','utf8')).toContain("'release-certification'");});

@@ -1,0 +1,14 @@
+import {describe,it,expect} from 'vitest';
+import fs from 'node:fs';
+import {normalizeSiteUrl,validateDeploymentEnvironment} from '../scripts/deployment-environment.mjs';
+const pkg=JSON.parse(fs.readFileSync('package.json','utf8'));const release=JSON.parse(fs.readFileSync('release-meta.json','utf8'));
+describe('EP-014 preview deployment foundation',()=>{
+ it('aligns release identity',()=>{expect(pkg.version).toBe('0.14.0');expect(release.version).toBe('0.14.0');expect(release.ep).toBe('EP-014');});
+ it('normalizes deployment URLs',()=>{expect(normalizeSiteUrl('https://preview.example.workers.dev/')).toBe('https://preview.example.workers.dev');});
+ it('requires a real HTTPS preview URL',()=>{expect(validateDeploymentEnvironment({channel:'preview',siteUrl:'https://helpdevops.example'})).not.toHaveLength(0);expect(validateDeploymentEnvironment({channel:'preview',siteUrl:'http://preview.test'})).not.toHaveLength(0);expect(validateDeploymentEnvironment({channel:'preview',siteUrl:'https://helpdevops-preview.example.workers.dev'})).toHaveLength(0);});
+ it('requires approved production hostname',()=>{const old=process.env.APPROVED_PRODUCTION_HOSTNAME;delete process.env.APPROVED_PRODUCTION_HOSTNAME;expect(validateDeploymentEnvironment({channel:'production',siteUrl:'https://helpdevops.test'})).not.toHaveLength(0);process.env.APPROVED_PRODUCTION_HOSTNAME='helpdevops.test';expect(validateDeploymentEnvironment({channel:'production',siteUrl:'https://helpdevops.test'})).toHaveLength(0);if(old)process.env.APPROVED_PRODUCTION_HOSTNAME=old;else delete process.env.APPROVED_PRODUCTION_HOSTNAME;});
+ it('provides live verification and dry-run commands',()=>{for(const name of ['verify:preview','verify:preview:browsers','cloudflare:dry-run:preview','cloudflare:dry-run:production'])expect(pkg.scripts[name]).toBeTruthy();});
+ it('separates hosted-preview smoke tests from the local browser matrix',()=>{const spec=fs.readFileSync('tests/e2e/ep014-hosted-preview.spec.js','utf8');const runner=fs.readFileSync('scripts/run-hosted-browser-tests.mjs','utf8');expect(spec).toContain("HELPDEVOPS_HOSTED_PREVIEW==='1'");expect(spec).toContain('PLAYWRIGHT_BASE_URL');expect(runner).toContain("HELPDEVOPS_HOSTED_PREVIEW:'1'");expect(runner).toContain('requires a deployed, non-local URL');});
+ it('adds preview robots and immutable hashed-asset caching through generated headers',()=>{const source=fs.readFileSync('scripts/generate-security-headers.mjs','utf8')+fs.readFileSync('scripts/security-headers.mjs','utf8');expect(source).toContain("X-Robots-Tag");expect(source).toContain('/_astro/*');expect(source).toContain('immutable');});
+ it('keeps deployment certification-bound and environment-driven',()=>{const source=fs.readFileSync('scripts/deploy-cloudflare.mjs','utf8');expect(source).toContain('validateCertificationForDeployment');expect(source).toContain('PUBLIC_SITE_URL');expect(source).toContain('validateDeploymentEnvironment');});
+});

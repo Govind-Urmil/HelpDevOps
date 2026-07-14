@@ -1,6 +1,6 @@
 {
   "name": "helpdevops",
-  "version": "0.13.0",
+  "version": "0.14.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -31,7 +31,11 @@
     "certify:release:archive": "node scripts/certify-release.mjs --profile core --allow-archive",
     "deploy:preview": "node scripts/deploy-cloudflare.mjs preview",
     "deploy:production": "node scripts/deploy-cloudflare.mjs production",
-    "audit:licenses": "node scripts/audit-licenses.mjs"
+    "audit:licenses": "node scripts/audit-licenses.mjs",
+    "verify:preview": "node scripts/verify-live-preview.mjs",
+    "verify:preview:browsers": "node scripts/run-hosted-browser-tests.mjs",
+    "cloudflare:dry-run:preview": "node scripts/cloudflare-dry-run.mjs preview",
+    "cloudflare:dry-run:production": "node scripts/cloudflare-dry-run.mjs production"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.6.0",

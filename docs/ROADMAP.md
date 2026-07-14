@@ -92,3 +92,9 @@ Reference, Discovery and Topic Clusters: 14 references, generated error index, u
 ## EP-013 — Owner-Controlled Production Hardening
 
 Strict release certification, owner browser workflows, rollback/recovery, and Workers Static Assets preparation. No deployment occurs until EP-014.
+
+## Current launch sequence
+
+- EP-014: Cloudflare preview deployment and live validation (current)
+- EP-015: production domain, final audit and public launch
+- EP-016+: post-launch stabilization and evidence-driven growth

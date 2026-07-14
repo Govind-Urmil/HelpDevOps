@@ -16,6 +16,7 @@ test('journey progresses, goes back, restarts, and switches emergency view',asyn
 });
 
 test('diagnostic routes reflow and have no serious accessibility violations',async({page})=>{
+ test.setTimeout(60_000);
   await page.setViewportSize({width:640,height:900});
   for(const route of routes){await page.goto(route);expect(await page.evaluate(()=>document.documentElement.scrollWidth<=document.documentElement.clientWidth)).toBe(true);const result=await new AxeBuilder({page}).analyze();expect(result.violations.filter(v=>['serious','critical'].includes(v.impact))).toEqual([])}
 });

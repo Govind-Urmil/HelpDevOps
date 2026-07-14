@@ -47,6 +47,7 @@ test('export is local and clear-all removes workspace data', async ({ page }) =>
   await page.locator('[data-workspace-title-input]').fill('Subnet review');
   page.once('dialog', dialog => dialog.accept());
   await page.locator('[data-save-current-tool]').click();
+  await expect(page.locator('[data-session-dock] [data-workspace-status]')).toContainText('saved in this browser');
   await page.goto('/workspace/');
   const downloadPromise = page.waitForEvent('download');
   page.once('dialog', async dialog => { expect(dialog.message()).toContain('Possible sensitive content'); await dialog.accept(); });
@@ -88,6 +89,7 @@ test('saved workspace can be renamed, duplicated, and deleted', async ({ page })
   await page.locator('header [data-session-open]').click();
   await page.locator('[data-workspace-title-input]').fill('Lifecycle workspace');
   await page.locator('[data-save-current-tool]').click();
+  await expect(page.locator('[data-session-dock] [data-workspace-status]')).toContainText('saved in this browser');
   await page.goto('/workspace/');
 
   page.once('dialog', dialog => dialog.accept('Renamed workspace'));
@@ -134,6 +136,7 @@ test('Universal Input transfer can be explicitly saved and restored without exte
   await page.locator('header [data-session-open]').click();
   await page.locator('[data-workspace-title-input]').fill('Transferred cron');
   await page.locator('[data-save-current-tool]').click();
+  await expect(page.locator('[data-session-dock] [data-workspace-status]')).toContainText('saved in this browser');
   await page.goto('/workspace/');
   await page.locator('[data-workspace-open]').click();
   await expect(page.locator('#cron-input')).toHaveValue('*/12 * * * *');

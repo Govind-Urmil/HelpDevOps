@@ -14,3 +14,7 @@ These are additional assurance tasks only. They do not replace `npm run certify:
 ## Current environment limitation
 
 The EP-013 implementation environment could not download Playwright browser binaries because `cdn.playwright.dev` DNS resolution failed. Browser commands and a focused smoke suite are committed for owner execution. Core certification and all non-browser gates were executed separately.
+
+## EP-014 additions
+
+Defer an independent live-preview header/routing review, rollback-evidence review, and final launch-candidate audit. These remain additional assurance and are not the operational deployment path.

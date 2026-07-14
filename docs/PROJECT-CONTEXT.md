@@ -39,3 +39,7 @@ HelpDevOps now exposes reviewed concepts through a resource-driven reference lib
 ## EP-013 operating rule
 
 ChatGPT Work is not a delivery dependency. The owner can run core/full certification locally. Work may later provide an additional independent pre-launch audit only.
+
+## EP-014 hosting policy
+
+Cloudflare Workers Static Assets is the selected preview architecture. Preview deployment is manual, owner-authenticated and bound to a successful full certification. Production domain and launch remain deferred to EP-015.

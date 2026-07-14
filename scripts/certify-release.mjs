@@ -18,7 +18,7 @@ rmSync(out,{recursive:true,force:true});mkdirSync(out,{recursive:true});
 function exec(command,commandArgs,{allowFailure=false,env={}}={}){
  const executable=process.platform==='win32'&&command==='npm'?'npm.cmd':command;
  const started=Date.now();
- const run=spawnSync(executable,commandArgs,{cwd:root,encoding:'utf8',stdio:'pipe',shell:false,env:{...process.env,CI:'1',...env}});
+ const run=spawnSync(executable,commandArgs,{cwd:root,encoding:'utf8',stdio:'pipe',shell:process.platform==='win32',env:{...process.env,CI:'1',...env}});
  if(run.stdout)process.stdout.write(run.stdout);if(run.stderr)process.stderr.write(run.stderr);
  const item={command:[command,...commandArgs].join(' '),status:run.status===0?'passed':'failed',exitCode:run.status,durationMs:Date.now()-started,stdout:(run.stdout||'').trim(),stderr:(run.stderr||'').trim(),error:run.error?.message||null};
  if(item.status==='failed'&&!allowFailure)throw Object.assign(new Error(`Certification command failed: ${item.command}\n${item.stderr||item.stdout}`),{certificationItem:item});
