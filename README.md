@@ -51,3 +51,7 @@ Five bounded, browser-local evidence interpreters connect supported command outp
 
 ## EP-011 operational coverage
 Reviewed troubleshooting now includes Git push rejection, Jenkins agent offline, DNS resolution, connection refused, cron jobs, and shell execution failures.
+
+## Release certification
+
+Use `npm run verify:release` for fast health checks, `npm run certify:release:core` for strict non-browser gates, and `npm run certify:release` before preview deployment. See `docs/RELEASE-CERTIFICATION.md` and `docs/OWNER-RELEASE-CHECKLIST.md`.

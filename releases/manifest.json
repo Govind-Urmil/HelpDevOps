@@ -1,0 +1,15 @@
+{
+  "schemaVersion": 1,
+  "releases": [
+    {
+      "version": "0.13.0",
+      "ep": "EP-013",
+      "status": "audit-candidate",
+      "commit": null,
+      "zipSha256": null,
+      "routeCount": 67,
+      "workspaceSchemaCompatibility": "EP-005 onward",
+      "certified": false
+    }
+  ]
+}

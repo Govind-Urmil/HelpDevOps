@@ -88,3 +88,7 @@ Adds six reviewed journeys across Git, Jenkins, networking, cron, and Bash.
 
 ## EP-011 delivered
 Reference, Discovery and Topic Clusters: 14 references, generated error index, unified discovery and deterministic linking. Next: EP-012 product cohesion and production hardening.
+
+## EP-013 — Owner-Controlled Production Hardening
+
+Strict release certification, owner browser workflows, rollback/recovery, and Workers Static Assets preparation. No deployment occurs until EP-014.

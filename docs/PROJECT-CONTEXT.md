@@ -35,3 +35,7 @@ The diagnostic platform now covers Git push rejection, Jenkins agents, DNS, refu
 
 ## EP-011 discovery foundation
 HelpDevOps now exposes reviewed concepts through a resource-driven reference library and connects user wording to tools, interpreters and diagnostics with deterministic local search.
+
+## EP-013 operating rule
+
+ChatGPT Work is not a delivery dependency. The owner can run core/full certification locally. Work may later provide an additional independent pre-launch audit only.

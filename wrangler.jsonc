@@ -1,0 +1,18 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "helpdevops",
+  "compatibility_date": "2026-07-14",
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  },
+  "env": {
+    "preview": {
+      "name": "helpdevops-preview"
+    },
+    "production": {
+      "name": "helpdevops"
+    }
+  }
+}

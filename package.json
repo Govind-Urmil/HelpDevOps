@@ -1,6 +1,6 @@
 {
   "name": "helpdevops",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -8,7 +8,7 @@
     "build": "astro build && node scripts/generate-security-headers.mjs",
     "test": "vitest run",
     "test:e2e": "playwright test",
-    "check": "astro check && node scripts/validate-resources.mjs && node scripts/validate-diagnostics.mjs && node scripts/validate-evidence.mjs && node scripts/validate-references.mjs && node scripts/validate-discovery.mjs && node scripts/validate-source.mjs",
+    "check": "astro check && node scripts/validate-resources.mjs && node scripts/validate-diagnostics.mjs && node scripts/validate-evidence.mjs && node scripts/validate-references.mjs && node scripts/validate-discovery.mjs && node scripts/validate-certification.mjs && node scripts/validate-source.mjs",
     "validate": "node scripts/validate-build.mjs",
     "audit:budgets": "node scripts/check-budgets.mjs",
     "audit:dependencies": "npm audit --audit-level=high",
@@ -22,7 +22,16 @@
     "validate:references": "node scripts/validate-references.mjs",
     "validate:discovery": "node scripts/validate-discovery.mjs",
     "verify:release": "node scripts/verify-release.mjs",
-    "verify:browsers": "playwright test"
+    "verify:browsers": "playwright test",
+    "browsers:install": "playwright install",
+    "verify:browsers:focused": "playwright test tests/e2e/ep013-certification.spec.js --project=chromium --workers=1",
+    "verify:browsers:headed": "playwright test --headed --project=chromium --workers=1",
+    "certify:release": "node scripts/certify-release.mjs --profile full",
+    "certify:release:core": "node scripts/certify-release.mjs --profile core",
+    "certify:release:archive": "node scripts/certify-release.mjs --profile core --allow-archive",
+    "deploy:preview": "node scripts/deploy-cloudflare.mjs preview",
+    "deploy:production": "node scripts/deploy-cloudflare.mjs production",
+    "audit:licenses": "node scripts/audit-licenses.mjs"
   },
   "dependencies": {
     "@astrojs/sitemap": "^3.6.0",
@@ -38,7 +47,8 @@
     "lighthouse": "12.6.1",
     "typescript": "^5.8.3",
     "vitest": "^3.2.4",
-    "zod": "^4.4.3"
+    "zod": "^4.4.3",
+    "wrangler": "4.110.0"
   },
   "engines": {
     "node": ">=22.12"

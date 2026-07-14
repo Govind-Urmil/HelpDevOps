@@ -30,3 +30,6 @@ Thumbs.db
 # Keep concise verification summaries in docs/, not raw reports/screenshots.
 evidence/
 release-health/
+
+# Generated release certification evidence
+release-certification/

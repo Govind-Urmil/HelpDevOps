@@ -1,15 +1,16 @@
 # Deferred Independent Verification Ledger
 
-These checks are an additional future independent assurance layer and are NOT required for HelpDevOps development, EP progression or launch.
+The consolidated independent verification ledger through EP-012 was closed before EP-013. ChatGPT Work is not a development, certification, deployment, or launch dependency.
 
-- Independent Chromium, Firefox, WebKit, and configured mobile matrix.
-- Visual and 200%-equivalent reflow audit.
-- Workspace/IndexedDB, cross-tab, storage-unavailable, import/export, and recovery flows.
-- Diagnostic journeys, evidence interpreters, Universal Input transfers, search, references, and error index.
-- Privacy/network instrumentation and unexpected external-request review.
-- Lighthouse on representative routes.
-- Technical-content spot review and package/evidence integrity.
-- Prior nested snapshot-validator timeout limitations.
-- EP-011 final-review limitation where a fresh independent Vitest execution was unavailable.
+## New deferred assurance from EP-013 onward
 
-Owner workflow: `npm ci`, `npx playwright install`, `npm run verify:browsers`. Generated reports stay outside release snapshots.
+- One final independent pre-launch audit of the latest certified candidate, when ChatGPT Work is available.
+- Independent review of the owner-generated full certification manifest and ZIP checksum.
+- Independent browser/visual spot checks only where they add assurance beyond the owner full matrix.
+- Independent Cloudflare preview review after EP-014, if available.
+
+These are additional assurance tasks only. They do not replace `npm run certify:release`, owner browser execution, preview validation, rollback evidence, or production gates.
+
+## Current environment limitation
+
+The EP-013 implementation environment could not download Playwright browser binaries because `cdn.playwright.dev` DNS resolution failed. Browser commands and a focused smoke suite are committed for owner execution. Core certification and all non-browser gates were executed separately.

@@ -30,3 +30,7 @@ Validate eight journeys, discovery, risk/rollback rules, 33 routes, workspace co
 
 ## EP-009 Evidence Interpreter Foundation
 Five bounded, browser-local evidence interpreters connect supported command output to observations, interpretations, unknowns, safe next checks, and reviewed diagnostic journeys. Raw evidence is not saved automatically. Routine wording, examples, references, limitations, and fixtures remain resource-maintained.
+
+## EP-013 release certification
+
+Use focused browser smoke during diagnosis and the complete browser matrix only in full certification. Full certification does not allow deferred mandatory browser projects. Generated reports remain outside snapshots.

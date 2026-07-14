@@ -98,3 +98,7 @@ Operational coverage candidate: six reviewed journeys; pending final approval an
 
 ## EP-011 / v0.11.0
 Reference library, error/symptom index, unified local discovery, topic hubs and stable related-content relationships. Status: audit candidate pending final technical review.
+
+## EP-013 / v0.13.0
+
+Owner-controlled production hardening and release certification. Status: audit-candidate until technical review and certification evidence pass.

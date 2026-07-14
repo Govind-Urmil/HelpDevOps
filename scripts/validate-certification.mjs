@@ -1,0 +1,16 @@
+import fs from 'node:fs';import path from 'node:path';
+const root=process.cwd();const pkg=JSON.parse(fs.readFileSync(path.join(root,'package.json'),'utf8'));const release=JSON.parse(fs.readFileSync(path.join(root,'release-meta.json'),'utf8'));
+const errors=[];
+if(pkg.version!==release.version||release.version!=='0.13.0'||release.ep!=='EP-013')errors.push('EP-013 release identity mismatch.');
+for(const file of ['wrangler.jsonc','scripts/certify-release.mjs','scripts/audit-licenses.mjs','docs/RELEASE-CERTIFICATION.md','docs/ROLLBACK-RUNBOOK.md','docs/CLOUDFLARE-DEPLOYMENT-PREPARATION.md','docs/OWNER-RELEASE-CHECKLIST.md'])if(!fs.existsSync(path.join(root,file)))errors.push(`Certification asset missing: ${file}`);
+const wrangler=fs.readFileSync(path.join(root,'wrangler.jsonc'),'utf8');
+for(const expected of ['"directory": "./dist"','"not_found_handling": "404-page"','"html_handling": "auto-trailing-slash"'])if(!wrangler.includes(expected))errors.push(`Wrangler static-assets setting missing: ${expected}`);
+if(/account_id|api[_-]?token|helpdevops\.(com|in|dev)/i.test(wrangler))errors.push('Wrangler configuration must not contain account credentials or an unapproved production domain.');
+const cert=fs.readFileSync(path.join(root,'scripts','certify-release.mjs'),'utf8');
+for(const expected of ["profile==='full'",'verify:browsers','snapshot:validate','sourceTreeClean','sourceTreeCleanAfter','checksums.txt','evidence.browserTests','evidence.unitTests','schemaVersion:2'])if(!cert.includes(expected))errors.push(`Certification gate missing expected behavior: ${expected}`);
+const deploy=fs.readFileSync(path.join(root,'scripts','deploy-cloudflare.mjs'),'utf8');
+for(const expected of ['validateCertificationForDeployment',"manifest.profile!=='full'","['exec','--','wrangler'",'validateMandatoryBrowserEvidence'])if(!deploy.includes(expected))errors.push(`Deployment certification enforcement missing: ${expected}`);
+const licenses=fs.readFileSync(path.join(root,'scripts','audit-licenses.mjs'),'utf8');if(!licenses.includes('installed.licenses')||!licenses.includes('if(unresolved.length)throw'))errors.push('License gate must support legacy metadata and fail unresolved packages.');
+const baseLayout=fs.readFileSync(path.join(root,'src/layouts/BaseLayout.astro'),'utf8');
+if(!baseLayout.includes("deploymentChannel === 'preview'")||!baseLayout.includes('noindex,nofollow'))errors.push('Preview builds must force noindex,nofollow.');
+if(errors.length)throw new Error(errors.join('\n'));console.log('EP-013 certification architecture checks passed.');

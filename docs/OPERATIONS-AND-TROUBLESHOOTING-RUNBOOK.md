@@ -248,3 +248,7 @@ If an operational journey gives a misleading result, preserve the input/path, di
 
 ## Reference or discovery issue
 If a reference is missing, a search result is wrong, or a link is broken: run reference and discovery validation, confirm the stable IDs and routes, rebuild, and verify the generated `/reference/` and `/errors/` pages before release.
+
+## Certification failure
+
+Open `release-certification/certification.md`, fix the first failed mandatory gate, remove temporary outputs, and rerun. Do not bypass the clean-tree or browser requirements. Use archive mode only for portable recovery checks.

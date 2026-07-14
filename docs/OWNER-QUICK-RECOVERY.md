@@ -11,3 +11,7 @@
 - Route missing from sitemap: confirm it builds as static HTML and is not `noindex`, then rebuild.
 - Production deployment failure: preserve the last known-good artifact and follow the host rollback procedure.
 - Rollback needed: redeploy the last owner-approved snapshot. Browser-local data is separate and not permanent backup.
+
+## Certification or package recovery
+
+Run `npm run certify:release:archive` inside an extracted portable snapshot for non-browser recovery verification. Use the committed repository and `npm run certify:release` for deployable certification.

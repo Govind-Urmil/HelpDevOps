@@ -146,3 +146,11 @@ Five bounded, browser-local evidence interpreters connect supported command outp
 - [ ] Reference validation passes and all 14 reviewed references are reachable.
 - [ ] Unified search ranking fixtures and generic-query safeguards pass.
 - [ ] `/errors/` and `/reference/` are crawlable and included in the sitemap.
+
+## EP-013 gate
+
+- [ ] Full certification passed from a clean Git commit.
+- [ ] Exact release ZIP SHA-256 recorded.
+- [ ] Accessibility manual checklist completed.
+- [ ] Rollback candidate and checksum available.
+- [ ] Preview configuration contains no secret, account ID, or production domain.

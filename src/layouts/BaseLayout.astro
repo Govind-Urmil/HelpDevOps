@@ -10,6 +10,8 @@ import { site } from '../config/site.js';
 interface Breadcrumb { label: string; href: string }
 const { title, description, path, canonicalPath = path, robots = 'index,follow', breadcrumbs = [] } = Astro.props as { title: string; description: string; path: string; canonicalPath?: string; robots?: string; breadcrumbs?: Breadcrumb[] };
 const canonical = new URL(canonicalPath, site.url).href;
+const deploymentChannel = process.env.RELEASE_CHANNEL || 'local';
+const effectiveRobots = deploymentChannel === 'preview' ? 'noindex,nofollow' : robots;
 const structured = [
   { '@context':'https://schema.org', '@type':'WebSite', name:site.name, url:site.url, description:site.description },
   { '@context':'https://schema.org', '@type':'Organization', name:site.name, url:site.url },
@@ -21,7 +23,7 @@ const structured = [
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <SEOHead {title} {description} {canonical} {robots}/><OpenGraphMeta {title} {description} {canonical}/>
+    <SEOHead {title} {description} {canonical} robots={effectiveRobots}/><OpenGraphMeta {title} {description} {canonical}/>
     <meta name="theme-color" content="#030A08" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <StructuredData data={structured}/>
