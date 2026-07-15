@@ -1,0 +1,5 @@
+---
+import {technologyFor} from '../config/technologies.js';
+const {technology}=Astro.props;const item=technologyFor(technology);
+---
+{item&&<span class="technology-mark"><svg aria-hidden="true" focusable="false"><use href={`/icons/technologies.svg#${item.icon}`}/></svg><span>{item.label}</span></span>}

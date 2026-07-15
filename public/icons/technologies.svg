@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg"><defs>
+<symbol id="kubernetes" viewBox="0 0 24 24"><path d="M12 2l8 4.6v10.8L12 22l-8-4.6V6.6zM12 7v10m-4-7l8 4m0-4l-8 4"/></symbol>
+<symbol id="docker" viewBox="0 0 24 24"><path d="M3 11h15c1.5 0 2.5-.5 3-1.5 0 5-3 9-9 9H7c-2 0-4-2-4-5zm3-3h3v3H6zm4 0h3v3h-3zm4 0h3v3h-3z"/></symbol>
+<symbol id="git" viewBox="0 0 24 24"><path d="M12 2l10 10-10 10L2 12zM8 8l8 8M8 8v5m8 3v-5"/></symbol>
+<symbol id="terraform" viewBox="0 0 24 24"><path d="M3 4l7 4v8l-7-4zm8 5l7 4v8l-7-4zm8-6v8l-7-4V-1z"/></symbol>
+<symbol id="linux" viewBox="0 0 24 24"><path d="M8 9c0-5 2-7 4-7s4 2 4 7c2 2 3 5 2 9H6c-1-4 0-7 2-9zm2 1h.1m3.9 0h.1M9 15h6"/></symbol>
+<symbol id="jenkins" viewBox="0 0 24 24"><path d="M7 21h10l2-9c0-6-3-10-7-10S5 6 5 12zm1-9h8M9 7h.1M15 7h.1"/></symbol>
+<symbol id="networking" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c3 3 3 15 0 18M12 3c-3 3-3 15 0 18"/></symbol>
+<symbol id="bash" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 9l3 3-3 3m5 0h6"/></symbol>
+<symbol id="ansible" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M7 17l5-11 5 11-5-4z"/></symbol>
+<symbol id="kafka" viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><circle cx="5" cy="5" r="2"/><circle cx="19" cy="5" r="2"/><circle cx="5" cy="19" r="2"/><path d="M7 7l3 3m4 0l3-3M7 17l3-3"/></symbol>
+</defs></svg>

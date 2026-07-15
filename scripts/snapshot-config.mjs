@@ -1,9 +1,10 @@
-export const snapshotName='HelpDevOps-v0.14.0-EP014-FINAL-PREVIEW-READY.zip';
+export const snapshotName='HelpDevOps-v0.15.0-EP015-CERTIFICATION-CANDIDATE.zip';
 export const excludedNames=new Set(['node_modules','.astro','dist','test-results','playwright-report','coverage','.tmp','.wrangler','.git','release-health','release-certification']);
 export const excludedPaths=new Set(['evidence']);
 export const excludedFiles=new Set(['dev-out.log','dev-err.log',snapshotName]);
 export const requiredFiles=[
 'README.md','package.json','package-lock.json','.gitignore','release-meta.json',
+'docs/EP-015-IMPLEMENTATION-REPORT.md','docs/EP-015-EVIDENCE.md','docs/EP-015-RELEASE-NOTES.md','public/icons/technologies.svg','src/config/technologies.js','src/components/TechnologyMark.astro','tests/ep015-premium-ux.test.js',
 'docs/EP-014-SPEC.md','docs/EP-014-IMPLEMENTATION-REPORT.md','docs/EP-014-EVIDENCE.md','docs/CLOUDFLARE-PREVIEW-VALIDATION.md','docs/LIVE-SMOKE-TESTS.md','docs/PREVIEW-ROLLBACK-DRILL.md','scripts/verify-live-preview.mjs','scripts/cloudflare-dry-run.mjs','scripts/run-hosted-browser-tests.mjs','scripts/deployment-environment.mjs','tests/ep014-preview.test.js','tests/e2e/ep014-hosted-preview.spec.js','src/pages/robots.txt.js',
 'docs/EP-013-SPEC.md','docs/EP-013-IMPLEMENTATION-REPORT.md','docs/EP-013-EVIDENCE.md','docs/NETWORK-PRIVACY-CERTIFICATION.md','docs/RELEASE-CERTIFICATION.md','docs/ACCESSIBILITY-MANUAL-CHECKLIST.md','docs/ROLLBACK-RUNBOOK.md','docs/CLOUDFLARE-DEPLOYMENT-PREPARATION.md','docs/OWNER-RELEASE-CHECKLIST.md','wrangler.jsonc','scripts/certify-release.mjs','scripts/validate-certification.mjs','scripts/audit-licenses.mjs','tests/ep013-certification.test.js','tests/ep013-remediation.test.js','scripts/deploy-cloudflare.mjs','scripts/certification-evidence.mjs','releases/manifest.json',
 'docs/EP-012-SPEC.md','docs/EP-012-IMPLEMENTATION-REPORT.md','docs/EP-012-EVIDENCE.md','docs/OWNER-QUICK-RECOVERY.md','docs/CHATGPT-WORK-DEFERRED-VERIFICATION.md','src/pages/incident-brief.astro','src/incident-brief/brief.js','src/components/ProvenanceStrip.astro','src/components/results/AnalysisResult.astro','src/components/diagnostics/DiagnosticJourney.astro','src/pages/references.astro','src/scripts/workspace-client.js','scripts/verify-release.mjs',
