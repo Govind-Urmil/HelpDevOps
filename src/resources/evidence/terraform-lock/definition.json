@@ -1,0 +1,33 @@
+{
+  "id": "terraform-lock",
+  "slug": "terraform-lock",
+  "source": "Terraform state lock",
+  "title": "How to interpret a Terraform state-lock error",
+  "summary": "Extract lock metadata while keeping backend, activity, and staleness unresolved until verified.",
+  "relatedJourneyId": "journey-terraform-state-lock",
+  "recommendedCommands": [],
+  "supportedFormats": {
+    "structured": [],
+    "humanReadable": [
+      "Terraform state-lock error block with Lock Info metadata"
+    ]
+  },
+  "limitations": [
+    "Lock age does not prove that an operation is inactive.",
+    "Recovery behavior depends on backend and workspace context."
+  ],
+  "references": [
+    {
+      "title": "Terraform state locking",
+      "url": "https://developer.hashicorp.com/terraform/language/state/locking"
+    },
+    {
+      "title": "terraform force-unlock",
+      "url": "https://developer.hashicorp.com/terraform/cli/commands/force-unlock"
+    }
+  ],
+  "reviewStatus": "reviewed",
+  "privacyReviewRequired": true,
+  "reviewedAt": "2026-07-13",
+  "schemaVersion": 1
+}

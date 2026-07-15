@@ -1,0 +1,8 @@
+import {buildEvidenceResult,unsupported} from '../result.js';
+export function parseTerraformLock(text){
+ if(/\.terraform\.lock\.hcl|dependency lock file/i.test(text))return unsupported('This appears to discuss Terraform provider dependency locking, not runtime state locking.',{source:'terraform-lock',conflict:'dependency-lock'});
+ const context=/Error(?:\s*:\s*)?(?:Error )?(?:acquiring|locking) the state lock|Error locking state/i.test(text);const info=/Lock Info\s*:/i.test(text);const labels=[...text.matchAll(/^\s*(ID|Path|Operation|Who|Version|Created|Info)\s*:\s*(.+)$/gim)];
+ if(!context || (!info && labels.length<2))return unsupported('A Terraform state-lock error block with sufficient context was not found.',{source:'terraform-lock'});
+ const observations=labels.slice(0,20).map(match=>({label:match[1],value:match[2].trim()}));
+ return buildEvidenceResult({parserId:'terraform-lock',title:'Terraform state-lock evidence recognized',summary:'Parsed state-lock context and available lock metadata without inferring whether the lock is stale.',recognition:{status:'recognized-human-readable',format:'terraform-lock-block'},observations,interpretations:[{message:'Terraform reports that it could not acquire a state lock. The lock protects state from concurrent operations.'}],unknowns:['Lock age alone does not prove whether an operation is inactive.','The backend, workspace, lock owner activity, and recovery method may still need confirmation.'],nextChecks:['Identify the backend and workspace, then verify whether another local, CI, HCP Terraform, or backend-specific operation is active.'],relatedJourneyId:'journey-terraform-state-lock',formatted:observations.map(o=>`${o.label}: ${o.value}`).join('\n')});
+}

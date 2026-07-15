@@ -1,0 +1,38 @@
+{
+  "id": "kubernetes-pod",
+  "slug": "kubernetes-pod",
+  "source": "Kubernetes Pod",
+  "title": "How to interpret Kubernetes Pod status evidence",
+  "summary": "Read bounded Pod status, container state, and scheduling evidence without claiming cluster validation.",
+  "relatedJourneyId": "journey-kubernetes-crashloopbackoff",
+  "recommendedCommands": [
+    "kubectl get pod <pod> -n <namespace> -o json"
+  ],
+  "supportedFormats": {
+    "structured": [
+      "Kubernetes Pod JSON with status fields"
+    ],
+    "humanReadable": [
+      "Bounded kubectl describe pod status excerpts",
+      "Selected Pod scheduling event excerpts"
+    ]
+  },
+  "limitations": [
+    "Does not validate live cluster state, CRDs, admission behavior, custom schedulers, or application logs.",
+    "Provider-specific event wording may be unsupported."
+  ],
+  "references": [
+    {
+      "title": "Kubernetes Pod lifecycle",
+      "url": "https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/"
+    },
+    {
+      "title": "Debug running Pods",
+      "url": "https://kubernetes.io/docs/tasks/debug/debug-application/debug-running-pod/"
+    }
+  ],
+  "reviewStatus": "reviewed",
+  "privacyReviewRequired": true,
+  "reviewedAt": "2026-07-13",
+  "schemaVersion": 1
+}

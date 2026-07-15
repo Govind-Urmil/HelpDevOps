@@ -1,0 +1,39 @@
+{
+  "id": "docker-state",
+  "slug": "docker-container",
+  "source": "Docker container",
+  "title": "How to read Docker container State output",
+  "summary": "Interpret allowlisted container lifecycle fields without echoing full inspect configuration.",
+  "relatedJourneyId": "journey-docker-container-exits",
+  "recommendedCommands": [
+    "docker inspect --format='{{json .State}}' <container>",
+    "docker ps -a --format '{{json .}}'"
+  ],
+  "supportedFormats": {
+    "structured": [
+      "Docker .State JSON",
+      "Formatted Docker container JSON record"
+    ],
+    "humanReadable": [
+      "Bounded docker ps -a table"
+    ]
+  },
+  "limitations": [
+    "Does not parse unrestricted application logs or prove application health.",
+    "Full docker inspect output may contain sensitive environment and configuration values."
+  ],
+  "references": [
+    {
+      "title": "Docker CLI formatting",
+      "url": "https://docs.docker.com/engine/cli/formatting/"
+    },
+    {
+      "title": "docker container inspect",
+      "url": "https://docs.docker.com/reference/cli/docker/container/inspect/"
+    }
+  ],
+  "reviewStatus": "reviewed",
+  "privacyReviewRequired": true,
+  "reviewedAt": "2026-07-13",
+  "schemaVersion": 1
+}

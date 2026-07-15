@@ -1,0 +1,24 @@
+{
+  "fixtures": [
+    {
+      "id": "systemd-show",
+      "format": "structured",
+      "input": "Id=api.service\nLoadState=loaded\nActiveState=failed\nSubState=failed\nResult=exit-code\nExecMainStatus=1",
+      "fixtureType": "synthetic",
+      "containsRealEnvironmentData": false,
+      "source": "HelpDevOps-authored",
+      "expectedParserId": "systemd-unit",
+      "expectedStatus": "recognized"
+    },
+    {
+      "id": "systemd-status",
+      "format": "human-readable",
+      "input": "\u25cf api.service - Example API\n Loaded: loaded (/etc/systemd/system/api.service; enabled)\n Active: failed (Result: exit-code)",
+      "fixtureType": "synthetic",
+      "containsRealEnvironmentData": false,
+      "source": "HelpDevOps-authored",
+      "expectedParserId": "systemd-unit",
+      "expectedStatus": "recognized"
+    }
+  ]
+}

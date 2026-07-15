@@ -1,0 +1,43 @@
+{
+  "id": "df-usage",
+  "slug": "df",
+  "source": "df",
+  "title": "How to read df disk-usage output",
+  "summary": "Interpret bounded filesystem block and inode usage without guessing the growth source.",
+  "relatedJourneyId": "journey-linux-disk-full",
+  "recommendedCommands": [
+    "df --output=source,size,used,avail,pcent,target",
+    "df -i --output=source,itotal,iused,iavail,ipcent,target"
+  ],
+  "supportedFormats": {
+    "structured": [
+      "GNU df --output selected fields",
+      "POSIX-like one-line filesystem rows"
+    ],
+    "humanReadable": [
+      "GNU/Linux df -h",
+      "GNU/Linux df -i",
+      "POSIX-style df -P"
+    ]
+  },
+  "limitations": [
+    "Does not identify which files or processes consume capacity.",
+    "BSD/macOS, localized, or severely wrapped output may be partial or unsupported."
+  ],
+  "references": [
+    {
+      "title": "GNU Coreutils df invocation",
+      "url": "https://www.gnu.org/software/coreutils/manual/html_node/df-invocation.html"
+    }
+  ],
+  "reviewStatus": "reviewed",
+  "privacyReviewRequired": true,
+  "reviewedAt": "2026-07-13",
+  "schemaVersion": 1,
+  "aliases": [
+    "df -h",
+    "df -i",
+    "df -P",
+    "filesystem usage output"
+  ]
+}

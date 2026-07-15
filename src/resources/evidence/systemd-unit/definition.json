@@ -1,0 +1,37 @@
+{
+  "id": "systemd-unit",
+  "slug": "systemd-status",
+  "source": "systemd service",
+  "title": "How to read systemd service state output",
+  "summary": "Interpret stable unit properties and bounded status evidence without treating state as root cause.",
+  "relatedJourneyId": "journey-linux-systemd-service-start",
+  "recommendedCommands": [
+    "systemctl show <service> --property=Id,LoadState,ActiveState,SubState,Result,ExecMainCode,ExecMainStatus,NRestarts"
+  ],
+  "supportedFormats": {
+    "structured": [
+      "Selected systemctl show key=value properties"
+    ],
+    "humanReadable": [
+      "Bounded systemctl status output"
+    ]
+  },
+  "limitations": [
+    "systemctl status is human-readable and not a stable machine interface.",
+    "Unit state does not replace journal and application configuration evidence."
+  ],
+  "references": [
+    {
+      "title": "systemd interface stability",
+      "url": "https://systemd.io/PORTABILITY_AND_STABILITY/"
+    },
+    {
+      "title": "systemctl manual",
+      "url": "https://www.freedesktop.org/software/systemd/man/latest/systemctl.html"
+    }
+  ],
+  "reviewStatus": "reviewed",
+  "privacyReviewRequired": true,
+  "reviewedAt": "2026-07-13",
+  "schemaVersion": 1
+}

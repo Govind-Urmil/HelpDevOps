@@ -1,0 +1,16 @@
+{
+  "schemaVersion": 1,
+  "inputLimits": {
+    "maxBytes": 65536,
+    "maxLines": 5000,
+    "maxLineChars": 16384
+  },
+  "recognitionStatuses": [
+    "recognized-structured",
+    "recognized-human-readable",
+    "ambiguous",
+    "unsupported",
+    "malformed"
+  ],
+  "privacyNotice": "Review and redact technical output before saving or sharing."
+}

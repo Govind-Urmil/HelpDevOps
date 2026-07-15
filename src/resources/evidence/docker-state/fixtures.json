@@ -1,0 +1,34 @@
+{
+  "fixtures": [
+    {
+      "id": "docker-state-json",
+      "format": "structured",
+      "input": "{\"Status\":\"exited\",\"Running\":false,\"OOMKilled\":true,\"ExitCode\":137}",
+      "fixtureType": "synthetic",
+      "containsRealEnvironmentData": false,
+      "source": "HelpDevOps-authored",
+      "expectedParserId": "docker-state",
+      "expectedStatus": "recognized"
+    },
+    {
+      "id": "docker-list",
+      "format": "human-readable",
+      "input": "CONTAINER ID IMAGE COMMAND CREATED STATUS PORTS NAMES\nabc123 nginx \"nginx\" 2 hours ago Exited (1) 5 minutes ago web",
+      "fixtureType": "synthetic",
+      "containsRealEnvironmentData": false,
+      "source": "HelpDevOps-authored",
+      "expectedParserId": "docker-state",
+      "expectedStatus": "recognized"
+    },
+    {
+      "id": "docker-list-json",
+      "format": "structured",
+      "input": "{\"ID\":\"abc123\",\"Image\":\"nginx:1.27\",\"Names\":\"web\",\"Status\":\"Exited (1) 5 minutes ago\"}",
+      "fixtureType": "synthetic",
+      "containsRealEnvironmentData": false,
+      "source": "HelpDevOps-authored",
+      "expectedParserId": "docker-state",
+      "expectedStatus": "recognized"
+    }
+  ]
+}

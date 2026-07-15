@@ -1,0 +1,34 @@
+{
+  "fixtures": [
+    {
+      "id": "df-block",
+      "format": "human-readable",
+      "input": "Filesystem Size Used Avail Use% Mounted on\n/dev/sda1 50G 49G 500M 99% /",
+      "fixtureType": "synthetic",
+      "containsRealEnvironmentData": false,
+      "source": "HelpDevOps-authored",
+      "expectedParserId": "df-usage",
+      "expectedStatus": "recognized"
+    },
+    {
+      "id": "df-inode",
+      "format": "human-readable",
+      "input": "Filesystem Inodes IUsed IFree IUse% Mounted on\n/dev/sda1 1000 999 1 99% /",
+      "fixtureType": "synthetic",
+      "containsRealEnvironmentData": false,
+      "source": "HelpDevOps-authored",
+      "expectedParserId": "df-usage",
+      "expectedStatus": "recognized"
+    },
+    {
+      "id": "df-posix",
+      "format": "human-readable",
+      "input": "Filesystem 1024-blocks Used Available Capacity Mounted on\n/dev/sda1 100000 99000 1000 99% /",
+      "fixtureType": "synthetic",
+      "containsRealEnvironmentData": false,
+      "source": "HelpDevOps-authored",
+      "expectedParserId": "df-usage",
+      "expectedStatus": "recognized"
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "fixtures": [
+    {
+      "id": "terraform-lock-block",
+      "format": "human-readable",
+      "input": "Error: Error acquiring the state lock\nLock Info:\n ID: 123\n Path: prod.tfstate\n Operation: Apply\n Who: ci@example.test",
+      "fixtureType": "synthetic",
+      "containsRealEnvironmentData": false,
+      "source": "HelpDevOps-authored",
+      "expectedParserId": "terraform-lock",
+      "expectedStatus": "recognized"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "fixtures": [
+    {
+      "id": "pod-json",
+      "format": "structured",
+      "input": "{\"kind\":\"Pod\",\"metadata\":{\"name\":\"api\"},\"status\":{\"phase\":\"Running\",\"containerStatuses\":[{\"name\":\"api\",\"restartCount\":3,\"state\":{\"waiting\":{\"reason\":\"CrashLoopBackOff\"}},\"lastState\":{\"terminated\":{\"reason\":\"OOMKilled\",\"exitCode\":137}}}]}}",
+      "fixtureType": "synthetic",
+      "containsRealEnvironmentData": false,
+      "source": "HelpDevOps-authored",
+      "expectedParserId": "kubernetes-pod",
+      "expectedStatus": "recognized"
+    },
+    {
+      "id": "pod-events",
+      "format": "human-readable",
+      "input": "State: Waiting\n  Reason: CrashLoopBackOff\nLast State: Terminated\n  Reason: OOMKilled\nRestart Count: 4",
+      "fixtureType": "synthetic",
+      "containsRealEnvironmentData": false,
+      "source": "HelpDevOps-authored",
+      "expectedParserId": "kubernetes-pod",
+      "expectedStatus": "recognized"
+    },
+    {
+      "id": "pod-current-terminated",
+      "format": "structured",
+      "input": "{\"kind\":\"Pod\",\"metadata\":{\"name\":\"job\"},\"status\":{\"phase\":\"Failed\",\"containerStatuses\":[{\"name\":\"job\",\"restartCount\":0,\"state\":{\"terminated\":{\"reason\":\"Error\",\"exitCode\":2,\"signal\":9}}}]}}",
+      "fixtureType": "synthetic",
+      "containsRealEnvironmentData": false,
+      "source": "HelpDevOps-authored",
+      "expectedParserId": "kubernetes-pod",
+      "expectedStatus": "recognized"
+    }
+  ]
+}
