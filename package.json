@@ -24,7 +24,7 @@
     "validate:knowledge": "node scripts/validate-operational-knowledge.mjs",
     "validate:coverage": "node scripts/validate-coverage.mjs",
     "verify:release": "node scripts/verify-release.mjs",
-    "verify:browsers": "playwright test",
+    "verify:browsers": "playwright test --workers=1",
     "browsers:install": "playwright install",
     "verify:browsers:focused": "playwright test tests/e2e/ep013-certification.spec.js --project=chromium --workers=1",
     "verify:browsers:headed": "playwright test --headed --project=chromium --workers=1",
