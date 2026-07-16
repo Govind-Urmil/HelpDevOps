@@ -1,8 +1,4 @@
-export const technologies = Object.freeze({
-  kubernetes:{label:'Kubernetes',icon:'kubernetes'}, docker:{label:'Docker',icon:'docker'}, git:{label:'Git',icon:'git'},
-  terraform:{label:'Terraform',icon:'terraform'}, linux:{label:'Linux',icon:'linux'}, jenkins:{label:'Jenkins',icon:'jenkins'},
-  networking:{label:'Networking',icon:'networking'}, bash:{label:'Bash',icon:'bash'}, ansible:{label:'Ansible',icon:'ansible'}, kafka:{label:'Kafka',icon:'kafka'}
-});
+export const technologies = Object.freeze(Object.fromEntries(['kubernetes','docker','git','terraform','linux','jenkins','networking','bash'].map(id=>[id,{label:{kubernetes:'Kubernetes',docker:'Docker',git:'Git',terraform:'Terraform',linux:'Linux',jenkins:'Jenkins',networking:'Networking',bash:'Bash'}[id],iconPath:`/icons/technologies/${id}.svg`}])));
 
 const aliases={container:'docker',containers:'docker',systemd:'linux',cron:'linux',shell:'bash',http:'networking',dns:'networking'};
 export function technologyFor(value=''){

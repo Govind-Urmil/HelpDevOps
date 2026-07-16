@@ -9,7 +9,9 @@ describe('EP-015 premium operational UX foundation',()=>{
     const mark=read('src/components/TechnologyMark.astro');
     expect(registry).toContain('export const technologies');
     expect(mark).toContain('technologyFor');
-    expect(mark).toContain('/icons/technologies.svg#');
+    expect(registry).toContain('/icons/technologies/');
+    expect(mark).toContain('src={item.iconPath}');
+    expect(mark).toContain('aria-hidden="true"');
     expect(mark).not.toMatch(/https?:\/\//);
   });
 

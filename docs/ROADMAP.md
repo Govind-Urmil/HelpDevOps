@@ -98,3 +98,7 @@ Strict release certification, owner browser workflows, rollback/recovery, and Wo
 - EP-014: Cloudflare preview deployment and live validation (current)
 - EP-015: production domain, final audit and public launch
 - EP-016+: post-launch stabilization and evidence-driven growth
+
+## EP-016 — Deep Operational Knowledge Foundation
+
+Implementation candidate for v0.16.0: HOKS v1.0, deterministic evidence recognition, safety-governed guidance, owner coverage, and 100 reviewed issue families across the five established core domains. Production deployment remains owner-controlled and outside this EP.

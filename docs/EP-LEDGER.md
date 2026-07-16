@@ -106,3 +106,7 @@ Owner-controlled production hardening and release certification. Status: audit-c
 ## EP-014 — Cloudflare Preview Deployment and Live Infrastructure Validation
 
 Status: preview candidate. Adds environment-driven site URLs, preview noindex headers, live verification, hosted smoke tests and preview rollback guidance. Production launch is explicitly excluded.
+
+## EP-016 / v0.16.0
+
+Deep Operational Knowledge Foundation. Adds HOKS v1.0, 100 reviewed issue families, 300 fixtures, deterministic matching and owner coverage across Kubernetes, Docker, Linux/systemd, Git and Terraform. Status: certification candidate pending the clean-commit release gate; no deployment or self-approval.

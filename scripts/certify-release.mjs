@@ -47,6 +47,7 @@ const commandChecks=[
  ['Performance budgets','npm',['run','audit:budgets'],'budgets'],
 ];
 if(profile==='full')commandChecks.push(['Full browser matrix','npm',['run','verify:browsers'],'browsers']);
+if(profile==='full')commandChecks.push(['Lighthouse','npm',['run','audit:lighthouse'],'lighthouse'],['Cloudflare preview dry run','npm',['run','cloudflare:dry-run:preview'],'cloudflareDryRun']);
 for(const [name,cmd,a,key] of commandChecks){
  try{
   const result=exec(cmd,a);checks.push({name,...result});const text=`${result.stdout}\n${result.stderr}`;
