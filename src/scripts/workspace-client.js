@@ -7,6 +7,7 @@ import { loadPreferences, savePreferences, openWorkspaceDatabase, listWorkspaces
 import { createWorkspaceChannel } from '../workspace/channel.js';
 import { site } from '../config/site.js';
 import { publishedJourneys } from '../diagnostics/registry.js';
+import { createInvestigationState, normalizeInvestigationState, rebuildInvestigationState, investigationToBrief } from '../investigations/state.js';
 
 const $ = (selector, root = document) => root.querySelector(selector);
 const $$ = (selector, root = document) => [...root.querySelectorAll(selector)];
@@ -176,10 +177,10 @@ async function renderWorkspaceList() {
       if(!state) return setStatus('This workspace has no compatible state for an Incident Brief.', 'warning');
       const input=state.input||{}; const isEvidence=state.toolId==='evidence-interpreter'; const isDiagnostic=state.options?.entityType==='diagnostic-journey'||String(state.toolId).startsWith('journey-');
       if(!isEvidence&&!isDiagnostic) return setStatus('Incident Brief transfer is currently supported for diagnostic and evidence workspaces.', 'warning');
-      let observations='',unknowns='',checks='',nextStep='';
+      let observations='',unknowns='',checks='',actions='',riskNotes='',verification='',nextStep='';
       if(isEvidence&&input['evidence-summary']){try{const parsed=JSON.parse(input['evidence-summary']);observations=(parsed.observations||[]).map(item=>`${item.label}: ${item.value}`).join('\n');unknowns=(parsed.unknowns||[]).join('\n');checks=(parsed.nextChecks||[]).join('\n');nextStep=parsed.relatedJourneyId?`Continue with reviewed journey ${parsed.relatedJourneyId}.`:checks;}catch{}}
-      if(isDiagnostic){let answers=[],investigation=null;try{answers=JSON.parse(input.answers||'[]');investigation=JSON.parse(input.investigationState||'null')}catch{}observations=investigation?.findings?.observed?.map(item=>item.label||item.value).join('\n')||answers.map(item=>item.label).join('\n');unknowns=investigation?.findings?.unknown?.map(item=>item.label||item.value).join('\n')||'';checks=investigation?.actions?.map(item=>item.label||item.summary).join('\n')||answers.map(item=>`${item.nodeId}: ${item.label}`).join('\n');nextStep=investigation?.nextAction||`Resume diagnostic node ${input.currentNodeId||'unknown'}.`;}
-      sessionStorage.setItem('helpdevops.incident-brief-transfer.v1',JSON.stringify({contractVersion:1,source:'saved-workspace',expiresAt:Date.now()+300000,data:{summary:record.title,symptom:isDiagnostic?'Saved diagnostic investigation':'Saved evidence interpretation',context:`Workspace ${record.id} · transferred context is not newly verified`,observations,unknowns,checks,nextStep}})); location.href='/incident-brief/';
+      if(isDiagnostic){let answers=[],saved=null;try{answers=JSON.parse(input.answers||'[]');saved=JSON.parse(input.investigationState||'null')}catch{}const journey=publishedJourneys.find(item=>item.id===state.toolId);if(journey){const nodes=Object.fromEntries(journey.nodes.map(node=>[node.id,node]));const fallback=createInvestigationState({id:`investigation-${journey.id}`,title:journey.title,journeyId:journey.id,originalEvidence:journey.summary});const canonical=rebuildInvestigationState(normalizeInvestigationState(saved,fallback),answers,nodes);({observations,unknowns,checks,actions,riskNotes,verification,nextStep}=investigationToBrief(canonical));}else{observations=answers.map(item=>item.label).join('\n');unknowns='Legacy workspace state is incomplete; conclusions and verification were not inferred.';checks=answers.map(item=>`${item.nodeId}: ${item.label}`).join('\n');verification='not-started';nextStep=`Resume diagnostic node ${input.currentNodeId||'unknown'}.`;}}
+      sessionStorage.setItem('helpdevops.incident-brief-transfer.v1',JSON.stringify({contractVersion:1,source:'saved-workspace',expiresAt:Date.now()+300000,data:{summary:record.title,symptom:isDiagnostic?'Saved diagnostic investigation':'Saved evidence interpretation',context:`Workspace ${record.id} · transferred context is not newly verified`,observations,unknowns,checks,actions,riskNotes,verification,nextStep}})); location.href='/incident-brief/';
     });
     $$('[data-workspace-delete]', list).forEach(button => button.onclick = async () => {
       if (!confirm('Delete this saved workspace from this browser?')) return;
