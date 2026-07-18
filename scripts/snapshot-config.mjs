@@ -1,8 +1,9 @@
-export const snapshotName='HelpDevOps-v0.16.0-EP016-CERTIFICATION-CANDIDATE.zip';
+export const snapshotName='HelpDevOps-v0.17.0-EP017-COMMIT-READY.zip';
 export const excludedNames=new Set(['node_modules','.astro','dist','test-results','playwright-report','coverage','.tmp','.wrangler','.git','release-health','release-certification']);
 export const excludedPaths=new Set(['evidence']);
 export const excludedFiles=new Set(['dev-out.log','dev-err.log',snapshotName]);
 export const requiredFiles=[
+'docs/EP-017-CAPABILITY-ARCHITECTURE.md','docs/EP-017-RELEASE-NOTES.md','src/core/capability-registry.js','src/investigations/state.js','src/investigations/registry.js','tests/ep017-connected-operations.test.js','tests/e2e/ep017-connected-operations.spec.js',
 'src/pages/knowledge/[technology].astro',
 'docs/HOKS-V1.md','docs/OPERATIONAL-KNOWLEDGE-OWNER-GUIDE.md','docs/EP-016-IMPLEMENTATION-REPORT.md','docs/EP-016-EVIDENCE.md','docs/EP-016-RELEASE-NOTES.md','src/operational-knowledge/model.js','src/operational-knowledge/matcher.js','src/operational-knowledge/coverage.js','src/resources/operational-knowledge/catalog.js','src/resources/operational-knowledge/fixtures.js','src/components/KnowledgeCard.astro','src/pages/knowledge/index.astro','scripts/validate-operational-knowledge.mjs','scripts/validate-coverage.mjs','tests/operational-knowledge.test.js','tests/e2e/ep016-knowledge.spec.js','public/icons/technologies/kubernetes.svg','public/icons/technologies/docker.svg','public/icons/technologies/git.svg','public/icons/technologies/terraform.svg','public/icons/technologies/linux.svg','public/icons/technologies/jenkins.svg','public/icons/technologies/networking.svg','public/icons/technologies/bash.svg',
 'README.md','package.json','package-lock.json','.gitignore','release-meta.json',
