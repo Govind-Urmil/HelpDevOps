@@ -49,12 +49,12 @@
     "@axe-core/playwright": "^4.10.2",
     "@playwright/test": "^1.54.0",
     "@types/node": "^24.0.0",
-    "adm-zip": "^0.5.16",
+    "adm-zip": "0.6.0",
     "lighthouse": "12.6.1",
     "typescript": "^5.8.3",
     "vitest": "^3.2.4",
-    "zod": "^4.4.3",
-    "wrangler": "4.110.0"
+    "wrangler": "4.110.0",
+    "zod": "^4.4.3"
   },
   "engines": {
     "node": ">=22.12"
