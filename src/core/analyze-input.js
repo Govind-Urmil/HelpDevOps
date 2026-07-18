@@ -5,6 +5,7 @@ import {detectAndAnalyze} from '../tools/structured-data/analyzer.js';
 import {publishedJourneys} from '../diagnostics/registry.js';
 import {calculateIPv4} from '../tools/ipv4-cidr/analyzer.js';import {analyzePermissions} from '../tools/linux-permissions/analyzer.js';import {validateRef} from '../tools/git-reference/analyzer.js';
 import {knowledgeObjects} from '../resources/operational-knowledge/catalog.js';import {matchOperationalKnowledge,knowledgeResult} from '../operational-knowledge/matcher.js';
+import {invokeCapability,getCapability} from './capability-registry.js';
 export function buildDiagnosticDiscoveryResult(diagnostic,trimmed){
   const isReviewed=diagnostic.status==='reviewed';
   const statusLabel=isReviewed?'Reviewed':'Technical review candidate';
@@ -35,4 +36,16 @@ export function analyzeInput(input, context='auto'){
   const structured=detectAndAnalyze(input);if(structured){if(structured.classification?.kind)return {...structured,kind:structured.classification.kind,title:`${structured.title} · ${structured.classification.label}`,evidence:[...(structured.evidence||[]),{signal:'structured-classification',source:'parsed document',excerpt:structured.classification.evidence.join(', ')}]};return structured;}if(/^\d{1,3}(?:\.\d{1,3}){3}\/\d{1,2}$/.test(trimmed)){const value=calculateIPv4({cidr:trimmed});return value.status==='valid'?{...value,title:'IPv4 CIDR recognized',summary:`${value.address}/${value.prefix} belongs to network ${value.network}.`,evidence:[{signal:'exact-ipv4-cidr',source:'input',excerpt:trimmed}],findings:[],actions:[{label:'Open IPv4 calculator',type:'link'}],nextActions:['Open the IPv4 CIDR Calculator for full output.']}:value}if(/^[r-][w-][xSs-][r-][w-][xSs-][r-][w-][xTt-]$/.test(trimmed)){const value=analyzePermissions(trimmed);return{...value,title:'Symbolic Linux permissions recognized',evidence:[{signal:'nine-permission-positions',source:'input',excerpt:trimmed}],findings:[],actions:[],nextActions:['Open the Linux Permissions Calculator.']}}if(/^refs\/(heads|tags)\/.+/.test(trimmed)){const value=validateRef(trimmed,'full');return{...value,kind:'git-ref',summary:'This resembles a fully qualified Git ref. Repository resolution was not performed.',evidence:[{signal:'fully-qualified-ref',source:'input',excerpt:trimmed}],findings:value.diagnostics,actions:[],nextActions:['Open the Git Reference Toolkit.']}}
   const cron=analyzeCron(input);if(cron.status!=='invalid'||input.trim().split(/\s+/).length>=5)return cron;
   return {status:'unsupported',kind:'unknown',title:'Input was not recognized',summary:'The supplied text did not match the supported evidence, diagnostic symptoms, Dockerfile, Compose, Kubernetes, JSON, YAML, Cron, networking, Linux-permission, or Git-ref subsets.',evidence:[],findings:[],actions:[],checked:['Dockerfile signature check','JSON parse attempt','YAML parse attempt','Common five-field cron analysis'],notChecked:['Shell commands, logs, Jenkinsfiles, Terraform, live clusters/engines, and other planned domains'],nextActions:['Open the tools directory or try a supported example.']};
+}
+
+const capabilityForKind={cron:'cron',json:'structured-data',yaml:'structured-data',compose:'docker-compose',kubernetes:'kubernetes-manifest',dockerfile:'dockerfile','ipv4-cidr':'ipv4-cidr','linux-permissions':'linux-permissions','git-ref':'git-reference'};
+export async function orchestrateInput(input,context='auto'){
+  const recognition=analyzeInput(input,context);const capabilityId=capabilityForKind[recognition.kind];
+  const recognitionState=['recognized','valid','valid-with-notes'].includes(recognition.status)?'recognized':recognition.status==='ambiguous'?'partial-match':recognition.status==='unsupported'?'unsupported-input':recognition.status==='invalid'?'more-context-needed':'unsupported-input';
+  if(!capabilityId)return{...recognition,recognitionState,capabilityResult:null};
+  const capability=getCapability(capabilityId);
+  if(capability?.invocationPolicy!=='automatic-safe')return{...recognition,recognitionState,capabilityResult:null};
+  const capabilityResult=await invokeCapability(capabilityId,{text:input},{workflow:'universal-input'});
+  return{...recognition,recognitionState,capabilityResult,findings:[...(recognition.findings||[]),...(capabilityResult.findings||[])],
+    verification:capabilityResult.verification,nextActions:[recognition.nextActions?.[0]||capabilityResult.suggestedNextAction||'Continue with the matching guided investigation.'].filter(Boolean)};
 }

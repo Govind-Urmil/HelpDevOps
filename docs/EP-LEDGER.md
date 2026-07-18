@@ -110,3 +110,11 @@ Status: preview candidate. Adds environment-driven site URLs, preview noindex he
 ## EP-016 / v0.16.0
 
 Deep Operational Knowledge Foundation. Adds HOKS v1.0, 100 reviewed issue families, 300 fixtures, deterministic matching and owner coverage across Kubernetes, Docker, Linux/systemd, Git and Terraform. Status: certification candidate pending the clean-commit release gate; no deployment or self-approval.
+
+## EP-017 / v0.17.0
+
+- Connected Guided Operations foundation.
+- Shared deterministic capability registry and result contract.
+- Ten connected investigation definitions with embedded local checks where useful.
+- Shared browser-local investigation state for Universal Input, Workspace, and Incident Brief.
+- No deployment; release remains owner-controlled.
