@@ -1,0 +1,13 @@
+import {boundaryMatch,mentionedTechnologies,normalizeInput} from './recognition-normalization.js';
+const families=[
+ {id:'kubernetes-container-creation',technology:'kubernetes',patterns:['CreateContainerConfigError','CreateContainerError'],missing:['kubectl describe pod output','container status'],destination:'/troubleshoot/kubernetes/'},
+ {id:'docker-daemon-response',technology:'docker',patterns:['Error response from daemon','docker daemon returned an error'],missing:['complete daemon error','Docker command'],destination:'/knowledge/docker/'},
+ {id:'permission-denial',technology:null,patterns:['operation not permitted','permission denied'],missing:['command','path or resource','technology and runtime'],destination:'/errors/'},
+ {id:'read-only-filesystem',technology:'linux',patterns:['read only file system','read-only file system'],missing:['mount details','runtime ownership'],destination:'/knowledge/linux/'},
+ {id:'network-reachability',technology:'networking',patterns:['host is unreachable','network is unreachable','no route to host','i/o timeout','connection timed out','operation timed out','request timed out'],missing:['source command','target host and port','routing context'],destination:'/troubleshoot/networking/'},
+ {id:'git-repository-state',technology:'git',patterns:['not a git repository','refusing to merge unrelated histories','not currently on a branch','not currently on any branch'],missing:['Git command','repository and branch state'],destination:'/knowledge/git/'},
+ {id:'tls-certificate',technology:'networking',patterns:['certificate has expired','certificate signed by unknown authority','TLS handshake timeout'],missing:['client command','hostname','certificate chain'],destination:'/troubleshoot/networking/'},
+ {id:'http-service-response',technology:'networking',patterns:['HTTP 503 Service Unavailable','503 Service Unavailable','upstream returned 503'],missing:['request target','proxy or upstream context'],destination:'/troubleshoot/networking/'}
+];
+export const familyCandidates=input=>families.flatMap(family=>{const signature=family.patterns.find(value=>boundaryMatch(input,value));if(!signature)return[];const mentions=mentionedTechnologies(input);const technologies=family.technology?[family.technology]:(mentions.filter(id=>['docker','kubernetes','linux'].includes(id)).length?mentions.filter(id=>['docker','kubernetes','linux'].includes(id)):['linux','docker','kubernetes']);return technologies.map(technology=>({family,technology,signature,mentions}))});
+export const schedulingSignature=input=>/(?:^|\s)\d+\/\d+\s+nodes?\s+are\s+available(?:\b|$)/i.test(normalizeInput(input));

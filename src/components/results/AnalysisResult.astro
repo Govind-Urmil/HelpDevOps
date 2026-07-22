@@ -1,6 +1,12 @@
 <section class="analysis-result" data-analysis-result hidden aria-live="polite" tabindex="-1">
   <div class="analysis-head"><div><span class="eyebrow" data-result-kind>ANALYSIS RESULT</span><h2 data-result-title>Result</h2></div><span class="badge" data-result-status>READY</span></div>
   <p class="analysis-summary" data-result-summary></p>
+  <dl class="analysis-metadata" data-result-metadata>
+    <div><dt>Result type</dt><dd data-result-type></dd></div>
+    <div><dt>Technology</dt><dd data-result-technology></dd></div>
+    <div><dt>Confidence</dt><dd data-result-confidence></dd></div>
+    <div><dt>Recognizer</dt><dd data-result-parser></dd></div>
+  </dl>
   <div class="analysis-columns">
     <ul data-result-checked hidden aria-hidden="true"></ul>
     <section><h3>What was observed?</h3><ul data-result-evidence></ul></section>
@@ -9,7 +15,10 @@
     <section><h3>What should be checked next?</h3><ul data-result-next></ul></section>
     <section><h3>Where can I continue?</h3><ul data-result-actions></ul></section>
     <section><h3>How should success be verified?</h3><ul data-result-verification></ul></section>
+    <section><h3>Why this result?</h3><ul data-result-explanation></ul></section>
+    <section><h3>Alternative candidates</h3><ul data-result-alternatives></ul></section>
+    <section><h3>Why stronger candidates were rejected</h3><ul data-result-rejected></ul></section>
   </div>
-  <div class="tool-actions" data-send-wrap hidden><button class="button secondary" type="button" data-send-result>Open in specialized tool →</button><button class="button ghost" type="button" data-build-incident-brief hidden>Build Incident Brief →</button></div>
+  <div class="tool-actions" data-send-wrap hidden><button class="button secondary" type="button" data-send-result>Open in specialized tool &rarr;</button><button class="button ghost" type="button" data-build-incident-brief hidden>Build Incident Brief &rarr;</button></div>
   <div class="formatted-output" data-formatted-wrap hidden><div class="output-head"><h3>Formatted output</h3><button class="button ghost" type="button" data-copy-output>Copy output</button></div><pre data-formatted-output></pre></div>
 </section>
