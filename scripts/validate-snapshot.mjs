@@ -4,6 +4,7 @@ import path from 'node:path';
 import {spawnSync} from 'node:child_process';
 import AdmZip from 'adm-zip';
 import {snapshotName,requiredFiles} from './snapshot-config.mjs';
+import {validateCredentialContent} from './secret-scan-policy.mjs';
 
 const archive=path.join(path.dirname(process.cwd()),snapshotName);
 if(!fs.existsSync(archive))throw new Error(`Snapshot missing: ${archive}`);
@@ -22,7 +23,7 @@ for(const entry of entries){
  if(entry.isDirectory||entry.header.size>2_000_000)continue;
  const text=entry.getData().toString('utf8');
  if(/C:\\Users\\/i.test(text))errors.push(`Local absolute path in ${entry.entryName}`);
- if(/(?:ghp_|github_pat_|AKIA)[A-Za-z0-9_\-]{12,}/.test(text))errors.push(`Credential-like token in ${entry.entryName}`);
+ errors.push(...validateCredentialContent(entry.entryName,text));
 }
 const temporary=fs.mkdtempSync(path.join(os.tmpdir(),'helpdevops-snapshot-'));
 function run(command,args){
