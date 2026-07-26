@@ -1,14 +1,20 @@
 import {diagnosticJourneys} from '../src/diagnostics/registry.js';
 import fs from 'node:fs';
 import path from 'node:path';
+import {validateCredentialContent} from './secret-scan-policy.mjs';
 const root=process.cwd();
+const secretScanErrors=[];
+const skippedSecretScanDirectories=new Set(['.git','node_modules','.astro','dist','evidence','release-health','release-certification','test-results','playwright-report','coverage','.tmp','.wrangler']);
+function scanDirectory(directory){for(const entry of fs.readdirSync(directory,{withFileTypes:true})){if(entry.isDirectory()&&skippedSecretScanDirectories.has(entry.name))continue;const absolute=path.join(directory,entry.name);if(entry.isDirectory()){scanDirectory(absolute);continue;}if(!entry.isFile()||fs.statSync(absolute).size>2_000_000)continue;const relative=path.relative(root,absolute).split(path.sep).join('/');secretScanErrors.push(...validateCredentialContent(relative,fs.readFileSync(absolute,'utf8')));}}
+scanDirectory(root);
+if(secretScanErrors.length)throw new Error(secretScanErrors.join('\n'));
 const pkg=JSON.parse(fs.readFileSync(path.join(root,'package.json')));
 const release=JSON.parse(fs.readFileSync(path.join(root,'release-meta.json')));
-if(pkg.version!==release.version||release.version!=='0.17.1'||release.ep!=='EP-017.1') throw new Error('Release version metadata is inconsistent.');
+if(pkg.version!==release.version||release.version!=='0.17.2'||release.ep!=='EP-017.2') throw new Error('Release version metadata is inconsistent.');
 const forbidden=['react','vue','svelte','angular','tailwind','analytics'];
 const dependencies=Object.keys({...pkg.dependencies,...pkg.devDependencies}).join(' ').toLowerCase();
 for(const item of forbidden) if(dependencies.includes(item)) throw new Error(`Forbidden dependency: ${item}`);
-if(pkg.dependencies.astro!=='7.0.7')throw new Error('Astro must remain pinned to the reviewed patched version 7.0.7.');
+if(pkg.dependencies.astro!=='7.1.3')throw new Error('Astro must remain pinned to the reviewed patched version 7.1.3.');
 for(const specFile of ['EP-002-SPEC.md','EP-003-SPEC.md','EP-004-SPEC.md','EP-005-SPEC.md','EP-006-SPEC.md','EP-007-SPEC.md','EP-008-SPEC.md','EP-009-SPEC.md','EP-011-SPEC.md']){const spec=fs.readFileSync(path.join(root,'docs',specFile),'utf8');if(spec.length<1000||!spec.includes('Acceptance Criteria'))throw new Error(`Authoritative specification is incomplete: ${specFile}`);}
 const required=['src/layouts/BaseLayout.astro','src/layouts/DirectoryLayout.astro','src/layouts/ProductLayout.astro','src/layouts/PolicyLayout.astro','src/components/DesktopNav.astro','src/components/MobileNav.astro','src/config/security.js','.gitignore'];for(const file of required)if(!fs.existsSync(path.join(root,file)))throw new Error(`Required architecture file missing: ${file}`);
 const siteSource=fs.readFileSync(path.join(root,'src','config','site.js'),'utf8');

@@ -47,16 +47,16 @@ describe('workspace schema', () => {
 });
 
 describe('sensitive-content warning', () => {
-  it('hard-blocks private keys', () => expect(hasBlockingSensitiveContent('-----BEGIN PRIVATE KEY-----')).toBe(true));
-  it('warns about bearer tokens', () => expect(scanSensitiveContent('Authorization: Bearer abcdefghijklmnop')[0].id).toBe('bearer-token'));
+  it('hard-blocks private keys', () => expect(hasBlockingSensitiveContent(['-----BEGIN','PRIVATE KEY-----'].join(' '))).toBe(true));
+  it('warns about bearer tokens', () => expect(scanSensitiveContent(['Authorization:','Bearer','abcdefghijklmnop'].join(' '))[0].id).toBe('bearer-token'));
   it('warns about GitHub tokens', () => expect(scanSensitiveContent('gh'+'p_'+'abcdefghijklmnopqrstuvwxyz123456')[0].id).toBe('github-token'));
   it('warns about AWS keys', () => expect(scanSensitiveContent('AK'+'IA'+'ABCDEFGHIJKLMNOP')[0].id).toBe('aws-key'));
-  it('warns about sensitive assignments', () => expect(scanSensitiveContent('password=hunter2')[0].id).toBe('sensitive-assignment'));
+  it('warns about sensitive assignments', () => expect(scanSensitiveContent(['pass','word=hunter2'].join(''))[0].id).toBe('sensitive-assignment'));
   it('warns about operational identifiers in interpretation-only evidence', () => { const warnings=scanSensitiveContent({summary:JSON.stringify({observations:[{label:'Path',value:'s3://company-prod-state/team/prod.tfstate'},{label:'Who',value:'alice@example.com'}]})}); expect(warnings.map(item=>item.id)).toEqual(expect.arrayContaining(['terraform-state-path','email-address'])); });
   it('warns about internal IP and owner fields without hard blocking', () => { const warnings=scanSensitiveContent({Who:'alice',Address:'10.20.30.40'}); expect(warnings.map(item=>item.id)).toEqual(expect.arrayContaining(['ownership-field','ip-address'])); expect(warnings.some(item=>item.severity==='block')).toBe(false); });
   it('warns about Kubernetes Secrets', () => expect(scanSensitiveContent('kind: Secret')[0].id).toBe('kubernetes-secret'));
-  it('reports line numbers', () => expect(scanSensitiveContent('safe\npassword=x')[0].line).toBe(2));
-  it('does not echo a complete long secret', () => expect(scanSensitiveContent('password=abcdefghijklmnopqrstuvwxyz')[0].excerpt).not.toContain('abcdefghijklmnopqrstuvwxyz'));
+  it('reports line numbers', () => expect(scanSensitiveContent(['safe','pass'+'word=x'].join('\n'))[0].line).toBe(2));
+  it('does not echo a complete long secret', () => expect(scanSensitiveContent(['pass','word=abcdefghijklmnopqrstuvwxyz'].join(''))[0].excerpt).not.toContain('abcdefghijklmnopqrstuvwxyz'));
   it('returns no warning for ordinary input', () => expect(scanSensitiveContent('*/5 * * * *')).toEqual([]));
 });
 

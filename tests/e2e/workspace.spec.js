@@ -31,7 +31,7 @@ test('explicit save persists a workspace and reopening restores input only', asy
 
 test('private-key material is blocked before saving', async ({ page }) => {
   await page.goto('/tools/structured-data/');
-  await page.locator('#structured-input').fill('-----BEGIN PRIVATE KEY-----\nabc\n-----END PRIVATE KEY-----');
+  await page.locator('#structured-input').fill([['-----BEGIN','PRIVATE KEY-----'].join(' '),'abc',['-----END','PRIVATE KEY-----'].join(' ')].join('\n'));
   await page.locator('header [data-session-open]').click();
   await page.locator('[data-workspace-title-input]').fill('Unsafe content');
   page.once('dialog', async dialog => { expect(dialog.message()).toContain('private-key material'); await dialog.accept(); });

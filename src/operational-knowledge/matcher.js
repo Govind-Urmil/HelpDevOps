@@ -1,5 +1,6 @@
 const normalize=value=>String(value||'').toLowerCase().replace(/\s+/g,' ').trim();
-const includes=(text,term)=>text.includes(normalize(term));
+const escape=value=>value.replace(/[.*+?^${}()|[\]\\]/g,'\\$&');
+const includes=(text,term)=>{const value=normalize(term);return Boolean(value)&&new RegExp(`(^|[^a-z0-9])${escape(value)}([^a-z0-9]|$)`,'i').test(text)};
 export function scoreKnowledge(item,input){
  const text=normalize(input);if(!text)return {score:0,matched:[],missing:item.recognition.requiredContext,excluded:[]};
  const excluded=item.recognition.exclusions.filter(term=>includes(text,term));if(excluded.length)return {score:0,matched:[],missing:[],excluded};
