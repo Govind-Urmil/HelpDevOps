@@ -16,7 +16,7 @@ export const approvedSecurityFixtures=Object.freeze({
   }),
   'tests/fixtures/universal-input-regression.json':Object.freeze({
     reason:'Permanent EP-017.2 audited regression corpus containing four synthetic sensitive-content controls.',
-    sha256:'3e062b60a304d1d1340197da0fb278961a79b93b15808479b4b722c0c0cb4473',
+    sha256:'2d9096e98dce4ac736ea520fa952371cabdfeb7b5c9b08ee13e6a30c451fb06d',
     expected:Object.freeze({'aws-secret-assignment':1,'bearer-token':1,'private-key-marker':1,'github-token':0,'sensitive-assignment':1})
   })
 });
@@ -36,7 +36,10 @@ export function validateSecurityFixturePolicy(policy=approvedSecurityFixtures){
 const configuredPolicyErrors=validateSecurityFixturePolicy();
 if(configuredPolicyErrors.length)throw new Error(configuredPolicyErrors.join('\n'));
 
-export const sha256=text=>createHash('sha256').update(text).digest('hex');
+export const sha256 = text =>
+  createHash('sha256')
+    .update(String(text).replace(/\r\n?/g, '\n'))
+    .digest('hex');
 export function normalizeEntryPath(value){
   const name=String(value||'').replaceAll('\\','/');
   if(!name||name.startsWith('/')||/^[A-Za-z]:\//.test(name)||name.split('/').some(part=>part==='..'||part===''))throw new Error(`Unsafe secret-scan path: ${value}`);
