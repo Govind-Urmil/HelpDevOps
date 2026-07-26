@@ -14,7 +14,9 @@
     ],
     "domain": "linux",
     "summary": "Distinguish exhausted filesystem blocks, inode exhaustion, deleted-but-open files, and misleading mount assumptions before changing data.",
-    "path": "/troubleshoot/linux/disk-full/"
+    "path": "/troubleshoot/linux/disk-full/",
+    "status": "reviewed",
+    "entryNodeId": "linux-start"
   },
   {
     "id": "journey-docker-container-exits",
@@ -31,7 +33,9 @@
     ],
     "domain": "docker",
     "summary": "Use container state, exit code, logs, and configured process evidence to distinguish expected completion from startup failure.",
-    "path": "/troubleshoot/docker/container-exits-immediately/"
+    "path": "/troubleshoot/docker/container-exits-immediately/",
+    "status": "reviewed",
+    "entryNodeId": "docker-start"
   },
   {
     "id": "journey-kubernetes-pod-pending",
@@ -49,7 +53,9 @@
     ],
     "domain": "kubernetes",
     "summary": "Use Pod scheduling events and related evidence to distinguish resource, placement, storage, port, and scheduler constraints.",
-    "path": "/troubleshoot/kubernetes/pod-pending/"
+    "path": "/troubleshoot/kubernetes/pod-pending/",
+    "status": "reviewed",
+    "entryNodeId": "k8s-start"
   },
   {
     "id": "journey-kubernetes-crashloopbackoff",
@@ -65,7 +71,9 @@
     ],
     "domain": "kubernetes",
     "summary": "Determine why a container repeatedly exits before changing probes, resources, commands, or restart behavior.",
-    "path": "/troubleshoot/kubernetes/crashloopbackoff/"
+    "path": "/troubleshoot/kubernetes/crashloopbackoff/",
+    "status": "reviewed",
+    "entryNodeId": "crash-start"
   },
   {
     "id": "journey-terraform-state-lock",
@@ -82,7 +90,9 @@
     ],
     "domain": "terraform",
     "summary": "Determine whether a lock is active, stale, backend-specific, or caused by connectivity before any unlock.",
-    "path": "/troubleshoot/terraform/state-lock/"
+    "path": "/troubleshoot/terraform/state-lock/",
+    "status": "reviewed",
+    "entryNodeId": "tf-start"
   },
   {
     "id": "journey-http-502",
@@ -99,7 +109,9 @@
     ],
     "domain": "http",
     "summary": "Identify the gateway that generated the 502, then inspect the immediately upstream hop.",
-    "path": "/troubleshoot/http/502-bad-gateway/"
+    "path": "/troubleshoot/http/502-bad-gateway/",
+    "status": "reviewed",
+    "entryNodeId": "http-start"
   },
   {
     "id": "journey-docker-disk-usage",
@@ -115,7 +127,9 @@
     ],
     "domain": "docker",
     "summary": "Separate host filesystem, Docker data-root, images, containers, build cache, volumes and logs before pruning.",
-    "path": "/troubleshoot/docker/disk-usage/"
+    "path": "/troubleshoot/docker/disk-usage/",
+    "status": "reviewed",
+    "entryNodeId": "dockdisk-start"
   },
   {
     "id": "journey-linux-systemd-service-start",
@@ -132,7 +146,9 @@
     ],
     "domain": "linux",
     "summary": "Use service state, journal, effective unit and dependencies before restarting or weakening controls.",
-    "path": "/troubleshoot/linux/service-wont-start/"
+    "path": "/troubleshoot/linux/service-wont-start/",
+    "status": "reviewed",
+    "entryNodeId": "sys-start"
   },
   {
     "id": "journey-git-push-rejected",
@@ -149,7 +165,9 @@
     ],
     "domain": "git",
     "summary": "Inspect repository identity and divergence before integrating or rewriting shared history.",
-    "path": "/troubleshoot/git/push-rejected/"
+    "path": "/troubleshoot/git/push-rejected/",
+    "status": "reviewed",
+    "entryNodeId": "git-start"
   },
   {
     "id": "journey-jenkins-agent-offline",
@@ -166,7 +184,9 @@
     ],
     "domain": "jenkins",
     "summary": "Identify the launch method and controller-agent boundary before changing credentials, Java, networking, or workloads.",
-    "path": "/troubleshoot/jenkins/agent-offline/"
+    "path": "/troubleshoot/jenkins/agent-offline/",
+    "status": "reviewed",
+    "entryNodeId": "jenkins-start"
   },
   {
     "id": "journey-networking-dns-resolution",
@@ -184,7 +204,9 @@
     ],
     "domain": "networking",
     "summary": "Separate NXDOMAIN, SERVFAIL, timeout, wrong-answer, and execution-context failures before changing DNS.",
-    "path": "/troubleshoot/networking/dns-resolution/"
+    "path": "/troubleshoot/networking/dns-resolution/",
+    "status": "reviewed",
+    "entryNodeId": "dns-start"
   },
   {
     "id": "journey-networking-connection-refused",
@@ -200,7 +222,9 @@
     ],
     "domain": "networking",
     "summary": "Identify the source/destination boundary, listener, binding, and policy without disabling network controls.",
-    "path": "/troubleshoot/networking/connection-refused/"
+    "path": "/troubleshoot/networking/connection-refused/",
+    "status": "reviewed",
+    "entryNodeId": "conn-start"
   },
   {
     "id": "journey-cron-job-not-running",
@@ -216,7 +240,9 @@
     ],
     "domain": "cron",
     "summary": "Separate scheduler launch, schedule, execution context, and application failures before changing permissions or running as root.",
-    "path": "/troubleshoot/cron/job-not-running/"
+    "path": "/troubleshoot/cron/job-not-running/",
+    "status": "reviewed",
+    "entryNodeId": "cron-start"
   },
   {
     "id": "journey-bash-execution-failure",
@@ -234,6 +260,296 @@
     ],
     "domain": "bash",
     "summary": "Distinguish permission, PATH, interpreter, format, and automation-context failures without chmod 777 or root shortcuts.",
-    "path": "/troubleshoot/bash/execution-failure/"
+    "path": "/troubleshoot/bash/execution-failure/",
+    "status": "reviewed",
+    "entryNodeId": "shell-start"
+  },
+  {
+    "id": "journey-linux-memory-pressure",
+    "title": "Linux memory pressure or OOM kill",
+    "aliases": [
+      "linux out of memory",
+      "oom killed process"
+    ],
+    "exactErrors": [
+      "out of memory: killed process",
+      "oom-kill",
+      "cannot allocate memory"
+    ],
+    "domain": "linux",
+    "summary": "Diagnose linux memory pressure or oom kill with read-only evidence before a scoped change.",
+    "path": "/troubleshoot/linux/memory-pressure/",
+    "status": "technical-review",
+    "entryNodeId": "linux-memory-pressure-start"
+  },
+  {
+    "id": "journey-linux-permission-denied",
+    "title": "Linux permission denied",
+    "aliases": [
+      "linux permission denied",
+      "file access denied"
+    ],
+    "exactErrors": [
+      "permission denied",
+      "operation not permitted",
+      "eacces"
+    ],
+    "domain": "linux",
+    "summary": "Diagnose linux permission denied with read-only evidence before a scoped change.",
+    "path": "/troubleshoot/linux/permission-denied/",
+    "status": "technical-review",
+    "entryNodeId": "linux-permission-denied-start"
+  },
+  {
+    "id": "journey-docker-build-failure",
+    "title": "Docker image build failure",
+    "aliases": [
+      "docker build failed",
+      "image build error"
+    ],
+    "exactErrors": [
+      "failed to solve",
+      "executor failed running",
+      "dockerfile parse error"
+    ],
+    "domain": "docker",
+    "summary": "Diagnose docker image build failure with read-only evidence before a scoped change.",
+    "path": "/troubleshoot/docker/build-failure/",
+    "status": "technical-review",
+    "entryNodeId": "docker-build-failure-start"
+  },
+  {
+    "id": "journey-docker-network-connectivity",
+    "title": "Docker container network connectivity",
+    "aliases": [
+      "docker network issue",
+      "container cannot connect"
+    ],
+    "exactErrors": [
+      "network not found",
+      "no route to host docker",
+      "temporary failure in name resolution docker"
+    ],
+    "domain": "docker",
+    "summary": "Diagnose docker container network connectivity with read-only evidence before a scoped change.",
+    "path": "/troubleshoot/docker/network-connectivity/",
+    "status": "technical-review",
+    "entryNodeId": "docker-network-connectivity-start"
+  },
+  {
+    "id": "journey-kubernetes-image-pull-backoff",
+    "title": "Kubernetes ImagePullBackOff",
+    "aliases": [
+      "image pull backoff",
+      "kubernetes cannot pull image"
+    ],
+    "exactErrors": [
+      "imagepullbackoff",
+      "errimagepull",
+      "failed to pull image"
+    ],
+    "domain": "kubernetes",
+    "summary": "Diagnose kubernetes imagepullbackoff with read-only evidence before a scoped change.",
+    "path": "/troubleshoot/kubernetes/image-pull-backoff/",
+    "status": "technical-review",
+    "entryNodeId": "kubernetes-image-pull-backoff-start"
+  },
+  {
+    "id": "journey-kubernetes-oomkilled",
+    "title": "Kubernetes container OOMKilled",
+    "aliases": [
+      "kubernetes oom killed",
+      "pod out of memory"
+    ],
+    "exactErrors": [
+      "oomkilled",
+      "reason: oomkilled",
+      "exit code 137"
+    ],
+    "domain": "kubernetes",
+    "summary": "Diagnose kubernetes container oomkilled with read-only evidence before a scoped change.",
+    "path": "/troubleshoot/kubernetes/oomkilled/",
+    "status": "technical-review",
+    "entryNodeId": "kubernetes-oomkilled-start"
+  },
+  {
+    "id": "journey-kubernetes-service-unreachable",
+    "title": "Kubernetes Service unreachable",
+    "aliases": [
+      "kubernetes service not reachable",
+      "service has no endpoints"
+    ],
+    "exactErrors": [
+      "no endpoints available for service",
+      "connection refused kubernetes service",
+      "service unavailable kubernetes"
+    ],
+    "domain": "kubernetes",
+    "summary": "Diagnose kubernetes service unreachable with read-only evidence before a scoped change.",
+    "path": "/troubleshoot/kubernetes/service-unreachable/",
+    "status": "technical-review",
+    "entryNodeId": "kubernetes-service-unreachable-start"
+  },
+  {
+    "id": "journey-terraform-init-provider-failure",
+    "title": "Terraform init or provider installation failure",
+    "aliases": [
+      "terraform init failed",
+      "provider installation failed"
+    ],
+    "exactErrors": [
+      "failed to install provider",
+      "failed to query available provider packages",
+      "inconsistent dependency lock file"
+    ],
+    "domain": "terraform",
+    "summary": "Diagnose terraform init or provider installation failure with read-only evidence before a scoped change.",
+    "path": "/troubleshoot/terraform/init-provider-failure/",
+    "status": "technical-review",
+    "entryNodeId": "terraform-init-provider-failure-start"
+  },
+  {
+    "id": "journey-terraform-plan-drift",
+    "title": "Terraform unexpected plan or drift",
+    "aliases": [
+      "terraform unexpected changes",
+      "terraform drift"
+    ],
+    "exactErrors": [
+      "objects have changed outside of terraform",
+      "forces replacement",
+      "plan does not match"
+    ],
+    "domain": "terraform",
+    "summary": "Diagnose terraform unexpected plan or drift with read-only evidence before a scoped change.",
+    "path": "/troubleshoot/terraform/plan-drift/",
+    "status": "technical-review",
+    "entryNodeId": "terraform-plan-drift-start"
+  },
+  {
+    "id": "journey-git-merge-conflict",
+    "title": "Git merge or rebase conflict",
+    "aliases": [
+      "git merge conflict",
+      "rebase conflict"
+    ],
+    "exactErrors": [
+      "merge conflict in",
+      "conflict (content)",
+      "could not apply"
+    ],
+    "domain": "git",
+    "summary": "Diagnose git merge or rebase conflict with read-only evidence before a scoped change.",
+    "path": "/troubleshoot/git/merge-conflict/",
+    "status": "technical-review",
+    "entryNodeId": "git-merge-conflict-start"
+  },
+  {
+    "id": "journey-jenkins-build-stuck",
+    "title": "Jenkins build stuck or waiting",
+    "aliases": [
+      "jenkins build stuck",
+      "jenkins job waiting"
+    ],
+    "exactErrors": [
+      "waiting for next available executor",
+      "still waiting to schedule task",
+      "paused for input"
+    ],
+    "domain": "jenkins",
+    "summary": "Diagnose jenkins build stuck or waiting with read-only evidence before a scoped change.",
+    "path": "/troubleshoot/jenkins/build-stuck/",
+    "status": "technical-review",
+    "entryNodeId": "jenkins-build-stuck-start"
+  },
+  {
+    "id": "journey-cron-duplicate-execution",
+    "title": "Cron job runs twice or overlaps",
+    "aliases": [
+      "cron runs twice",
+      "duplicate cron job"
+    ],
+    "exactErrors": [
+      "cron job overlapping",
+      "duplicate scheduled execution",
+      "job already running cron"
+    ],
+    "domain": "cron",
+    "summary": "Diagnose cron job runs twice or overlaps with read-only evidence before a scoped change.",
+    "path": "/troubleshoot/cron/duplicate-execution/",
+    "status": "technical-review",
+    "entryNodeId": "cron-duplicate-execution-start"
+  },
+  {
+    "id": "journey-networking-connection-timeout",
+    "title": "Network connection timeout",
+    "aliases": [
+      "connection timed out",
+      "network timeout"
+    ],
+    "exactErrors": [
+      "connection timed out",
+      "operation timed out",
+      "etimedout"
+    ],
+    "domain": "networking",
+    "summary": "Diagnose network connection timeout with read-only evidence before a scoped change.",
+    "path": "/troubleshoot/networking/connection-timeout/",
+    "status": "technical-review",
+    "entryNodeId": "networking-connection-timeout-start"
+  },
+  {
+    "id": "journey-networking-tls-certificate",
+    "title": "TLS certificate verification failure",
+    "aliases": [
+      "tls certificate error",
+      "ssl certificate verify failed"
+    ],
+    "exactErrors": [
+      "certificate verify failed",
+      "certificate has expired",
+      "hostname mismatch"
+    ],
+    "domain": "networking",
+    "summary": "Diagnose tls certificate verification failure with read-only evidence before a scoped change.",
+    "path": "/troubleshoot/networking/tls-certificate/",
+    "status": "technical-review",
+    "entryNodeId": "networking-tls-certificate-start"
+  },
+  {
+    "id": "journey-bash-environment-path",
+    "title": "Shell command not found or wrong executable",
+    "aliases": [
+      "command not found",
+      "wrong command version"
+    ],
+    "exactErrors": [
+      "command not found",
+      "no such file or directory bash",
+      "bad interpreter"
+    ],
+    "domain": "bash",
+    "summary": "Diagnose shell command not found or wrong executable with read-only evidence before a scoped change.",
+    "path": "/troubleshoot/bash/environment-path/",
+    "status": "technical-review",
+    "entryNodeId": "bash-environment-path-start"
+  },
+  {
+    "id": "journey-yaml-parse-error",
+    "title": "YAML parse or indentation error",
+    "aliases": [
+      "yaml parse error",
+      "invalid yaml indentation"
+    ],
+    "exactErrors": [
+      "mapping values are not allowed here",
+      "did not find expected key",
+      "found character that cannot start any token"
+    ],
+    "domain": "yaml",
+    "summary": "Diagnose yaml parse or indentation error with read-only evidence before a scoped change.",
+    "path": "/troubleshoot/yaml/parse-error/",
+    "status": "technical-review",
+    "entryNodeId": "yaml-parse-error-start"
   }
 ]

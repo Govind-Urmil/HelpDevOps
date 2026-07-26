@@ -1,7 +1,7 @@
 Exit code: 0
 Wall time: 7 seconds
 Output:
-# EP-002 Specification â€” Command Center Platform
+# EP-002 Specification — Command Center Platform
 
 **Release:** EP-002 / v0.2.0  
 **Status:** Approved engineering contract

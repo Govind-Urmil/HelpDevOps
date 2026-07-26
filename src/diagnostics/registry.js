@@ -55,6 +55,7 @@ import shellJourney from './journeys/execution-failure/journey.json' with { type
 import shellNodes from './journeys/execution-failure/nodes.json' with { type: 'json' };
 import shellExamples from './journeys/execution-failure/examples.json' with { type: 'json' };
 import shellReferences from './journeys/execution-failure/references.json' with { type: 'json' };
+import {expandedJourneys} from './expanded-journeys.js';
 
 export const diagnosticJourneys = [
   {...linuxJourney,nodes:linuxNodes,examples:linuxExamples,references:linuxReferences,path:`/troubleshoot/${linuxJourney.domain}/${linuxJourney.slug}/`},
@@ -70,8 +71,12 @@ export const diagnosticJourneys = [
   {...dnsJourney,nodes:dnsNodes,examples:dnsExamples,references:dnsReferences,path:`/troubleshoot/${dnsJourney.domain}/${dnsJourney.slug}/`},
   {...connectionJourney,nodes:connectionNodes,examples:connectionExamples,references:connectionReferences,path:`/troubleshoot/${connectionJourney.domain}/${connectionJourney.slug}/`},
   {...cronJourney,nodes:cronNodes,examples:cronExamples,references:cronReferences,path:`/troubleshoot/${cronJourney.domain}/${cronJourney.slug}/`},
-  {...shellJourney,nodes:shellNodes,examples:shellExamples,references:shellReferences,path:`/troubleshoot/${shellJourney.domain}/${shellJourney.slug}/`}
+  {...shellJourney,nodes:shellNodes,examples:shellExamples,references:shellReferences,path:`/troubleshoot/${shellJourney.domain}/${shellJourney.slug}/`},
+  ...expandedJourneys
 ];
 export const publishedJourneys = diagnosticJourneys.filter(item=>['reviewed','technical-review'].includes(item.status));
 export const journeyByPath = path => diagnosticJourneys.find(item=>item.path===path);
 export const diagnosticDomains = [...new Set(publishedJourneys.map(item=>item.domain))];
+
+
+

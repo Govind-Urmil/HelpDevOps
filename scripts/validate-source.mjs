@@ -7,10 +7,21 @@ const secretScanErrors=[];
 const skippedSecretScanDirectories=new Set(['.git','node_modules','.astro','dist','evidence','release-health','release-certification','test-results','playwright-report','coverage','.tmp','.wrangler']);
 function scanDirectory(directory){for(const entry of fs.readdirSync(directory,{withFileTypes:true})){if(entry.isDirectory()&&skippedSecretScanDirectories.has(entry.name))continue;const absolute=path.join(directory,entry.name);if(entry.isDirectory()){scanDirectory(absolute);continue;}if(!entry.isFile()||fs.statSync(absolute).size>2_000_000)continue;const relative=path.relative(root,absolute).split(path.sep).join('/');secretScanErrors.push(...validateCredentialContent(relative,fs.readFileSync(absolute,'utf8')));}}
 scanDirectory(root);
+const mojibakeFragments=[
+ String.fromCodePoint(0xc2),
+ String.fromCodePoint(0xc3,0x201a),
+ String.fromCodePoint(0xe2,0x20ac),
+ String.fromCodePoint(0xe2,0x2020),
+ String.fromCodePoint(0xc3,0x192)
+];
+const mojibakeErrors=[];
+function scanTextEncoding(directory){for(const entry of fs.readdirSync(directory,{withFileTypes:true})){if(entry.isDirectory()&&skippedSecretScanDirectories.has(entry.name))continue;const absolute=path.join(directory,entry.name);if(entry.isDirectory()){scanTextEncoding(absolute);continue;}if(!entry.isFile()||fs.statSync(absolute).size>2_000_000)continue;const relative=path.relative(root,absolute).split(path.sep).join('/');const content=fs.readFileSync(absolute,'utf8');for(const fragment of mojibakeFragments)if(content.includes(fragment))mojibakeErrors.push(`${relative}: common mojibake sequence detected`);}}
+scanTextEncoding(root);
+if(mojibakeErrors.length)throw new Error([...new Set(mojibakeErrors)].join('\n'));
 if(secretScanErrors.length)throw new Error(secretScanErrors.join('\n'));
 const pkg=JSON.parse(fs.readFileSync(path.join(root,'package.json')));
 const release=JSON.parse(fs.readFileSync(path.join(root,'release-meta.json')));
-if(pkg.version!==release.version||release.version!=='0.17.2'||release.ep!=='EP-017.2') throw new Error('Release version metadata is inconsistent.');
+if(pkg.version!==release.version||release.version!=='0.18.0'||release.ep!=='EP-018') throw new Error('Release version metadata is inconsistent.');
 const forbidden=['react','vue','svelte','angular','tailwind','analytics'];
 const dependencies=Object.keys({...pkg.dependencies,...pkg.devDependencies}).join(' ').toLowerCase();
 for(const item of forbidden) if(dependencies.includes(item)) throw new Error(`Forbidden dependency: ${item}`);

@@ -1,6 +1,6 @@
 {
   "name": "helpdevops",
-  "version": "0.17.2",
+  "version": "0.18.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -65,3 +65,4 @@
     "postcss": "8.5.18"
   }
 }
+

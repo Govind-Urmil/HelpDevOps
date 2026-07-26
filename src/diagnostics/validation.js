@@ -41,4 +41,4 @@ export function validateDiagnosticJourney(journey,{riskIds=[]}={}){
   for(const id of nodeMap.keys())if(!seen.has(id))errors.push(`${journey.id}: unreachable node ${id}.`);
   return [...new Set(errors)];
 }
-export function buildDiagnosticSearchIndex(journeys){return journeys.map(j=>({id:j.id,title:j.title,aliases:j.aliases,exactErrors:j.exactErrors,domain:j.domain,summary:j.summary,path:j.path}))}
+export function buildDiagnosticSearchIndex(journeys){return journeys.map(j=>({id:j.id,title:j.title,aliases:j.aliases,exactErrors:j.exactErrors,domain:j.domain,summary:j.summary,path:j.path,status:j.status,entryNodeId:j.entryNodeId}))}

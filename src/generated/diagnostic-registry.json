@@ -672,5 +672,715 @@
     "path": "/troubleshoot/bash/execution-failure/",
     "nodeCount": 18,
     "referenceCount": 2
+  },
+  {
+    "id": "journey-linux-memory-pressure",
+    "slug": "memory-pressure",
+    "domain": "linux",
+    "title": "Linux memory pressure or OOM kill",
+    "summary": "Diagnose linux memory pressure or oom kill with read-only evidence before a scoped change.",
+    "aliases": [
+      "linux out of memory",
+      "oom killed process"
+    ],
+    "exactErrors": [
+      "out of memory: killed process",
+      "oom-kill",
+      "cannot allocate memory"
+    ],
+    "status": "technical-review",
+    "entryNodeId": "linux-memory-pressure-start",
+    "reviewedAt": "2026-07-26",
+    "reviewDue": "2026-10-26",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "Linux",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current official general guidance"
+      ],
+      "limitations": [
+        "Provider, distribution, version, and local policy details may differ.",
+        "HelpDevOps does not inspect or change a live environment."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not prove one root cause.",
+      "Omitted context can change the safe response."
+    ],
+    "firstChecks": [
+      "free -h && vmstat 1 5"
+    ],
+    "relatedToolIds": [
+      "linux-permissions"
+    ],
+    "path": "/troubleshoot/linux/memory-pressure/",
+    "nodeCount": 7,
+    "referenceCount": 1
+  },
+  {
+    "id": "journey-linux-permission-denied",
+    "slug": "permission-denied",
+    "domain": "linux",
+    "title": "Linux permission denied",
+    "summary": "Diagnose linux permission denied with read-only evidence before a scoped change.",
+    "aliases": [
+      "linux permission denied",
+      "file access denied"
+    ],
+    "exactErrors": [
+      "permission denied",
+      "operation not permitted",
+      "eacces"
+    ],
+    "status": "technical-review",
+    "entryNodeId": "linux-permission-denied-start",
+    "reviewedAt": "2026-07-26",
+    "reviewDue": "2026-10-26",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "Linux",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current official general guidance"
+      ],
+      "limitations": [
+        "Provider, distribution, version, and local policy details may differ.",
+        "HelpDevOps does not inspect or change a live environment."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not prove one root cause.",
+      "Omitted context can change the safe response."
+    ],
+    "firstChecks": [
+      "namei -l <path> && getfacl -p <path>"
+    ],
+    "relatedToolIds": [
+      "linux-permissions"
+    ],
+    "path": "/troubleshoot/linux/permission-denied/",
+    "nodeCount": 7,
+    "referenceCount": 1
+  },
+  {
+    "id": "journey-docker-build-failure",
+    "slug": "build-failure",
+    "domain": "docker",
+    "title": "Docker image build failure",
+    "summary": "Diagnose docker image build failure with read-only evidence before a scoped change.",
+    "aliases": [
+      "docker build failed",
+      "image build error"
+    ],
+    "exactErrors": [
+      "failed to solve",
+      "executor failed running",
+      "dockerfile parse error"
+    ],
+    "status": "technical-review",
+    "entryNodeId": "docker-build-failure-start",
+    "reviewedAt": "2026-07-26",
+    "reviewDue": "2026-10-26",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "Docker",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current official general guidance"
+      ],
+      "limitations": [
+        "Provider, distribution, version, and local policy details may differ.",
+        "HelpDevOps does not inspect or change a live environment."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not prove one root cause.",
+      "Omitted context can change the safe response."
+    ],
+    "firstChecks": [
+      "docker build --progress=plain --no-cache -t <temporary-tag> ."
+    ],
+    "relatedToolIds": [
+      "dockerfile"
+    ],
+    "path": "/troubleshoot/docker/build-failure/",
+    "nodeCount": 7,
+    "referenceCount": 1
+  },
+  {
+    "id": "journey-docker-network-connectivity",
+    "slug": "network-connectivity",
+    "domain": "docker",
+    "title": "Docker container network connectivity",
+    "summary": "Diagnose docker container network connectivity with read-only evidence before a scoped change.",
+    "aliases": [
+      "docker network issue",
+      "container cannot connect"
+    ],
+    "exactErrors": [
+      "network not found",
+      "no route to host docker",
+      "temporary failure in name resolution docker"
+    ],
+    "status": "technical-review",
+    "entryNodeId": "docker-network-connectivity-start",
+    "reviewedAt": "2026-07-26",
+    "reviewDue": "2026-10-26",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "Docker",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current official general guidance"
+      ],
+      "limitations": [
+        "Provider, distribution, version, and local policy details may differ.",
+        "HelpDevOps does not inspect or change a live environment."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not prove one root cause.",
+      "Omitted context can change the safe response."
+    ],
+    "firstChecks": [
+      "docker inspect <container> --format \"{{json .NetworkSettings.Networks}}\""
+    ],
+    "relatedToolIds": [
+      "docker-compose"
+    ],
+    "path": "/troubleshoot/docker/network-connectivity/",
+    "nodeCount": 10,
+    "referenceCount": 1
+  },
+  {
+    "id": "journey-kubernetes-image-pull-backoff",
+    "slug": "image-pull-backoff",
+    "domain": "kubernetes",
+    "title": "Kubernetes ImagePullBackOff",
+    "summary": "Diagnose kubernetes imagepullbackoff with read-only evidence before a scoped change.",
+    "aliases": [
+      "image pull backoff",
+      "kubernetes cannot pull image"
+    ],
+    "exactErrors": [
+      "imagepullbackoff",
+      "errimagepull",
+      "failed to pull image"
+    ],
+    "status": "technical-review",
+    "entryNodeId": "kubernetes-image-pull-backoff-start",
+    "reviewedAt": "2026-07-26",
+    "reviewDue": "2026-10-26",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "Kubernetes",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current official general guidance"
+      ],
+      "limitations": [
+        "Provider, distribution, version, and local policy details may differ.",
+        "HelpDevOps does not inspect or change a live environment."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not prove one root cause.",
+      "Omitted context can change the safe response."
+    ],
+    "firstChecks": [
+      "kubectl describe pod <pod> -n <namespace>"
+    ],
+    "relatedToolIds": [
+      "kubernetes-manifest"
+    ],
+    "path": "/troubleshoot/kubernetes/image-pull-backoff/",
+    "nodeCount": 10,
+    "referenceCount": 1
+  },
+  {
+    "id": "journey-kubernetes-oomkilled",
+    "slug": "oomkilled",
+    "domain": "kubernetes",
+    "title": "Kubernetes container OOMKilled",
+    "summary": "Diagnose kubernetes container oomkilled with read-only evidence before a scoped change.",
+    "aliases": [
+      "kubernetes oom killed",
+      "pod out of memory"
+    ],
+    "exactErrors": [
+      "oomkilled",
+      "reason: oomkilled",
+      "exit code 137"
+    ],
+    "status": "technical-review",
+    "entryNodeId": "kubernetes-oomkilled-start",
+    "reviewedAt": "2026-07-26",
+    "reviewDue": "2026-10-26",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "Kubernetes",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current official general guidance"
+      ],
+      "limitations": [
+        "Provider, distribution, version, and local policy details may differ.",
+        "HelpDevOps does not inspect or change a live environment."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not prove one root cause.",
+      "Omitted context can change the safe response."
+    ],
+    "firstChecks": [
+      "kubectl get pod <pod> -n <namespace> -o jsonpath=\"{.status.containerStatuses[*].lastState.terminated}\""
+    ],
+    "relatedToolIds": [
+      "kubernetes-manifest"
+    ],
+    "path": "/troubleshoot/kubernetes/oomkilled/",
+    "nodeCount": 7,
+    "referenceCount": 1
+  },
+  {
+    "id": "journey-kubernetes-service-unreachable",
+    "slug": "service-unreachable",
+    "domain": "kubernetes",
+    "title": "Kubernetes Service unreachable",
+    "summary": "Diagnose kubernetes service unreachable with read-only evidence before a scoped change.",
+    "aliases": [
+      "kubernetes service not reachable",
+      "service has no endpoints"
+    ],
+    "exactErrors": [
+      "no endpoints available for service",
+      "connection refused kubernetes service",
+      "service unavailable kubernetes"
+    ],
+    "status": "technical-review",
+    "entryNodeId": "kubernetes-service-unreachable-start",
+    "reviewedAt": "2026-07-26",
+    "reviewDue": "2026-10-26",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "Kubernetes",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current official general guidance"
+      ],
+      "limitations": [
+        "Provider, distribution, version, and local policy details may differ.",
+        "HelpDevOps does not inspect or change a live environment."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not prove one root cause.",
+      "Omitted context can change the safe response."
+    ],
+    "firstChecks": [
+      "kubectl get service,endpointslice -n <namespace> -l kubernetes.io/service-name=<service> -o wide"
+    ],
+    "relatedToolIds": [
+      "kubernetes-manifest"
+    ],
+    "path": "/troubleshoot/kubernetes/service-unreachable/",
+    "nodeCount": 10,
+    "referenceCount": 1
+  },
+  {
+    "id": "journey-terraform-init-provider-failure",
+    "slug": "init-provider-failure",
+    "domain": "terraform",
+    "title": "Terraform init or provider installation failure",
+    "summary": "Diagnose terraform init or provider installation failure with read-only evidence before a scoped change.",
+    "aliases": [
+      "terraform init failed",
+      "provider installation failed"
+    ],
+    "exactErrors": [
+      "failed to install provider",
+      "failed to query available provider packages",
+      "inconsistent dependency lock file"
+    ],
+    "status": "technical-review",
+    "entryNodeId": "terraform-init-provider-failure-start",
+    "reviewedAt": "2026-07-26",
+    "reviewDue": "2026-10-26",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "Terraform",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current official general guidance"
+      ],
+      "limitations": [
+        "Provider, distribution, version, and local policy details may differ.",
+        "HelpDevOps does not inspect or change a live environment."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not prove one root cause.",
+      "Omitted context can change the safe response."
+    ],
+    "firstChecks": [
+      "terraform version && terraform providers"
+    ],
+    "relatedToolIds": [],
+    "path": "/troubleshoot/terraform/init-provider-failure/",
+    "nodeCount": 10,
+    "referenceCount": 1
+  },
+  {
+    "id": "journey-terraform-plan-drift",
+    "slug": "plan-drift",
+    "domain": "terraform",
+    "title": "Terraform unexpected plan or drift",
+    "summary": "Diagnose terraform unexpected plan or drift with read-only evidence before a scoped change.",
+    "aliases": [
+      "terraform unexpected changes",
+      "terraform drift"
+    ],
+    "exactErrors": [
+      "objects have changed outside of terraform",
+      "forces replacement",
+      "plan does not match"
+    ],
+    "status": "technical-review",
+    "entryNodeId": "terraform-plan-drift-start",
+    "reviewedAt": "2026-07-26",
+    "reviewDue": "2026-10-26",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "Terraform",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current official general guidance"
+      ],
+      "limitations": [
+        "Provider, distribution, version, and local policy details may differ.",
+        "HelpDevOps does not inspect or change a live environment."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not prove one root cause.",
+      "Omitted context can change the safe response."
+    ],
+    "firstChecks": [
+      "terraform plan -detailed-exitcode -out=<review-plan>"
+    ],
+    "relatedToolIds": [],
+    "path": "/troubleshoot/terraform/plan-drift/",
+    "nodeCount": 7,
+    "referenceCount": 1
+  },
+  {
+    "id": "journey-git-merge-conflict",
+    "slug": "merge-conflict",
+    "domain": "git",
+    "title": "Git merge or rebase conflict",
+    "summary": "Diagnose git merge or rebase conflict with read-only evidence before a scoped change.",
+    "aliases": [
+      "git merge conflict",
+      "rebase conflict"
+    ],
+    "exactErrors": [
+      "merge conflict in",
+      "conflict (content)",
+      "could not apply"
+    ],
+    "status": "technical-review",
+    "entryNodeId": "git-merge-conflict-start",
+    "reviewedAt": "2026-07-26",
+    "reviewDue": "2026-10-26",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "Git",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current official general guidance"
+      ],
+      "limitations": [
+        "Provider, distribution, version, and local policy details may differ.",
+        "HelpDevOps does not inspect or change a live environment."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not prove one root cause.",
+      "Omitted context can change the safe response."
+    ],
+    "firstChecks": [
+      "git status --short --branch && git diff --name-only --diff-filter=U"
+    ],
+    "relatedToolIds": [
+      "git-reference"
+    ],
+    "path": "/troubleshoot/git/merge-conflict/",
+    "nodeCount": 7,
+    "referenceCount": 1
+  },
+  {
+    "id": "journey-jenkins-build-stuck",
+    "slug": "build-stuck",
+    "domain": "jenkins",
+    "title": "Jenkins build stuck or waiting",
+    "summary": "Diagnose jenkins build stuck or waiting with read-only evidence before a scoped change.",
+    "aliases": [
+      "jenkins build stuck",
+      "jenkins job waiting"
+    ],
+    "exactErrors": [
+      "waiting for next available executor",
+      "still waiting to schedule task",
+      "paused for input"
+    ],
+    "status": "technical-review",
+    "entryNodeId": "jenkins-build-stuck-start",
+    "reviewedAt": "2026-07-26",
+    "reviewDue": "2026-10-26",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "Jenkins",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current official general guidance"
+      ],
+      "limitations": [
+        "Provider, distribution, version, and local policy details may differ.",
+        "HelpDevOps does not inspect or change a live environment."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not prove one root cause.",
+      "Omitted context can change the safe response."
+    ],
+    "firstChecks": [
+      "Review the queue reason, assigned node, executor state, and current Pipeline step."
+    ],
+    "relatedToolIds": [],
+    "path": "/troubleshoot/jenkins/build-stuck/",
+    "nodeCount": 7,
+    "referenceCount": 1
+  },
+  {
+    "id": "journey-cron-duplicate-execution",
+    "slug": "duplicate-execution",
+    "domain": "cron",
+    "title": "Cron job runs twice or overlaps",
+    "summary": "Diagnose cron job runs twice or overlaps with read-only evidence before a scoped change.",
+    "aliases": [
+      "cron runs twice",
+      "duplicate cron job"
+    ],
+    "exactErrors": [
+      "cron job overlapping",
+      "duplicate scheduled execution",
+      "job already running cron"
+    ],
+    "status": "technical-review",
+    "entryNodeId": "cron-duplicate-execution-start",
+    "reviewedAt": "2026-07-26",
+    "reviewDue": "2026-10-26",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "Cron",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current official general guidance"
+      ],
+      "limitations": [
+        "Provider, distribution, version, and local policy details may differ.",
+        "HelpDevOps does not inspect or change a live environment."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not prove one root cause.",
+      "Omitted context can change the safe response."
+    ],
+    "firstChecks": [
+      "crontab -l && systemctl list-timers --all"
+    ],
+    "relatedToolIds": [
+      "cron"
+    ],
+    "path": "/troubleshoot/cron/duplicate-execution/",
+    "nodeCount": 7,
+    "referenceCount": 1
+  },
+  {
+    "id": "journey-networking-connection-timeout",
+    "slug": "connection-timeout",
+    "domain": "networking",
+    "title": "Network connection timeout",
+    "summary": "Diagnose network connection timeout with read-only evidence before a scoped change.",
+    "aliases": [
+      "connection timed out",
+      "network timeout"
+    ],
+    "exactErrors": [
+      "connection timed out",
+      "operation timed out",
+      "etimedout"
+    ],
+    "status": "technical-review",
+    "entryNodeId": "networking-connection-timeout-start",
+    "reviewedAt": "2026-07-26",
+    "reviewDue": "2026-10-26",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "Networking",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current official general guidance"
+      ],
+      "limitations": [
+        "Provider, distribution, version, and local policy details may differ.",
+        "HelpDevOps does not inspect or change a live environment."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not prove one root cause.",
+      "Omitted context can change the safe response."
+    ],
+    "firstChecks": [
+      "traceroute <host> || tracepath <host>"
+    ],
+    "relatedToolIds": [
+      "ipv4-cidr"
+    ],
+    "path": "/troubleshoot/networking/connection-timeout/",
+    "nodeCount": 10,
+    "referenceCount": 1
+  },
+  {
+    "id": "journey-networking-tls-certificate",
+    "slug": "tls-certificate",
+    "domain": "networking",
+    "title": "TLS certificate verification failure",
+    "summary": "Diagnose tls certificate verification failure with read-only evidence before a scoped change.",
+    "aliases": [
+      "tls certificate error",
+      "ssl certificate verify failed"
+    ],
+    "exactErrors": [
+      "certificate verify failed",
+      "certificate has expired",
+      "hostname mismatch"
+    ],
+    "status": "technical-review",
+    "entryNodeId": "networking-tls-certificate-start",
+    "reviewedAt": "2026-07-26",
+    "reviewDue": "2026-10-26",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "Networking",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current official general guidance"
+      ],
+      "limitations": [
+        "Provider, distribution, version, and local policy details may differ.",
+        "HelpDevOps does not inspect or change a live environment."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not prove one root cause.",
+      "Omitted context can change the safe response."
+    ],
+    "firstChecks": [
+      "openssl s_client -connect <host>:443 -servername <host> -showcerts </dev/null"
+    ],
+    "relatedToolIds": [],
+    "path": "/troubleshoot/networking/tls-certificate/",
+    "nodeCount": 10,
+    "referenceCount": 1
+  },
+  {
+    "id": "journey-bash-environment-path",
+    "slug": "environment-path",
+    "domain": "bash",
+    "title": "Shell command not found or wrong executable",
+    "summary": "Diagnose shell command not found or wrong executable with read-only evidence before a scoped change.",
+    "aliases": [
+      "command not found",
+      "wrong command version"
+    ],
+    "exactErrors": [
+      "command not found",
+      "no such file or directory bash",
+      "bad interpreter"
+    ],
+    "status": "technical-review",
+    "entryNodeId": "bash-environment-path-start",
+    "reviewedAt": "2026-07-26",
+    "reviewDue": "2026-10-26",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "Bash",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current official general guidance"
+      ],
+      "limitations": [
+        "Provider, distribution, version, and local policy details may differ.",
+        "HelpDevOps does not inspect or change a live environment."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not prove one root cause.",
+      "Omitted context can change the safe response."
+    ],
+    "firstChecks": [
+      "printf \"shell=%s\\npath=%s\\n\" \"$SHELL\" \"$PATH\"; type -a <command>"
+    ],
+    "relatedToolIds": [],
+    "path": "/troubleshoot/bash/environment-path/",
+    "nodeCount": 7,
+    "referenceCount": 1
+  },
+  {
+    "id": "journey-yaml-parse-error",
+    "slug": "parse-error",
+    "domain": "yaml",
+    "title": "YAML parse or indentation error",
+    "summary": "Diagnose yaml parse or indentation error with read-only evidence before a scoped change.",
+    "aliases": [
+      "yaml parse error",
+      "invalid yaml indentation"
+    ],
+    "exactErrors": [
+      "mapping values are not allowed here",
+      "did not find expected key",
+      "found character that cannot start any token"
+    ],
+    "status": "technical-review",
+    "entryNodeId": "yaml-parse-error-start",
+    "reviewedAt": "2026-07-26",
+    "reviewDue": "2026-10-26",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "Yaml",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current official general guidance"
+      ],
+      "limitations": [
+        "Provider, distribution, version, and local policy details may differ.",
+        "HelpDevOps does not inspect or change a live environment."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not prove one root cause.",
+      "Omitted context can change the safe response."
+    ],
+    "firstChecks": [
+      "Validate the exact file and preserve the reported line and column."
+    ],
+    "relatedToolIds": [
+      "structured-data"
+    ],
+    "path": "/troubleshoot/yaml/parse-error/",
+    "nodeCount": 7,
+    "referenceCount": 1
   }
 ]

@@ -1,4 +1,4 @@
-export const snapshotName='HelpDevOps-v0.17.2-EP017.2-COMMIT-READY.zip';
+export const snapshotName='HelpDevOps-v0.18.0-EP018-COMMIT-READY.zip';
 export const excludedNames=new Set(['node_modules','.astro','dist','test-results','playwright-report','coverage','.tmp','.wrangler','.git','release-health','release-certification']);
 export const excludedPaths=new Set(['evidence']);
 export const excludedFiles=new Set(['dev-out.log','dev-err.log',snapshotName]);

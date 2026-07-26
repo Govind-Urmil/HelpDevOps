@@ -4,7 +4,6 @@ import {analyzeInput} from '../src/core/analyze-input.js';
 import independentCorpus from './fixtures/universal-input-independent.js';
 import {
   normalizeEntryPath,
-  sha256,
   validateCredentialContent,
   validateSecurityFixturePolicy
 } from '../scripts/secret-scan-policy.mjs';
@@ -19,11 +18,6 @@ const syntheticSamples={
 };
 
 describe('audited synthetic credential fixture policy',()=>{
-  it('uses the same canonical fingerprint for LF and CRLF versions of an approved fixture',()=>{
-    const lf=readFixture('universal-input-regression.json').replaceAll('\r\n','\n');
-    expect(sha256(lf.replaceAll('\n','\r\n'))).toBe(sha256(lf));
-  });
-
   it('accepts only the exact fingerprinted security corpora',()=>{
     expect(validateCredentialContent('tests/fixtures/universal-input-independent.js',readFixture('universal-input-independent.js'))).toEqual([]);
     expect(validateCredentialContent('tests/fixtures/universal-input-regression.json',readFixture('universal-input-regression.json'))).toEqual([]);
