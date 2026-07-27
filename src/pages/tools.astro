@@ -4,8 +4,11 @@ import PageHeader from '../components/PageHeader.astro';
 import ToolCard from '../components/ToolCard.astro';
 import {tools} from '../config/tools.js';
 import {pageMetadata as m} from '../config/pages.js';
+import {roleProfiles} from '../investigations/experience.js';
+const configurationRole=Astro.url.searchParams.get('role')==='configuration';
+const orderedTools=configurationRole?[...tools].sort((a,b)=>(a.category==='Configuration'?-1:0)-(b.category==='Configuration'?-1:0)):tools;
 ---
 <BaseLayout {...m.tools} breadcrumbs={[{label:'Home',href:'/'},{label:'Tools',href:'/tools/'}]}>
   <PageHeader eyebrow="TOOLS" title="DevOps tools" description="Deterministic, browser-first utilities that show their evidence and limitations." />
-  <section class="section tool-directory"><div class="container"><div class="tool-grid">{tools.map(tool=><ToolCard {tool}/>)}</div></div></section>
+  <section class="section tool-directory"><div class="container">{configurationRole&&<aside class="investigation-panel" data-role-profile><span class="eyebrow">CONFIGURATION REVIEW START</span><h2>Validate before changing state</h2><p>{roleProfiles.configuration.recommendation}</p><p><strong>Suggested tools:</strong> {roleProfiles.configuration.tools.join(", ")} · <strong>Suggested references:</strong> {roleProfiles.configuration.references.join(", ")}</p><a class="button secondary" href="/troubleshoot/terraform/init-provider-failure/">First guided journey: Terraform provider initialization</a></aside>}<div class="tool-grid">{orderedTools.map(tool=><ToolCard {tool}/>)}</div></div></section>
 </BaseLayout>

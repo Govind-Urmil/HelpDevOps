@@ -1,0 +1,167 @@
+---
+// @ts-nocheck
+const { journey } = Astro.props;
+---
+<aside class="investigation-workbench" data-investigation-workbench data-journey-id={journey.id}>
+  <div class="current-step-bar" data-current-step-bar>
+    <span><strong data-progress-label>Step 1</strong> of the guided investigation</span>
+    <span class="risk-badge" data-current-risk>read only</span>
+  </div>
+
+  <details class="investigation-panel" open>
+    <summary>Optional environment context</summary>
+    <p>Context narrows guidance only. It is never treated as proof of a diagnosis.</p>
+    <div class="environment-grid">
+      <label>Cloud<select data-environment="cloud"><option value="">Not specified</option><option>AWS</option><option>Azure</option><option>GCP</option><option>Other or private cloud</option></select></label>
+      <label>Kubernetes<select data-environment="kubernetes"><option value="">Not specified</option><option>Amazon EKS</option><option>Azure AKS</option><option>Google GKE</option><option>OpenShift</option><option>Self-managed</option></select></label>
+      <label>Operating system<select data-environment="operatingSystem"><option value="">Not specified</option><option>Linux</option><option>macOS</option><option>Windows</option><option>Container image</option><option>Unknown</option></select></label>
+      <label>Proxy or egress<select data-environment="proxy"><option value="">Not specified</option><option>No proxy known</option><option>HTTP or HTTPS proxy</option><option>Private egress gateway</option><option>Unknown</option></select></label>
+      <label>Registry<select data-environment="registry"><option value="">Not specified</option><option>Public registry</option><option>Private registry</option><option>Cloud-managed registry</option><option>Unknown</option></select></label>
+      <label>Relevant versions<input data-environment="versions" maxlength="240" placeholder="For example: Kubernetes 1.32, Terraform 1.11"/></label>
+    </div>
+  </details>
+
+  <details class="investigation-panel" open>
+    <summary>Paste follow-up evidence</summary>
+    <p>Paste redacted output from the current read-only check. HelpDevOps will suggest—not automatically choose—the closest evidence branch.</p>
+    <label class="sr-only" for={`follow-up-${journey.id}`}>Follow-up command output</label>
+    <textarea id={`follow-up-${journey.id}`} rows="5" data-follow-up-evidence placeholder="Paste redacted command output"></textarea>
+    <div class="tool-actions"><button class="button secondary" type="button" data-interpret-follow-up>Interpret follow-up</button><button class="button ghost" type="button" data-clear-follow-up>Clear evidence</button></div>
+    <div class="follow-up-result" data-follow-up-result hidden aria-live="polite"></div>
+  </details>
+
+  <details class="investigation-panel" data-command-bundle>
+    <summary>Evidence collection and command prerequisites</summary>
+    <p>Run one justified command at a time. Replace every visible placeholder and confirm the execution context first.</p>
+    <div data-context-guidance></div><div data-command-prerequisite-list></div><div data-evidence-bundles></div>
+  </details>
+
+  <details class="investigation-panel">
+    <summary>Before-and-after verification</summary>
+    <div class="comparison-grid">
+      <label>Before change<textarea rows="4" data-before-evidence></textarea></label>
+      <label>After change<textarea rows="4" data-after-evidence></textarea></label>
+    </div>
+    <fieldset data-verification-criteria><legend>Verification criteria</legend></fieldset><button class="button secondary" type="button" data-compare-evidence>Compare evidence</button>
+    <div data-comparison-result aria-live="polite"></div>
+  </details>
+
+  <details class="investigation-panel" open>
+    <summary>Local investigation timeline</summary>
+    <p>Only this browser stores the timeline. Review and redact content before sharing it.</p>
+    <ol class="investigation-timeline" data-investigation-timeline><li>No timeline entries yet.</li></ol>
+    <div class="tool-actions">
+      <button class="button secondary" type="button" data-resume-save>Save and resume locally</button>
+      <button class="button ghost" type="button" data-export-channel>Copy for incident channel</button>
+      <button class="button ghost" type="button" data-export-ticket>Copy ticket</button><button class="button ghost" type="button" data-export-markdown>Copy Markdown report</button><button class="button ghost" type="button" data-export-transcript>Copy sanitized command transcript</button>
+      <button class="button danger" type="button" data-clear-investigation>Clear saved investigation</button>
+    </div>
+    <p data-investigation-storage-status aria-live="polite"></p>
+  </details>
+
+  <fieldset class="branch-feedback">
+    <legend>Was this branch useful?</legend>
+    <p>Feedback stays in this browser unless you explicitly include it in an export.</p>
+    <div class="feedback-grid">
+      <button type="button" data-branch-feedback="solved">Solved</button>
+      <button type="button" data-branch-feedback="did-not-solve">Did not solve</button>
+      <button type="button" data-branch-feedback="missing-scenario">Missing scenario</button>
+      <button type="button" data-branch-feedback="guidance-outdated">Guidance appears outdated</button>
+    </div>
+    <p data-feedback-status aria-live="polite"></p>
+  </fieldset>
+</aside>
+
+<script>
+  // @ts-nocheck
+  import { analyzeInput } from '../../core/analyze-input.js';
+  import { compareEvidence, createTimelineEntry, buildInvestigationExport, commandPrerequisites, buildEvidenceBundles, clearInvestigationStorage, environmentGuidance, investigationStorageKey, normalizeEnvironmentContext, normalizeTimeline } from '../../investigations/experience.js';
+
+  const workbench = document.querySelector('[data-investigation-workbench]');
+  const diagnostic = document.querySelector('[data-diagnostic-root]');
+  if (workbench && diagnostic) {
+    const journey = JSON.parse(diagnostic.dataset.journey);
+    const nodes = Object.fromEntries(journey.nodes.map(node => [node.id, node]));
+    const storageKey = investigationStorageKey(journey.id);
+    let timeline = [];
+    const q = selector => workbench.querySelector(selector);
+    const environment = () => normalizeEnvironmentContext(Object.fromEntries([...workbench.querySelectorAll('[data-environment]')].map(input => [input.dataset.environment, input.value])));
+    const currentNode = () => nodes[diagnostic.querySelector('[data-current-node]').value] || nodes[journey.entryNodeId];
+    const renderTimeline = () => {
+      const list = q('[data-investigation-timeline]');
+      list.replaceChildren();
+      if (!timeline.length) { const li = document.createElement('li'); li.textContent = 'No timeline entries yet.'; list.append(li); return; }
+      for (const item of timeline) { const li = document.createElement('li'); const time = document.createElement('time'); time.dateTime = item.createdAt; time.textContent = new Date(item.createdAt).toLocaleString(); const strong = document.createElement('strong'); strong.textContent = item.type; li.append(time, strong, document.createTextNode(` ${item.summary}`)); list.append(li); }
+    };
+    const record = (type, summary, detail = '') => { timeline = normalizeTimeline([...timeline, createTimelineEntry(type, summary, detail)]); renderTimeline(); };
+    const refresh = () => {
+      const node = currentNode(), answers = JSON.parse(diagnostic.querySelector('[data-answer-state]').value || '[]');
+      q('[data-progress-label]').textContent = `Step ${answers.length + 1}`;
+      q('[data-current-risk]').textContent = node.risk.replaceAll('-', ' ');
+      q('[data-current-risk]').dataset.risk = node.risk;
+      const context = environmentGuidance(environment());
+      const contextTarget=q('[data-context-guidance]'); contextTarget.replaceChildren();
+      if(context.recommendations.length){const h=document.createElement('h3');h.textContent='Context-narrowed guidance';const ul=document.createElement('ul');[...context.recommendations,...context.commands,...context.prerequisites].forEach(value=>{const li=document.createElement('li');li.textContent=value;ul.append(li)});const links=document.createElement('p');[...context.references,...context.relatedLinks].forEach(item=>{const a=document.createElement('a');a.href=item.path;a.textContent=item.label;links.append(a,document.createTextNode(' '))});contextTarget.append(h,ul,links);}
+      diagnostic.querySelectorAll('[data-choice-list] button').forEach(button=>{const relevant=context.branchTerms.some(term=>button.textContent.toLowerCase().includes(term));button.dataset.contextRelevant=String(relevant);button.title=relevant?'Context-relevant possibility; confirm with observed evidence.':''});
+      const criteria=q('[data-verification-criteria]');criteria.replaceChildren();const legend=document.createElement('legend');legend.textContent='Verification criteria';criteria.append(legend);for(const item of node.verification||[]){const label=document.createElement('label');const checkbox=document.createElement('input');checkbox.type='checkbox';checkbox.dataset.verificationCriterion='';checkbox.value=typeof item==='string'?item:(item.label||String(item));label.append(checkbox,document.createTextNode(' '+checkbox.value));criteria.append(label)}
+      const target = q('[data-command-prerequisite-list]'); target.replaceChildren();
+      for (const command of node.commands || []) {
+        const meta = commandPrerequisites(command, node.risk), card = document.createElement('article'); card.className = 'command-prerequisite-card';
+        const heading = document.createElement('h3'); heading.textContent = meta.purpose;
+        const code = document.createElement('code'); code.textContent = command.command;
+        const dl = document.createElement('dl');
+        for (const [label, value] of [['Risk', meta.risk], ['Permissions', meta.permissions], ['Execution context', meta.executionContext], ['Platform assumptions', meta.platformAssumptions], ['Placeholders', meta.placeholders.join(', ') || 'None'], ['Expected evidence', meta.expectedEvidence]]) { const dt = document.createElement('dt'); dt.textContent = label; const dd = document.createElement('dd'); dd.textContent = value; dl.append(dt, dd); }
+        card.append(heading, code, dl); target.append(card);
+      }
+      if (!target.children.length) target.textContent = 'The current decision does not require a command.';
+      const bundleTarget=q('[data-evidence-bundles]');bundleTarget.replaceChildren();const bundles=buildEvidenceBundles(journey);for(const [risk,commands] of Object.entries(bundles)){if(!commands.length)continue;const section=document.createElement('section');const h=document.createElement('h3');h.textContent=risk.replaceAll('-',' ');const pre=document.createElement('pre');pre.textContent=commands.map(item=>`# Prerequisites: ${item.permissions}; ${item.executionContext}\n# Placeholders: ${item.placeholders.join(', ')||'None'}\n${item.command}`).join('\n\n');const copy=document.createElement('button');copy.type='button';copy.className='button ghost';copy.dataset.copyBundle=risk;copy.textContent=`Copy ${risk.replaceAll('-',' ')} bundle`;copy.onclick=async()=>{await navigator.clipboard.writeText(pre.textContent);commands.forEach(item=>record('command',`Copied ${risk} command`,item.command));};section.append(h,pre,copy);bundleTarget.append(section)}
+    };
+
+    q('[data-interpret-follow-up]').onclick = () => {
+      const evidence = q('[data-follow-up-evidence]').value.trim(), output = q('[data-follow-up-result]');
+      const result = analyzeInput(evidence, 'command-output'), node = currentNode();
+      const terms = `${result.title || ''} ${result.summary || ''} ${(result.evidence || []).map(item => item.excerpt || item.signal || item).join(' ')} ${evidence}`.toLowerCase();
+      const ranked = (node.choices || []).map(choice => ({ choice, score: choice.label.toLowerCase().split(/\W+/).filter(term => term.length > 3 && terms.includes(term)).length })).sort((a, b) => b.score - a.score);
+      const suggestion = ranked[0]?.score ? ranked[0].choice : null;
+      output.hidden = false; output.replaceChildren();
+      const h = document.createElement('h3'); h.textContent = result.title || 'Follow-up evidence reviewed';
+      const p = document.createElement('p'); p.textContent = suggestion ? `Closest current branch: ${suggestion.label}. Confirm it against the observed output before selecting it.` : 'No current branch can be selected safely from this evidence. Preserve it and choose the unclear or escalation path.';
+      output.append(h, p); record('evidence', result.title || 'Follow-up evidence reviewed', p.textContent);
+    };
+    q('[data-clear-follow-up]').onclick = () => { q('[data-follow-up-evidence]').value = ''; q('[data-follow-up-result]').hidden = true; };
+    q('[data-compare-evidence]').onclick = () => {
+      const checks=[...workbench.querySelectorAll('[data-verification-criterion]')].map(input=>({label:input.value,checked:input.checked})); const result = compareEvidence(q('[data-before-evidence]').value, q('[data-after-evidence]').value, checks);
+      q('[data-comparison-result]').textContent = `${result.status.replaceAll('-', ' ')}. ${result.reminder}`;
+      record('verification', `Before/after comparison: ${result.status}`, result.criteria.join('; '));
+    };
+    q('[data-resume-save]').onclick = () => {
+      const payload = { contractVersion: 1, journeyId: journey.id, currentNodeId: diagnostic.querySelector('[data-current-node]').value, answers: JSON.parse(diagnostic.querySelector('[data-answer-state]').value || '[]'), investigationState: JSON.parse(diagnostic.querySelector('[data-investigation-state]').value || 'null'), environment: environment(), timeline, savedAt: new Date().toISOString() };
+      localStorage.setItem(storageKey, JSON.stringify(payload)); q('[data-investigation-storage-status]').textContent = 'Investigation saved only in this browser.';
+    };
+    const copyExport = async format => {
+      const result = buildInvestigationExport({ title: journey.title, timeline, environment: environment(), format });
+      await navigator.clipboard.writeText(result.text); q('[data-investigation-storage-status]').textContent = `Redacted ${format === 'channel' ? 'incident-channel handoff' : 'Markdown report'} copied. Review it before sharing.`;
+    };
+    q('[data-export-channel]').onclick = () => copyExport('channel');
+    q('[data-export-ticket]').onclick = () => copyExport('ticket');
+    q('[data-export-markdown]').onclick = () => copyExport('markdown');
+    q('[data-export-transcript]').onclick = () => copyExport('transcript');
+    q('[data-clear-investigation]').onclick = () => { const cleared=clearInvestigationStorage(localStorage,journey.id); if(cleared){timeline=[];renderTimeline();workbench.querySelectorAll('textarea,input[data-environment]').forEach(input=>input.value='');workbench.querySelectorAll('select[data-environment]').forEach(input=>input.value='');q('[data-follow-up-result]').hidden=true;q('[data-comparison-result]').textContent='';q('[data-feedback-status]').textContent='';q('[data-investigation-storage-status]').textContent='All locally stored investigation data was cleared from this browser.';}else q('[data-investigation-storage-status]').textContent='Some local investigation data could not be cleared.'; refresh(); };
+    workbench.querySelectorAll('[data-branch-feedback]').forEach(button => button.onclick = () => {
+      record('feedback', button.textContent, currentNode().title); localStorage.setItem(`${storageKey}.feedback`, JSON.stringify(timeline.filter(item => item.type === 'feedback')));
+      q('[data-feedback-status]').textContent = 'Feedback recorded locally. It has not been transmitted.';
+    });
+    const saved = localStorage.getItem(storageKey);
+    if (saved) try {
+      const value = JSON.parse(saved); timeline = normalizeTimeline(value.timeline);
+      for (const input of workbench.querySelectorAll('[data-environment]')) input.value = value.environment?.[input.dataset.environment] || '';
+      document.addEventListener('helpdevops:investigation-ready', () => window.dispatchEvent(new CustomEvent('helpdevops:resume-investigation', { detail: value })), { once: true });
+      q('[data-investigation-storage-status]').textContent = `Saved investigation available from ${new Date(value.savedAt).toLocaleString()}.`;
+    } catch { localStorage.removeItem(storageKey); }
+    new MutationObserver(refresh).observe(diagnostic.querySelector('[data-current-node]'), { attributes: true, attributeFilter: ['value'] });
+    diagnostic.addEventListener('click', event => { const choice = event.target.closest('[data-choice-list] button'); if (choice) setTimeout(() => { record('decision', choice.textContent, currentNode().title); refresh(); }, 0); });
+    workbench.querySelectorAll('[data-environment]').forEach(input=>input.addEventListener('change',refresh));
+    window.addEventListener('helpdevops:timeline',event=>record(event.detail?.type||'observation',event.detail?.summary||'Investigation activity',event.detail?.detail||''));
+    renderTimeline(); refresh();
+  }
+</script>

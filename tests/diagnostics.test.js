@@ -54,9 +54,9 @@ describe('diagnostic discovery',()=>{
   it('derives discovery wording from candidate and reviewed statuses',()=>{
     const base={id:'journey-test',title:'Test journey',path:'/troubleshoot/test/example/'};
     const candidate=buildDiagnosticDiscoveryResult({...base,status:'technical-review'},'example symptom');
-    expect(candidate.title).toContain('Technical review candidate');
-    expect(candidate.summary).toContain('technical-review candidate');
-    expect(candidate.checked[0]).toContain('Technical review candidate');
+    expect(candidate.title).toContain('Guidance with stated limitations');
+    expect(candidate.summary).toContain('guidance with stated limitations');
+    expect(candidate.checked[0]).toContain('Guidance with stated limitations');
     expect(candidate.title).not.toContain('Reviewed diagnostic');
     const reviewed=buildDiagnosticDiscoveryResult({...base,status:'reviewed'},'example symptom');
     expect(reviewed.title).toContain('Reviewed diagnostic journey');

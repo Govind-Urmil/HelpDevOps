@@ -2,6 +2,7 @@
 // @ts-nocheck
 import Badge from '../Badge.astro';
 import TechnologyMark from '../TechnologyMark.astro';
+import InvestigationWorkbench from './InvestigationWorkbench.astro';
 import {connectedInvestigationById} from '../../investigations/registry.js';
 const {journey}=Astro.props;
 const connection=connectedInvestigationById(journey.id);
@@ -11,7 +12,7 @@ const entry=nodeMap[journey.entryNodeId];
 <section class="diagnostic-shell" data-diagnostic-root data-tool-root data-workspace-entity data-workspace-id={journey.id} data-workspace-entity-title={journey.title} data-workspace-path={journey.path} data-journey={JSON.stringify(journey)}>
   <div class="diagnostic-overview">
     <div><TechnologyMark technology={journey.domain}/><span class="eyebrow">GUIDED DIAGNOSIS</span><h2>{journey.title}</h2><p>{journey.summary}</p></div>
-    <Badge label={journey.status === 'reviewed' ? 'REVIEWED' : 'TECHNICAL REVIEW CANDIDATE'} tone={journey.status === 'reviewed' ? 'success' : 'warning'} />
+    <Badge label={journey.status === 'reviewed' ? 'REVIEWED GUIDANCE' : 'LIMITATIONS STATED'} tone={journey.status === 'reviewed' ? 'success' : 'warning'} />
   </div>
   <div class="diagnostic-mode-row" role="group" aria-label="Diagnostic view">
     <button class="button secondary" type="button" data-mode="guided" aria-pressed="true">Guided diagnosis</button>
@@ -39,6 +40,7 @@ const entry=nodeMap[journey.entryNodeId];
     <div class="diagnostic-choices" data-choice-list></div>
     <div class="diagnostic-terminal" data-terminal hidden></div>
   </article>
+  <InvestigationWorkbench {journey}/>
   <div class="diagnostic-controls">
     <button class="button ghost" type="button" data-step-back disabled>Previous step</button>
     <button class="button ghost" type="button" data-step-restart>Restart journey</button>
@@ -63,7 +65,7 @@ const entry=nodeMap[journey.entryNodeId];
       const risk=el('[data-risk]');risk.dataset.risk=node.risk;risk.textContent=node.risk.replaceAll('-',' ');
       const why=el('[data-step-why]');why.hidden=emergency||!node.why;why.textContent=node.why?`Why this matters: ${node.why}`:'';
       const commands=el('[data-command-list]');commands.replaceChildren();
-      if(node.commands?.length){const h=document.createElement('h3');h.textContent='Do this first';commands.append(h);for(const item of node.commands){const card=document.createElement('div');card.className='diagnostic-command';const meta=document.createElement('span');meta.className='command-meta';meta.textContent=node.risk==='read-only'?'Read-only check':node.risk.replaceAll('-',' ');const code=document.createElement('code');code.textContent=item.command;const p=document.createElement('p');p.textContent=item.purpose;const b=document.createElement('button');b.type='button';b.className='command-copy';b.setAttribute('aria-label','Copy command');b.innerHTML='<span aria-hidden="true">⧉</span><span class="sr-only">Copy command</span>';b.onclick=async()=>{try{await navigator.clipboard.writeText(item.command);b.dataset.copied='true';b.innerHTML='<span aria-hidden="true">✓</span><span class="sr-only">Command copied</span>';el('[data-diagnostic-status]').textContent='Command copied.';setTimeout(()=>{b.dataset.copied='false';b.innerHTML='<span aria-hidden="true">⧉</span><span class="sr-only">Copy command</span>'},1600)}catch{el('[data-diagnostic-status]').textContent='Copy unavailable; select the command manually.'}};card.append(meta,code,p,b);commands.append(card)}}
+      if(node.commands?.length){const h=document.createElement('h3');h.textContent='Do this first';commands.append(h);for(const item of node.commands){const card=document.createElement('div');card.className='diagnostic-command';const meta=document.createElement('span');meta.className='command-meta';meta.textContent=node.risk==='read-only'?'Read-only check':node.risk.replaceAll('-',' ');const code=document.createElement('code');code.textContent=item.command;const p=document.createElement('p');p.textContent=item.purpose;const b=document.createElement('button');b.type='button';b.className='command-copy';b.setAttribute('aria-label','Copy command');b.innerHTML='<span aria-hidden="true">⧉</span><span class="sr-only">Copy command</span>';b.onclick=async()=>{try{await navigator.clipboard.writeText(item.command);window.dispatchEvent(new CustomEvent('helpdevops:timeline',{detail:{type:'command',summary:'Copied command',detail:item.command}}));b.dataset.copied='true';b.innerHTML='<span aria-hidden="true">✓</span><span class="sr-only">Command copied</span>';el('[data-diagnostic-status]').textContent='Command copied.';setTimeout(()=>{b.dataset.copied='false';b.innerHTML='<span aria-hidden="true">⧉</span><span class="sr-only">Copy command</span>'},1600)}catch{el('[data-diagnostic-status]').textContent='Copy unavailable; select the command manually.'}};card.append(meta,code,p,b);commands.append(card)}}
       const prereq=el('[data-prerequisites]');prereq.hidden=!node.prerequisites?.length&&!node.rollback;prereq.replaceChildren();if(!prereq.hidden){renderList(prereq,node.prerequisites,'Before changing anything');if(node.rollback){const p=document.createElement('p');p.textContent=`Rollback: ${node.rollback}`;prereq.append(p)}}
       const choices=el('[data-choice-list]');choices.replaceChildren();const terminal=el('[data-terminal]');terminal.hidden=true;terminal.replaceChildren();const briefButton=el('[data-build-incident-brief]');briefButton.hidden=true;
       if(node.choices?.length){const h=document.createElement('h3');h.textContent='Choose the observed evidence';choices.append(h);for(const choice of node.choices){const b=document.createElement('button');b.type='button';b.className='diagnostic-choice';b.textContent=choice.label;b.onclick=()=>{history.push(node.id);answers.push({nodeId:node.id,choiceId:choice.id,label:choice.label});investigation=rebuildInvestigationState(investigation,answers,nodes);render(choice.nextNodeId)};choices.append(b)}}else{terminal.hidden=false;briefButton.hidden=false;renderList(terminal,node.verification,'Verification');renderList(terminal,node.prevention,'Prevention');const p=document.createElement('p');p.textContent=node.nodeKind==='completion'?'Journey complete. Verify the result before closing the incident.':'This path needs human or platform-owner review. Preserve the evidence collected so far.';terminal.append(p)}
@@ -77,7 +79,8 @@ const entry=nodeMap[journey.entryNodeId];
     root.querySelectorAll('[data-mode]').forEach(button=>button.onclick=()=>{emergency=button.dataset.mode==='emergency';root.dataset.emergency=String(emergency);root.querySelectorAll('[data-mode]').forEach(item=>item.setAttribute('aria-pressed',String(item===button)));render(current.value,{focus:false})});
     const restoreState=input=>{let restoredAnswers=[],restoredInvestigation=null;try{restoredAnswers=JSON.parse(input?.answers||answersInput.value||'[]');restoredInvestigation=JSON.parse(input?.investigationState||el('[data-investigation-state]').value||'null')}catch{}answers=Array.isArray(restoredAnswers)?restoredAnswers:[];history=answers.map(item=>item.nodeId);investigation=rebuildInvestigationState(normalizeInvestigationState(restoredInvestigation,investigation),answers,nodes);render(input?.currentNodeId||current.value,{focus:false})};
     document.addEventListener('helpdevops:workspace-state-restored',event=>{if(event.detail?.toolId===journey.id)restoreState(event.detail.input)});
+    window.addEventListener('helpdevops:resume-investigation',event=>{const value=event.detail||{};restoreState({answers:JSON.stringify(value.answers||[]),investigationState:JSON.stringify(value.investigationState||null),currentNodeId:value.currentNodeId||journey.entryNodeId})});
     window.addEventListener('load',()=>restoreState(),{once:true});
-    restoreState();
+    restoreState();document.dispatchEvent(new CustomEvent('helpdevops:investigation-ready'));
   }
 </script>

@@ -1,9 +1,9 @@
-const rules = [
+export const sensitiveContentRules = [
   { id: 'private-key', severity: 'block', label: 'Private key material', pattern: /-----BEGIN(?: [A-Z0-9]+)? PRIVATE KEY-----/i },
   { id: 'bearer-token', severity: 'warn', label: 'Bearer token', pattern: /authorization\s*:\s*bearer\s+[^\s"']+/i },
   { id: 'github-token', severity: 'warn', label: 'GitHub token-like value', pattern: /\b(?:gh[pousr]_[A-Za-z0-9_]{20,}|github_pat_[A-Za-z0-9_]{20,})\b/ },
   { id: 'aws-key', severity: 'warn', label: 'AWS access-key-like value', pattern: /\b(?:AKIA|ASIA)[A-Z0-9]{16}\b/ },
-  { id: 'sensitive-assignment', severity: 'warn', label: 'Sensitive key assignment', pattern: /\b(?:password|passwd|secret|token|api[_-]?key)\b\s*[:=]\s*[^\s#]+/i },
+  { id: 'sensitive-assignment', severity: 'warn', label: 'Sensitive key assignment', pattern: /\b(?:password|passwd|secret|token|api[_-]?key|client[_-]?secret|aws[_-]?secret[_-]?access[_-]?key)\b\s*[:=]\s*[^\s#]+/i },
   { id: 'kubernetes-secret', severity: 'warn', label: 'Kubernetes Secret manifest', pattern: /\bkind\s*:\s*Secret\b/i },
   { id: 'email-address', severity: 'warn', label: 'Email or ownership address', pattern: /\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/i },
   { id: 'terraform-state-path', severity: 'warn', label: 'Terraform or remote state path', pattern: /(?:\bPath\s*:\s*)?(?:s3:\/\/[^\s"']+|[^\s"']+\.tfstate\b)/i },
@@ -36,9 +36,22 @@ function reviewText(input,depth=0){
 
 export function scanSensitiveContent(input){
   const source=reviewText(input);
-  return rules.flatMap(rule=>{
+  return sensitiveContentRules.flatMap(rule=>{
     const match=rule.pattern.exec(source);
     return match?[{id:rule.id,severity:rule.severity,label:rule.label,line:lineOf(source,match.index),excerpt:redact(match[0])}]:[];
   });
 }
 export function hasBlockingSensitiveContent(input){return scanSensitiveContent(input).some(item=>item.severity==='block');}
+
+const redactionPatterns = Object.freeze([
+  { pattern: /(authorization\s*:\s*bearer\s+)[^\s"']+/ig, replacement: '$1[REDACTED]' },
+  { pattern: /\b(?:AKIA|ASIA)[A-Z0-9]{16}\b/g, replacement: '[REDACTED_AWS_ACCESS_KEY]' },
+  { pattern: /\b(?:gh[pousr]_[A-Za-z0-9_]{20,}|github_pat_[A-Za-z0-9_]{20,})\b/g, replacement: '[REDACTED_GITHUB_TOKEN]' },
+  { pattern: /(\b(?:password|passwd|secret|token|api[_-]?key|client[_-]?secret|aws[_-]?secret[_-]?access[_-]?key)\b\s*[:=]\s*)(?:"[^"]*"|'[^']*'|[^\s#;,]+)/ig, replacement: '$1[REDACTED]' }
+]);
+
+export function redactSensitiveContent(input) {
+  let output = typeof input === 'string' ? input : reviewText(input);
+  for (const rule of redactionPatterns) output = output.replace(rule.pattern, rule.replacement);
+  return output;
+}

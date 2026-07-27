@@ -57,7 +57,7 @@ export const errorEntries = publishedJourneys
   })))
   .sort((a, b) => a.term.localeCompare(b.term));
 
-const make = (type, rawId, title, route, domain, summary, aliases = [], exactErrors = []) => {
+const make = (type, rawId, title, route, domain, summary, aliases = [], exactErrors = [], commandFragments = []) => {
   const normalizedTitle = normalizePhrase(title);
   const normalizedAliases = unique(aliases.map(normalizePhrase));
   const normalizedErrors = unique(exactErrors.map(normalizePhrase));
@@ -68,7 +68,8 @@ const make = (type, rawId, title, route, domain, summary, aliases = [], exactErr
     normalizedDomain,
     normalizedSummary,
     ...normalizedAliases,
-    ...normalizedErrors
+    ...normalizedErrors,
+    ...commandFragments.map(normalizePhrase)
   ].join(' ')));
 
   return {
@@ -81,6 +82,7 @@ const make = (type, rawId, title, route, domain, summary, aliases = [], exactErr
     summary,
     aliases,
     exactErrors,
+    commandFragments,
     normalizedTitle,
     normalizedAliases,
     normalizedErrors,
@@ -93,7 +95,7 @@ export const discoveryIndex = [
     .filter(tool => tool.status === 'available')
     .map(tool => make('TOOL', tool.id, tool.title, tool.path, tool.category, tool.description, tool.aliases)),
   ...publishedJourneys
-    .map(journey => make('DIAGNOSTIC', journey.id, journey.title, journey.path, journey.domain, journey.summary, journey.aliases, journey.exactErrors)),
+    .map(journey => make('DIAGNOSTIC', journey.id, journey.title, journey.path, journey.domain, journey.summary, journey.aliases, journey.exactErrors, journey.nodes.flatMap(node => (node.commands || []).map(command => command.command)))),
   ...evidenceDefinitions
     .filter(definition => definition.reviewStatus === 'reviewed')
     .map(definition => make('INTERPRETER', definition.id, definition.title, `/interpret/${definition.slug}/`, definition.domain || definition.source, definition.summary, definition.aliases || [])),
