@@ -1,61 +1,70 @@
 # HelpDevOps
 
-Website Factory Project #2.
+> A static-first DevOps troubleshooting web application built to explore modern frontend architecture, performance, accessibility, and browser-first engineering.
 
-Trusted, free, privacy-first, browser-based DevOps workspace.
+🌐 **Live Demo**  
+https://helpdevops.work-on.workers.dev/
 
-Current release: **EP-022 / v0.22.0**. The product provides reviewed provenance, launch-quality issue entry pages, local deterministic analysis, browser-local continuity, and production-readiness operations.
+---
 
-Owner release gate: `npm run verify:release`. Browser assurance: `npm run verify:browsers`. Recovery guidance: `docs/OWNER-QUICK-RECOVERY.md`.
+## About
 
-## Roles
-- Govind: Product Owner and final approval
-- ChatGPT: primary research, product design, architecture, implementation, core verification, documentation, and commit-ready packaging
-- ChatGPT Work: focused environment-specific browser, Lighthouse, visual, and independent technical verification when those checks cannot be completed here
+HelpDevOps is a portfolio project that demonstrates the design and implementation of a browser-based DevOps troubleshooting experience.
 
-## Release lineage
+The project focuses on engineering quality rather than backend infrastructure, emphasizing a static-first architecture, reusable components, performance optimization, accessibility, testing, and deployment on Cloudflare Workers.
 
-EP-022 / v0.22.0 is the final pre-launch release candidate.
+---
 
-EP-006 / v0.6.0 remains the completed container and Kubernetes engineering baseline.
+## Tech Stack
 
-EP-005 / v0.5.0 remains the completed privacy-first local continuity baseline.
+- Astro
+- TypeScript
+- HTML & CSS
+- Vitest
+- Playwright
+- Cloudflare Workers
 
-EP-004 / v0.4.0 remains the completed developer-essentials and owner-operations baseline.
+---
 
-## Commands
+## Highlights
 
-- `npm ci` — clean dependency installation
-- `npm run dev` — local development
-- `npm run validate:resources` — tool resource-pack validation
-- `npm run validate:diagnostics` — diagnostic structure, relationship, safety, and review validation
-- `npm run check` — Astro, resource, source, and release checks
-- `npm test` — unit tests
-- `npm run build` — production build and security-header generation
-- `npm run validate` — routes, metadata, links, sitemap, and robots validation
-- `npm run audit:budgets` — compressed asset, transfer, and request budgets
-- `npm run audit:dependencies` — high/critical dependency audit
-- `npm run audit:lighthouse` — Lighthouse thresholds when a browser is available
-- `npm run test:e2e` — Chromium, Firefox, WebKit, and mobile browser tests when browser binaries are available
-- `npm run snapshot && npm run snapshot:validate` — create and verify the portable commit-ready snapshot
+- Static-first architecture
+- Responsive and accessible UI
+- Client-side processing
+- Performance-focused implementation
+- Automated testing
+- Security-conscious configuration
+- Cloudflare deployment
 
-## Architecture
+---
 
-Static Astro website + vanilla browser JavaScript + local processing. No backend, database, authentication, required remote APIs, or paid dependencies without explicit approval.
+## Running Locally
 
-Routine resource maintenance is documented in `docs/RESOURCE-MAINTENANCE-GUIDE.md`.
+```bash
+npm install
+npm run dev
+```
 
+Build for production:
 
-## EP-009 Evidence Interpreter Foundation
-Five bounded, browser-local evidence interpreters connect supported command output to observations, interpretations, unknowns, safe next checks, and reviewed diagnostic journeys. Raw evidence is not saved automatically. Routine wording, examples, references, limitations, and fixtures remain resource-maintained.
+```bash
+npm run build
+```
 
-## EP-011 operational coverage
-Reviewed troubleshooting now includes Git push rejection, Jenkins agent offline, DNS resolution, connection refused, cron jobs, and shell execution failures.
+Run project validation:
 
-## Release certification
+```bash
+npm run check
+```
 
-Use `npm run verify:release` for fast health checks, `npm run certify:release:core` for strict non-browser gates, and `npm run certify:release` before preview deployment. See `docs/RELEASE-CERTIFICATION.md` and `docs/OWNER-RELEASE-CHECKLIST.md`.
+---
 
-## EP-014 preview workflow
+## Project Status
 
-HelpDevOps now supports certification-bound Cloudflare Workers Static Assets preview deployment. Set `PUBLIC_SITE_URL` to the exact HTTPS preview Worker URL, run full certification, deploy with `npm run deploy:preview`, then execute the live HTTP and hosted-browser checks. Production deployment remains blocked until an approved hostname is configured.
+This project is complete and maintained as a portfolio demonstration of frontend engineering, DevOps-oriented product design, and modern web development practices.
+
+---
+
+## License
+
+MIT
