@@ -3,6 +3,7 @@ import '../styles/global.css';
 import '../styles/ep019.css';
 import '../styles/ep020.css';
 import '../styles/ep021.css';
+import '../styles/ep022.css';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import SearchDialog from '../components/SearchDialog.astro';
@@ -10,7 +11,7 @@ import SessionDockShell from '../components/SessionDockShell.astro';
 import SEOHead from '../components/SEOHead.astro';import OpenGraphMeta from '../components/OpenGraphMeta.astro';import StructuredData from '../components/StructuredData.astro';
 import { site } from '../config/site.js';
 interface Breadcrumb { label: string; href: string }
-const { title, description, path, canonicalPath = path, robots = 'index,follow', breadcrumbs = [] } = Astro.props as { title: string; description: string; path: string; canonicalPath?: string; robots?: string; breadcrumbs?: Breadcrumb[] };
+const { title, description, path, canonicalPath = path, robots = 'index,follow', breadcrumbs = [], structuredData = true } = Astro.props as { title: string; description: string; path: string; canonicalPath?: string; robots?: string; breadcrumbs?: Breadcrumb[]; structuredData?: boolean };
 const canonical = new URL(canonicalPath, site.url).href;
 const deploymentChannel = process.env.RELEASE_CHANNEL || 'local';
 const effectiveRobots = deploymentChannel === 'preview' ? 'noindex,nofollow' : robots;
@@ -28,7 +29,7 @@ const structured = [
     <SEOHead {title} {description} {canonical} robots={effectiveRobots}/><OpenGraphMeta {title} {description} {canonical}/>
     <meta name="theme-color" content="#030A08" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <StructuredData data={structured}/>
+    {structuredData&&<StructuredData data={structured}/>}
   </head>
   <body>
     <a class="skip-link" href="#main-content">Skip to main content</a>

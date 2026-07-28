@@ -3,8 +3,8 @@ const configuredUrl = import.meta.env.PUBLIC_SITE_URL || 'https://helpdevops.exa
 export const site = {
   name: 'HelpDevOps',
   url: configuredUrl.replace(/\/$/, ''),
-  version: '0.21.0',
-  ep: 'EP-021',
+  version: '0.22.0',
+  ep: 'EP-022',
   description: 'A privacy-first DevOps problem-solving workspace with deterministic tools and reviewed diagnostic journeys.'
 };
 

@@ -1,0 +1,25 @@
+---
+// @ts-nocheck
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import {seoEntries} from '../../resources/launch-readiness.js';
+import {publishedJourneys} from '../../diagnostics/registry.js';
+export function getStaticPaths(){return seoEntries.map(entry=>({params:{slug:entry.slug},props:{entry}}))}
+const {entry}=Astro.props;
+const path=`/issues/${entry.slug}/`;
+const crumbs=[{label:'Home',href:'/'},{label:'Issue guides',href:'/issues/'},{label:entry.title,href:path}];
+const journey=publishedJourneys.find(item=>item.id===entry.journeyId);
+---
+<BaseLayout title={`${entry.title}: safe first checks | HelpDevOps`} description={entry.summary} {path} breadcrumbs={crumbs} structuredData={false}>
+  <Breadcrumbs items={crumbs}/>
+  <article class="section issue-entry"><div class="container reading"><span class="eyebrow">{entry.technology} · REVIEWED GUIDANCE</span><h1>{entry.title}</h1><p class="lead">{entry.summary}</p>
+    <aside class="journey-trust"><strong>Last reviewed {entry.reviewedAt}</strong><span>Applies to: {entry.appliesTo}</span><span>Testing boundary: {entry.testedAgainst}</span><a href="/issues/methodology/">Review methodology</a></aside>
+    <h2>Common evidence-backed causes</h2><ul>{entry.causes.map(item=><li>{item}</li>)}</ul>
+    <h2>First safe checks</h2><p>Run these only in the affected, owner-approved context. Preserve the output and redact secrets before sharing.</p>{entry.checks.map(item=><pre><code>{item}</code></pre>)}
+    <h2>Evidence to collect</h2><ul>{entry.evidence.map(item=><li>{item}</li>)}</ul>
+    <h2>Mistake to avoid</h2><p>{entry.avoid}</p>
+    <h2>Limits and escalation</h2><p>{entry.limitation}</p><p>{entry.escalation}</p>
+    <h2>Official source</h2><p><a href={entry.official} rel="noreferrer">Official {entry.technology} documentation</a></p>
+    <a class="button primary" href={journey?.path||'/troubleshoot/'}>Open the complete guided investigation</a>
+  </div></article>
+</BaseLayout>

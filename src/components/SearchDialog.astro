@@ -1,5 +1,6 @@
 ---
 import SearchInput from './SearchInput.astro';import SearchResult from './SearchResult.astro';import {discoveryIndex} from '../references/discovery.js';
-const searchIndex=discoveryIndex.filter(item=>item.type!=='ERROR').map(({type,title,route,domain,summary,aliases,exactErrors,commandFragments})=>({type,title,route,domain,summary,aliases,exactErrors,commandFragments}));
+import {seoEntries} from '../resources/launch-readiness.js';
+const searchIndex=[...discoveryIndex.filter(item=>item.type!=='ERROR').map(({type,title,route,domain,summary,aliases,exactErrors,commandFragments})=>({type,title,route,domain,summary,aliases,exactErrors,commandFragments})),...seoEntries.map(entry=>({type:'ISSUE GUIDE',title:entry.title,route:`/issues/${entry.slug}/`,domain:entry.technology,summary:entry.summary,aliases:entry.queries,exactErrors:entry.queries,commandFragments:entry.checks}))];
 ---
 <dialog class="search-dialog" data-search-dialog aria-labelledby="search-title" data-search-index={JSON.stringify(searchIndex)}><div class="dialog-head"><div><span class="eyebrow">UNIFIED DISCOVERY</span><h2 id="search-title">Find the safest useful destination</h2></div><button type="button" data-search-close aria-label="Close search">×</button></div><SearchInput/><SearchResult/><p class="dialog-help"><kbd>Esc</kbd> close <span>·</span> Search stays in this browser tab.</p></dialog>

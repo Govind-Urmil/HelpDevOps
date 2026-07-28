@@ -1,0 +1,3 @@
+.journey-trust{display:flex;flex-wrap:wrap;gap:.65rem 1rem;align-items:center;margin:1rem 0;padding:.85rem 1rem;border:1px solid var(--border);border-radius:var(--radius);background:color-mix(in srgb,var(--surface) 88%,var(--accent) 12%)}
+.journey-trust>div,.journey-trust>details,.journey-trust>span{display:flex;flex-wrap:wrap;gap:.45rem 1rem;align-items:center}.journey-trust details{flex:1 1 100%}.journey-trust dl{display:grid;grid-template-columns:max-content 1fr;gap:.4rem 1rem}.journey-trust dt{font-weight:700}.journey-trust dd{margin:0}.issue-entry pre{overflow:auto}.issue-entry .button{margin-top:1rem}
+@media(max-width:600px){.journey-trust dl{grid-template-columns:1fr}.journey-trust dd{margin-bottom:.5rem}}

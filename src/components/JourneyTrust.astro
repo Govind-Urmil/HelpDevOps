@@ -1,0 +1,17 @@
+---
+// @ts-nocheck
+import {seoEntryByJourney,reviewPolicy,technologyGovernance} from '../resources/launch-readiness.js';
+const {journey}=Astro.props;
+const entry=seoEntryByJourney(journey.id);
+const governance=technologyGovernance[journey.domain];
+const appliesTo=entry?.appliesTo||governance?.appliesTo||'Version-neutral guidance; confirm behavior against the installed version';
+const compatibility=entry?.compatibility||governance?.compatibility||journey.compatibility.limitations[0];
+---
+<aside class="journey-trust" aria-label="Guidance review and applicability">
+  <div><strong>Reviewed guidance</strong><span>Last reviewed {journey.reviewedAt}</span><span>Next review {journey.reviewDue}</span></div>
+  <details><summary>Versions, evidence boundaries, and sources</summary>
+    <dl><dt>Applies to</dt><dd>{appliesTo}</dd><dt>Tested against</dt><dd>{reviewPolicy.testedAgainst}</dd><dt>Known limitations</dt><dd>{compatibility} {journey.whatItDoesNotProve[0]}</dd></dl>
+    <p><strong>Official references:</strong> {journey.references.map((reference,index)=><>{index>0&&' · '}<a href={reference.url} rel="noreferrer">{reference.title}</a></>)}</p>
+    <a href="/issues/methodology/">What “Reviewed guidance” means</a>
+  </details>
+</aside>

@@ -1,0 +1,13 @@
+---
+import PolicyLayout from '../../layouts/PolicyLayout.astro';
+const meta={title:'Editorial and technical review policy | HelpDevOps',description:'How HelpDevOps researches, reviews, dates, limits, and retires technical guidance.',path:'/issues/methodology/',structuredData:false};
+const crumbs=[{label:'Home',href:'/'},{label:'Issue guides',href:'/issues/'},{label:'Review policy',href:'/issues/methodology/'}];
+---
+<PolicyLayout {meta} eyebrow="TRUST & METHODOLOGY" title="What “Reviewed guidance” means" description="A transparent standard for evidence, safety, freshness, uncertainty, and escalation." status="Public policy" {crumbs}>
+  <h2>Research and sources</h2><p>Reviewed guidance is checked for structure, safety, evidence boundaries, and consistency by the HelpDevOps project. It is not a claim of independent expert review. Official product documentation, standards, advisories, and source repositories are preferred. Supporting sources must directly support the guidance.</p>
+  <h2>Commands and safety</h2><p>Read-only evidence collection comes first. Commands are reviewed for purpose, execution context, privilege, scope, likely output, and risk. State-changing or destructive operations require clear prerequisites, limited scope, consequences, rollback, and verification. Broad permission changes, disabled TLS validation, blind force operations, and evidence-destroying shortcuts are rejected.</p>
+  <h2>Uncertainty and versions</h2><p>Observed evidence is separated from interpretation. A possible cause is not presented as confirmed without supporting evidence. “Applies to” describes the intended compatibility boundary. “Tested against” records only environments or fixtures actually exercised; synthetic tests are not production validation.</p>
+  <h2>Freshness</h2><p>Every launch-critical guide records a review date and next-review date. Version and compatibility metadata is maintained in the central launch-readiness resource. Material vendor changes trigger review. Overdue or incompatible guidance must be marked for review or deprecated rather than silently presented as current.</p>
+  <h2>Deprecation and escalation</h2><p>Guidance is deprecated when its assumptions, commands, or supported versions are no longer defensible. Stop and escalate when ownership, blast radius, credentials, rollback, live state, or conflicting evidence cannot be resolved safely.</p>
+  <h2>What HelpDevOps cannot guarantee</h2><p>HelpDevOps cannot inspect your environment, guarantee accuracy or recovery, replace change control, or provide vendor endorsement. Users must validate guidance against current evidence, local policy, installed versions, and responsible system owners.</p>
+</PolicyLayout>

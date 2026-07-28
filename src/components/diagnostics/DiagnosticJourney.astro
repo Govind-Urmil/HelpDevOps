@@ -3,6 +3,7 @@
 import Badge from '../Badge.astro';
 import TechnologyMark from '../TechnologyMark.astro';
 import InvestigationWorkbench from './InvestigationWorkbench.astro';
+import JourneyTrust from '../JourneyTrust.astro';
 import {connectedInvestigationById} from '../../investigations/registry.js';
 const {journey}=Astro.props;
 const connection=connectedInvestigationById(journey.id);
@@ -16,6 +17,7 @@ const causeCandidates=journey.causeCandidates||journey.nodes.filter(node=>node.n
     <Badge label={journey.status === 'reviewed' ? 'REVIEWED GUIDANCE' : 'LIMITATIONS STATED'} tone={journey.status === 'reviewed' ? 'success' : 'warning'} />
   </div>
   <div class="journey-meta journey-meta-prominent"><span>{journey.nodes.length} decision nodes</span><span>~{Math.max(5,Math.ceil(journey.nodes.length*1.4))} minutes</span><span>Reviewed {journey.reviewedAt}</span></div>{causeCandidates.length>0&&<details class="cause-map"><summary>Initial cause map — not a diagnosis</summary><ol>{causeCandidates.map(item=><li><strong>{item.title}</strong><span>{item.evidence}</span></li>)}</ol></details>}<div class="diagnostic-mode-row" role="group" aria-label="Diagnostic view">
+  <JourneyTrust {journey}/>
     <button class="button secondary" type="button" data-mode="guided" aria-pressed="true">Guided diagnosis</button>
     <button class="button ghost" type="button" data-mode="emergency" aria-pressed="false">Emergency view</button>
   </div>

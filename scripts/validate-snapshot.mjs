@@ -36,7 +36,7 @@ try{
  for(const required of requiredFiles)if(!fs.existsSync(path.join(temporary,...required.split('/'))))errors.push(`Extracted file missing: ${required}`);
  const pkg=JSON.parse(fs.readFileSync(path.join(temporary,'package.json'),'utf8'));
  const release=JSON.parse(fs.readFileSync(path.join(temporary,'release-meta.json'),'utf8'));
- if(pkg.version!=='0.21.0'||release.version!==pkg.version||release.ep!=='EP-021')errors.push('Extracted release identity mismatch.');
+ if(pkg.version!=='0.22.0'||release.version!==pkg.version||release.ep!=='EP-022')errors.push('Extracted release identity mismatch.');
  if(!errors.length){
   run('npm',['ci']);
   run('npm',['run','audit:dependencies']);

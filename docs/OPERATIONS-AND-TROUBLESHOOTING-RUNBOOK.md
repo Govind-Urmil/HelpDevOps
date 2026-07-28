@@ -1,5 +1,7 @@
 # HelpDevOps Operations & Troubleshooting Runbook
 
+EP-022 maintenance: trust, freshness, and issue-entry content live in `src/resources/launch-readiness.js`; `/issues/methodology/` is the public methodology; `scripts/validate-launch-readiness.mjs` validates review windows and relationships; `scripts/production-smoke.mjs` is the post-deployment check. Stage explicit reviewed paths and inspect `git diff --cached`; never use an unaudited `git add .`.
+
 Primary reader: Govind, HelpDevOps owner. This is the owner-safe first response guide. HelpDevOps is not publicly deployed. Replace every `[TODO: ...]` infrastructure placeholder and verify it before launch.
 
 ## Severity and emergency principle

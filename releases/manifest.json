@@ -61,6 +61,16 @@
       "routeCount": 98,
       "workspaceSchemaCompatibility": "EP-005 onward",
       "certified": false
+    },
+    {
+      "version": "0.22.0",
+      "ep": "EP-022",
+      "status": "launch-candidate",
+      "commit": null,
+      "zipSha256": null,
+      "routeCount": 114,
+      "workspaceSchemaCompatibility": "EP-005 onward",
+      "certified": false
     }
   ]
 }

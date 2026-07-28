@@ -4,7 +4,7 @@ Website Factory Project #2.
 
 Trusted, free, privacy-first, browser-based DevOps workspace.
 
-Current release: **EP-021 / v0.21.0**. The product provides local deterministic analysis, reviewed investigations, browser-local continuity, verification, privacy-controlled handover, and a launch-ready public experience.
+Current release: **EP-022 / v0.22.0**. The product provides reviewed provenance, launch-quality issue entry pages, local deterministic analysis, browser-local continuity, and production-readiness operations.
 
 Owner release gate: `npm run verify:release`. Browser assurance: `npm run verify:browsers`. Recovery guidance: `docs/OWNER-QUICK-RECOVERY.md`.
 
@@ -15,7 +15,7 @@ Owner release gate: `npm run verify:release`. Browser assurance: `npm run verify
 
 ## Release lineage
 
-EP-021 / v0.21.0 is the current release candidate and final remediation baseline.
+EP-022 / v0.22.0 is the final pre-launch release candidate.
 
 EP-006 / v0.6.0 remains the completed container and Kubernetes engineering baseline.
 

@@ -1,0 +1,9 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Breadcrumbs from '../../components/Breadcrumbs.astro';
+import {seoEntries} from '../../resources/launch-readiness.js';
+const crumbs=[{label:'Home',href:'/'},{label:'Issue guides',href:'/issues/'}];
+---
+<BaseLayout title="DevOps issue investigation guides | HelpDevOps" description="Evidence-first entry points for common Kubernetes, Docker, Terraform, Git, Jenkins, Linux, Cron, and networking failures." path="/issues/" breadcrumbs={crumbs} structuredData={false}>
+  <Breadcrumbs items={crumbs}/><section class="section"><div class="container"><span class="eyebrow">ISSUE GUIDES</span><h1>Start with the exact symptom</h1><p>These concise entry points lead into the full guided investigations. They do not claim a root cause from an error string alone.</p><div class="card-grid">{seoEntries.map(entry=><a class="card" href={`/issues/${entry.slug}/`}><span class="eyebrow">{entry.technology}</span><h2>{entry.title}</h2><p>{entry.summary}</p><span class="card-action">Review safe first checks →</span></a>)}</div></div></section>
+</BaseLayout>

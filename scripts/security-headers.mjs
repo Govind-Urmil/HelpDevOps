@@ -29,7 +29,10 @@ export function generateHeaders({pages,channel='local'}){
  const common={...securityPolicy.headers,...(channel==='preview'?{'X-Robots-Tag':'noindex, nofollow'}:{})};
  if(securityPolicy.hsts.enabled)common['Strict-Transport-Security']=`${securityPolicy.hsts.value}${securityPolicy.hsts.includeSubDomains?'; includeSubDomains':''}`;
  const blocks=[`/*\n${Object.entries(common).map(([name,value])=>`  ${name}: ${value}`).join('\n')}`];
- for(const page of pages)blocks.push(`${page.route}\n  Content-Security-Policy: ${cspForHashes(page.hashes)}`);
+ const issuePages=pages.filter(page=>page.route.startsWith('/issues/'));
+ const issueHashes=[...new Set(issuePages.flatMap(page=>page.hashes))];
+ for(const page of pages.filter(page=>!page.route.startsWith('/issues/')))blocks.push(`${page.route}\n  Content-Security-Policy: ${cspForHashes(page.hashes)}`);
+ if(issuePages.length)blocks.push(`/issues/*\n  Content-Security-Policy: ${cspForHashes(issueHashes)}`);
  blocks.push('/_astro/*\n  Cache-Control: public, max-age=31536000, immutable');
  return `${blocks.join('\n\n')}\n`;
 }
@@ -50,7 +53,9 @@ export function validateGeneratedHeaders({body,pages,channel='local'}){
   for(const [name,value] of Object.entries(securityPolicy.headers))if(global.get(name)!==value)errors.push(`Global security header mismatch: ${name}`);
   if(channel==='preview'&&global.get('X-Robots-Tag')!=='noindex, nofollow')errors.push('Preview X-Robots-Tag is missing or incorrect');
  }
- for(const page of pages){const actual=rules.get(page.route)?.get('Content-Security-Policy');const expected=cspForHashes(page.hashes);if(!actual)errors.push(`CSP rule missing for HTML route: ${page.route}`);else if(actual!==expected)errors.push(`CSP rule or inline-script hashes mismatch for HTML route: ${page.route}`)}
+ const wildcardFor=route=>[...rules.keys()].filter(pattern=>pattern!=='/*'&&pattern.endsWith('*')&&route.startsWith(pattern.slice(0,-1))).sort((a,b)=>b.length-a.length)[0];
+ const matchingRule=route=>rules.get(route)||rules.get(wildcardFor(route));
+ for(const page of pages){const matched=matchingRule(page.route);const actual=matched?.get('Content-Security-Policy');const wildcard=rules.has(page.route)?null:wildcardFor(page.route);const peers=wildcard?pages.filter(item=>item.route.startsWith(wildcard.slice(0,-1))):[page];const expected=cspForHashes([...new Set(peers.flatMap(item=>item.hashes))]);if(!actual)errors.push(`CSP rule missing for HTML route: ${page.route}`);else if(actual!==expected)errors.push(`CSP rule or inline-script hashes mismatch for HTML route: ${page.route}`)}
  if(rules.get('/_astro/*')?.get('Cache-Control')!=='public, max-age=31536000, immutable')errors.push('Immutable asset cache rule is missing or changed');
  return {errors,stats:{rules:blocks.length,longestLine:Math.max(...lines.map(line=>line.length)),longestCspLine:Math.max(...lines.filter(line=>line.trimStart().startsWith('Content-Security-Policy:')).map(line=>line.length),0)}};
 }
