@@ -3,7 +3,7 @@ import { test, expect } from '@playwright/test';
 test('homepage presents one primary path and compact platform routes', async ({ page }) => {
   await page.goto('/');
   await expect(page.getByRole('link', { name: 'Analyze evidence' })).toHaveAttribute('href', '#analyze');
-  await expect(page.getByRole('link', { name: 'Start from a symptom' })).toHaveAttribute('href', '#symptoms');
+  await expect(page.getByRole('link', { name: 'Browse Investigations' })).toHaveAttribute('href', '/troubleshoot/');
   await expect(page.locator('.platform-path')).toHaveCount(2);
 });
 

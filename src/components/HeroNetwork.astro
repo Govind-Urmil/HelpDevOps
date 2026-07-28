@@ -1,0 +1,12 @@
+<div class="hero-network" data-hero-network aria-hidden="true">
+  <svg viewBox="0 0 520 300" focusable="false">
+    <g class="network-neutral"><path d="M36 148H106L158 92L222 148L286 72L350 148L416 104L484 148"/><path d="M106 148L160 212L222 148L286 228L350 148L418 220"/><path d="M158 92L214 40M286 72L350 34M416 104L478 54"/></g>
+    <g class="network-safe-route"><path d="M36 148H106L158 92L222 148L350 148L416 104L484 148"/></g>
+    <g class="network-pulse"><circle r="4"><animateMotion dur="12s" repeatCount="indefinite" path="M36 148H106L158 92L222 148L350 148L416 104L484 148"/></circle></g>
+    <g class="network-nodes"><circle class="network-node observe" cx="36" cy="148" r="8"/><circle class="network-node evidence e1" cx="106" cy="148" r="6"/><circle class="network-node evidence e2" cx="158" cy="92" r="6"/><circle class="network-node muted" cx="160" cy="212" r="5"/><circle class="network-node muted" cx="214" cy="40" r="4"/><circle class="network-node decision" cx="222" cy="148" r="8"/><circle class="network-node muted" cx="286" cy="72" r="5"/><circle class="network-node muted" cx="286" cy="228" r="5"/><circle class="network-node verify" cx="350" cy="148" r="7"/><circle class="network-node muted" cx="350" cy="34" r="4"/><circle class="network-node evidence e3" cx="416" cy="104" r="6"/><circle class="network-node muted" cx="418" cy="220" r="5"/><circle class="network-node muted" cx="478" cy="54" r="4"/><circle class="network-node recover" cx="484" cy="148" r="10"/></g>
+  </svg>
+</div>
+<script>
+  // @ts-nocheck
+  document.querySelectorAll('[data-hero-network]').forEach(root=>{if(root.dataset.ready)return;root.dataset.ready='true';const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;const svg=root.querySelector('svg');let visible=true;const sync=()=>{const paused=reduced||document.hidden||!visible;root.dataset.paused=String(paused);if(svg&&'pauseAnimations'in svg&&'unpauseAnimations'in svg)paused?svg.pauseAnimations():svg.unpauseAnimations()};if('IntersectionObserver'in window)new IntersectionObserver(entries=>{visible=entries[0]?.isIntersecting??true;sync()},{threshold:.05}).observe(root);document.addEventListener('visibilitychange',sync);sync()});
+</script>

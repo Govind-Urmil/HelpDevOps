@@ -1,4 +1,4 @@
-import {describe,it,expect} from 'vitest';
+﻿import {describe,it,expect} from 'vitest';
 import fs from 'node:fs';
 
 const read=(file)=>fs.readFileSync(file,'utf8');
@@ -33,7 +33,8 @@ describe('EP-015 premium operational UX foundation',()=>{
 
   it('keeps the footer concise without repeating the homepage trust message',()=>{
     const footer=read('src/components/SiteFooter.astro');
-    expect(footer).toContain('A private, browser-first DevOps task workspace.');
+    expect(footer).toContain('Evidence-first DevOps investigation, verification, and recovery.');
     expect(footer).not.toContain('trust-strip');
   });
 });
+

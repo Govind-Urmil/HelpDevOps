@@ -1,4 +1,4 @@
-[
+﻿[
   {
     "id": "crash-start",
     "nodeKind": "question",
@@ -248,7 +248,7 @@
     "risk": "read-only",
     "prevention": [
       "Alert on restart growth.",
-      "Preflight probes and resources.",
+      "Readiness probes and resource settings.",
       "Document expected process lifecycle."
     ]
   },
@@ -260,3 +260,4 @@
     "risk": "read-only"
   }
 ]
+

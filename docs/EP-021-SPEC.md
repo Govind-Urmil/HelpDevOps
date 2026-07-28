@@ -2,7 +2,7 @@
 
 Version: 0.21.0
 
-EP-021 makes the homepage a single evidence-first story, adds a lightweight educational investigation preview, resolves verified export/copy defects, and gives investigation completion a recognizable recovery and escalation handoff.
+EP-021 makes the homepage a single evidence-first story, establishes an original evidence-path identity, resolves verified export/copy defects, and gives investigation completion a recognizable recovery and escalation handoff.
 
 ## Locked product hierarchy
 
@@ -10,7 +10,7 @@ EP-021 makes the homepage a single evidence-first story, adds a lightweight educ
 2. Start from an observed symptom.
 3. Browse investigations or deterministic tools.
 
-The animation demonstrates symptom → evidence → safe branch → verification. It does not imply a live diagnosis, reserves its layout space, pauses outside the viewport or background tab, and does not rotate when reduced motion is requested.
+The decorative network communicates Observe → Investigate → Verify → Recover without demonstrating or simulating a diagnosis. It reserves its layout space, pauses outside the viewport or background tab, and presents a complete static state when reduced motion is requested.
 
 ## Visual system
 

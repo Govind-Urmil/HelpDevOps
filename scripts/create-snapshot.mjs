@@ -12,6 +12,7 @@ const files=result.stdout.toString('utf8').split('\0').filter(Boolean).sort();
 const zip=new AdmZip();
 for(const archivePath of files){
   const absolute=path.join(root,...archivePath.split('/'));
+  if(!fs.existsSync(absolute))continue;
   if(!fs.statSync(absolute).isFile())continue;
   zip.addFile(archivePath,fs.readFileSync(absolute));
 }

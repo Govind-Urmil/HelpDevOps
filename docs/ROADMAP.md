@@ -33,8 +33,8 @@ Add HTTP 502 and Terraform state-lock journeys, selected exact-error and command
 ### EP-009 — Exact Error & Output Intelligence
 Exact-error discovery, selected deterministic command-output interpreters, evidence extraction and safe next-command guidance.
 
-### EP-010 — Preflight & Change Safety
-Deployment readiness, change verification and bounded Docker/Kubernetes/Terraform/CI checks.
+### EP-010 — Investigation & Change Safety
+Evidence collection, change verification, and bounded Docker/Kubernetes/Terraform/CI checks.
 
 ## Content, traffic and scale
 
@@ -87,7 +87,7 @@ Adds six reviewed journeys across Git, Jenkins, networking, cron, and Bash.
 
 
 ## EP-011 delivered
-Reference, Discovery and Topic Clusters: 14 references, generated error index, unified discovery and deterministic linking. Next: EP-012 product cohesion and production hardening.
+Reference, Discovery and Topic Clusters: 14 references, generated error index, unified discovery and deterministic linking. EP-012 subsequently delivered product cohesion and production hardening.
 
 ## EP-013 — Owner-Controlled Production Hardening
 

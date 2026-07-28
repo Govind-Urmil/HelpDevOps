@@ -7,7 +7,6 @@ import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import SearchDialog from '../components/SearchDialog.astro';
 import SessionDockShell from '../components/SessionDockShell.astro';
-import CorrectionReport from '../components/CorrectionReport.astro';
 import SEOHead from '../components/SEOHead.astro';import OpenGraphMeta from '../components/OpenGraphMeta.astro';import StructuredData from '../components/StructuredData.astro';
 import { site } from '../config/site.js';
 interface Breadcrumb { label: string; href: string }
@@ -36,7 +35,6 @@ const structured = [
     <SiteHeader />
     <main id="main-content" tabindex="-1"><slot /></main>
     <SiteFooter />
-    <div class="container site-correction"><CorrectionReport resourceId={path} /></div>
     <SearchDialog />
     <SessionDockShell />
     <script is:inline src="/scripts/ui.js"></script>

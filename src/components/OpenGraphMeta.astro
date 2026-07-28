@@ -1,4 +1,4 @@
 ---
 import {site} from '../config/site.js';const {title,description,canonical}=Astro.props;
 ---
-<meta property="og:type" content="website"/><meta property="og:site_name" content={site.name}/><meta property="og:title" content={title}/><meta property="og:description" content={description}/><meta property="og:url" content={canonical}/>
+<meta property="og:type" content="website"/><meta property="og:site_name" content={site.name}/><meta property="og:title" content={title}/><meta property="og:description" content={description}/><meta property="og:url" content={canonical}/><meta property="og:image" content={new URL('/brand-social.svg',site.url).href}/><meta property="og:image:alt" content="HelpDevOps evidence path mark"/>

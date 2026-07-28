@@ -75,7 +75,7 @@ Improve.
 Actions:
 
 - Explore Tools
-- Run Preflight
+- Browse Investigations
 
 ### Terminal Preview
 
@@ -123,7 +123,7 @@ Desktop:
 
 - Tools
 - Guides
-- Preflight
+- Investigations
 - References
 - About
 - Search
@@ -133,7 +133,7 @@ Mobile:
 - Home
 - Tools
 - Search
-- Preflight
+- Investigations
 - More
 
 ## Component Rules

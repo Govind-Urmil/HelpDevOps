@@ -8,7 +8,7 @@ DevOps, cloud, SRE, platform and infrastructure engineers; secondarily learners 
 - Privacy-first local processing
 - Transparent validation and limitations
 - Reduced context switching
-- DevOps Preflight flagship
+- Observe → Investigate → Verify → Recover workflow
 
 ## Feature Gate
 A feature should solve a real problem, save time, be trustworthy, support repeat use, fit browser-side architecture, strengthen the workspace and remain maintainable.

@@ -1,15 +1,15 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import UniversalInput from '../components/UniversalInput.astro';
-import InvestigationDemo from '../components/InvestigationDemo.astro';
+import HeroNetwork from '../components/HeroNetwork.astro';
 import {pageMetadata as meta} from '../config/pages.js';
 import {symptomStarts} from '../investigations/symptoms.js';
 ---
 <BaseLayout {...meta.home}>
   <section class="hero ep021-hero"><div class="container">
     <div class="ep021-hero-grid">
-      <div class="hero-copy"><span class="eyebrow">EVIDENCE-FIRST DEVOPS TROUBLESHOOTING</span><h1>Find the safest next step <span>when DevOps breaks.</span></h1><p>Analyze supported evidence locally, follow transparent branches, and verify recovery without guessing.</p><div class="tool-actions"><a class="button primary" href="#analyze">Analyze evidence</a><a class="button secondary" href="#symptoms">Start from a symptom</a></div></div>
-      <InvestigationDemo />
+      <div class="hero-copy"><span class="eyebrow">OBSERVE · INVESTIGATE · VERIFY · RECOVER</span><h1>Find the safest next step <span>when DevOps breaks.</span></h1><p>Analyze supported evidence locally, follow transparent branches, and verify recovery without guessing.</p><div class="tool-actions"><a class="button primary" href="#analyze">Analyze Evidence</a><a class="button secondary" href="/troubleshoot/">Browse Investigations</a></div></div>
+      <HeroNetwork />
     </div>
     <div id="analyze" class="hero-analyzer"><UniversalInput /></div>
   </div></section>

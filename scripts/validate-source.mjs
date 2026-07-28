@@ -34,10 +34,11 @@ if(process.env.RELEASE_CHANNEL==='production'){
  if(!configured||configured.includes('.example')||!configured.startsWith('https://'))throw new Error('Production release blocked: approved HTTPS PUBLIC_SITE_URL is required.');
 }
 const siteVersion=siteSource.match(/version:\s*'([^']+)'/)?.[1],siteEp=siteSource.match(/ep:\s*'([^']+)'/)?.[1];if(siteVersion!==release.version||siteEp!==release.ep)throw new Error(`Site release metadata is inconsistent: ${siteEp}/${siteVersion} versus ${release.ep}/${release.version}.`);
-const footer=fs.readFileSync(path.join(root,'src','components','SiteFooter.astro'),'utf8');if(!footer.includes('{site.ep}')||!footer.includes('{site.version}'))throw new Error('Footer must render centralized release metadata.');
+const footer=fs.readFileSync(path.join(root,'src','components','SiteFooter.astro'),'utf8');if(/site\.(?:ep|version)|\/preflight\/|Technical Correction/i.test(footer))throw new Error('Footer exposes discontinued or internal product metadata.');
 if(fs.existsSync(path.join(root,'docs','CODEX-WORKFLOW.md')))throw new Error('Obsolete workflow file must not return; use docs/CHATGPT-WORK-WORKFLOW.md.');
-const currentUiFiles=['src/pages/index.astro','src/pages/preflight.astro','src/pages/privacy.astro','src/pages/workspace.astro'];
-for(const file of currentUiFiles){const source=fs.readFileSync(path.join(root,file),'utf8');if(/EP-00[1-5]/.test(source))throw new Error(`${file}: stale current-release EP wording`);}
+const currentUiFiles=['src/pages/index.astro','src/pages/privacy.astro','src/pages/workspace.astro'];
+for(const file of currentUiFiles){const source=fs.readFileSync(path.join(root,file),'utf8');if(/EP-\d{3}|v0\.\d+\.\d+/.test(source))throw new Error(`${file}: public engineering release wording`);}
+if(fs.existsSync(path.join(root,'src/pages/preflight.astro')))throw new Error('Discontinued Preflight route must not exist.');
 const snapshotSource=fs.readFileSync(path.join(root,'scripts','snapshot-config.mjs'),'utf8');
 const requiredSnapshotSection=snapshotSource.split('requiredFiles=')[1]||'';
 if(requiredSnapshotSection.includes("'evidence/")||requiredSnapshotSection.includes('\"evidence/'))throw new Error('Snapshot configuration must not require the ignored raw evidence directory.');

@@ -4,7 +4,8 @@ import path from 'node:path';
 const root=process.cwd();
 describe('EP-008 release hygiene',()=>{
   it('keeps stale EP wording out of current UI while preserving historical specs',()=>{
-    for(const file of ['src/pages/index.astro','src/pages/preflight.astro','src/pages/privacy.astro','src/pages/workspace.astro'])expect(fs.readFileSync(path.join(root,file),'utf8')).not.toMatch(/EP-00[1-5]/);
+    for(const file of ['src/pages/index.astro','src/pages/privacy.astro','src/pages/workspace.astro'])expect(fs.readFileSync(path.join(root,file),'utf8')).not.toMatch(/EP-\d{3}|v0\.\d+\.\d+/);
+    expect(fs.existsSync(path.join(root,'src/pages/preflight.astro'))).toBe(false);
     expect(fs.readFileSync(path.join(root,'docs/EP-003-SPEC.md'),'utf8')).toMatch(/EP-003/);
   });
   it('prevents the obsolete workflow from returning',()=>expect(fs.existsSync(path.join(root,'docs/CODEX-WORKFLOW.md'))).toBe(false));

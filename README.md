@@ -4,7 +4,7 @@ Website Factory Project #2.
 
 Trusted, free, privacy-first, browser-based DevOps workspace.
 
-Current release: **EP-012 / v0.12.0**. The product now connects local deterministic analysis to reviewed guidance, explicit browser-local continuity, verification, and privacy-controlled Incident Brief handover.
+Current release: **EP-021 / v0.21.0**. The product provides local deterministic analysis, reviewed investigations, browser-local continuity, verification, privacy-controlled handover, and a launch-ready public experience.
 
 Owner release gate: `npm run verify:release`. Browser assurance: `npm run verify:browsers`. Recovery guidance: `docs/OWNER-QUICK-RECOVERY.md`.
 
@@ -13,9 +13,9 @@ Owner release gate: `npm run verify:release`. Browser assurance: `npm run verify
 - ChatGPT: primary research, product design, architecture, implementation, core verification, documentation, and commit-ready packaging
 - ChatGPT Work: focused environment-specific browser, Lighthouse, visual, and independent technical verification when those checks cannot be completed here
 
-## Current release candidate
+## Release lineage
 
-EP-008 / v0.8.0 expands the reviewed diagnostic platform to eight high-intent journeys.
+EP-021 / v0.21.0 is the current release candidate and final remediation baseline.
 
 EP-006 / v0.6.0 remains the completed container and Kubernetes engineering baseline.
 

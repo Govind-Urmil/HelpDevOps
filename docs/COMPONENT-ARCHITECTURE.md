@@ -21,7 +21,7 @@ The authoritative component contract is `EP-002-SPEC.md`. Components are separat
 - `StatusLabel`: represented by the reusable Badge primitive.
 - `SearchTrigger`: remains header-owned; SearchDialog/Input/Result carry the reusable search behavior.
 - `CategoryCard`: current quick-access cards are homepage-only and deliberately point to truthful platform status rather than fake categories.
-- `PreflightFlow`: the three-step preview remains local to the single Preflight homepage preview.
+- The discontinued cross-file preview has no component or route.
 - `TrustGrid`: the trust content remains homepage-local because it has no second consumer.
 
 These are disclosed consolidations, not claims that every proposed filename exists. They preserve the specification’s responsibilities without creating unused one-line wrappers.

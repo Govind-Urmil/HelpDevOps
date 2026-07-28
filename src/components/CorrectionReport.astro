@@ -1,5 +1,5 @@
 ---
-import {site} from '../config/site.js';const {resourceId='page'}=Astro.props;const template=`HelpDevOps technical correction\nResource: ${resourceId}\nRelease: ${site.version}\n\nWhat appears incorrect:\n\nSuggested authoritative source:\n\nDo not include logs, credentials, or private operational data.`;
+const {resourceId='page'}=Astro.props;const template=`HelpDevOps technical correction\nResource: ${resourceId}\n\nWhat appears incorrect:\n\nSuggested authoritative source:\n\nDo not include logs, credentials, or private operational data.`;
 ---
 <details class="correction-report"><summary>Technical correction template</summary><p>Nothing is sent or attached automatically. Review the template before sharing it through your preferred channel.</p><button class="button ghost" type="button" data-copy-correction data-template={template}>Copy correction template</button><p data-correction-status aria-live="polite"></p></details>
 <script>// @ts-nocheck

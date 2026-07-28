@@ -47,4 +47,4 @@ None. No tool met the removal criteria.
 - Increase the result contract version only for incompatible changes.
 - Preserve local-only behavior and explicit saving.
 - Connected checks validate supplied artifacts only; they do not contact hosts, clusters, repositories, registries, CI systems, or clouds.
-- EP-018 Change Preflight is intentionally excluded.
+- Cross-file change analysis is intentionally excluded.

@@ -116,7 +116,7 @@ Used for:
 - Homepage
 - Product introduction
 - Workspace introduction
-- Preflight introduction
+- Investigation introduction
 - Major category pages
 
 Characteristics:
@@ -141,7 +141,7 @@ Used for:
 - Logs
 - Diffs
 - Validation results
-- Preflight results
+- Investigation results
 
 Characteristics:
 
@@ -166,7 +166,7 @@ Future purpose:
 - Tool routing
 - Troubleshooting
 - Reference discovery
-- Preflight entry
+- Investigation entry
 
 Recommended presentation:
 
@@ -199,7 +199,7 @@ Use subtle product markers such as:
 ```text
 // DEVOPS COMMAND CENTER
 // LOCAL PROCESSING
-// PREFLIGHT
+// INVESTIGATION
 // DETECTED INPUT
 // COVERAGE
 // NEXT ACTION
@@ -317,7 +317,7 @@ Tool pages must prioritize:
 Desktop:
 
 ```text
-HelpDevOps | Tools | Workspace | Preflight | Guides | References | Search
+HelpDevOps | Troubleshoot | Tools | Interpret | Workspace | Search
 ```
 
 Mobile:
@@ -386,7 +386,7 @@ Requirements:
 
 ### Product
 
-- PreflightFlow
+- HeroNetwork
 - TrustGrid
 - ProductStatus
 - PrivacyPulse
@@ -564,7 +564,7 @@ Requirements:
 - Session Dock collapses
 - Navigation stays accessible
 - Code areas scroll intentionally
-- Preflight diagrams simplify
+- Investigation diagrams simplify
 - Decorative elements never reduce usability
 
 Breakpoints:
@@ -630,11 +630,7 @@ Never display:
 - Fake product capability
 - Fake release status
 
-Preflight must remain labeled:
-
-> In Development
-
-until real functionality exists.
+Unavailable product concepts must not appear in global navigation.
 
 Quick Tools and Recent Sessions may show only real data.
 
@@ -763,7 +759,7 @@ The design and resource architecture must support:
 - Networking
 - CI/CD
 - Cloud
-- Preflight
+- Investigation network
 
 Examples:
 

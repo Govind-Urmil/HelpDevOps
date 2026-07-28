@@ -1,11 +1,12 @@
 ---
 import DesktopNav from './DesktopNav.astro';
 import MobileNav from './MobileNav.astro';
+import BrandMark from './BrandMark.astro';
 const pathname=Astro.url.pathname;
 ---
 <header class="site-header">
   <div class="container header-inner">
-    <a class="brand" href="/" aria-label="HelpDevOps home"><span aria-hidden="true">&gt;_</span> HelpDevOps</a>
+    <a class="brand" href="/" aria-label="HelpDevOps home"><BrandMark /> <span>HelpDevOps</span></a>
     <DesktopNav {pathname} />
     <div class="header-actions"><button class="search-trigger" type="button" data-session-open aria-label="Open local workspace"><span aria-hidden="true">▣</span><span class="search-label" aria-hidden="true">Workspace</span></button>
       <button class="search-trigger" type="button" data-search-open aria-label="Search HelpDevOps" aria-haspopup="dialog"><span aria-hidden="true">⌕</span><span class="search-label" aria-hidden="true">Search</span><kbd aria-hidden="true">⌘ K</kbd></button>

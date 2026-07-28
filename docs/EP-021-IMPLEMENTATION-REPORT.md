@@ -1,7 +1,9 @@
 # EP-021 implementation report
 
 - Rebuilt the homepage around one primary analysis action, symptom-first starts, and two tertiary catalog links.
-- Added a four-scenario, seven-second educational investigation preview with visibility and reduced-motion controls.
+- Added an original evidence-path brand and lightweight investigation network with visibility and reduced-motion controls.
+- Removed the discontinued product preview and its route, capability label, navigation, and metadata.
+- Removed public release labels and moved the correction template from the global layout to Workspace.
 - Removed the repeated footer trust strip and the prominent “Report a technical issue” wording.
 - Fixed the visible TypeScript directive on the troubleshooting index.
 - Strengthened browser downloads for Incident Brief and workspace exports with delayed URL cleanup and truthful status.
