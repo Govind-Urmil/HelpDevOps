@@ -92,10 +92,18 @@ async function saveCurrentTool() {
 }
 
 function downloadJSON(filename, value) {
-  const blob = new Blob([JSON.stringify(value, null, 2)], { type:'application/json' });
-  const url = URL.createObjectURL(blob);
-  const link = document.createElement('a'); link.href = url; link.download = filename; document.body.append(link); link.click(); link.remove();
-  setTimeout(() => URL.revokeObjectURL(url), 0);
+  let url;
+  try {
+    const blob = new Blob([JSON.stringify(value, null, 2)], { type:'application/json;charset=utf-8' });
+    url = URL.createObjectURL(blob);
+    const link = document.createElement('a'); link.href = url; link.download = filename; link.rel = 'noopener'; link.hidden = true;
+    document.body.append(link); link.click(); link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+    return true;
+  } catch {
+    if (url) URL.revokeObjectURL(url);
+    return false;
+  }
 }
 
 async function exportAll() {
@@ -105,8 +113,8 @@ async function exportAll() {
     const warnings = scanSensitiveContent(records);
     if (warnings.some(item => item.severity === 'block')) return setStatus('Export blocked: private-key material exists in a saved workspace.', 'error');
     if (warnings.length && !confirm(`Possible sensitive content exists in this export. Review before sharing.\n\n${describeWarnings(warnings)}\n\nExport anyway?`)) return;
-    downloadJSON(`helpdevops-workspaces-${new Date().toISOString().slice(0,10)}.json`, createWorkspaceExport(records, site.version));
-    setStatus('Workspace export created locally.', 'success');
+    const requested=downloadJSON(`helpdevops-workspaces-${new Date().toISOString().slice(0,10)}.json`, createWorkspaceExport(records, site.version));
+    setStatus(requested?'Workspace download requested. Check your browser downloads.':'Workspace download could not be started.', requested?'success':'error');
   } catch (error) { setStatus(error.message || 'Export failed.', 'error'); }
 }
 
@@ -191,7 +199,8 @@ async function renderWorkspaceList() {
       const warnings = scanSensitiveContent(record);
       if (warnings.some(item => item.severity === 'block')) return setStatus('Export blocked: private-key material exists in this workspace.', 'error');
       if (warnings.length && !confirm(`Possible sensitive content exists in this export. Review before sharing.\n\n${describeWarnings(warnings)}\n\nExport anyway?`)) return;
-      downloadJSON('helpdevops-workspace.json', createWorkspaceExport(record, site.version));
+      const requested=downloadJSON('helpdevops-workspace.json', createWorkspaceExport(record, site.version));
+      setStatus(requested?'Workspace download requested. Check your browser downloads.':'Workspace download could not be started.',requested?'success':'error');
     });
     const count = $('[data-workspace-count]'); if (count) count.textContent = String(records.length);
   } catch { list.innerHTML = '<p class="muted">Saved workspace storage is unavailable. Analysis tools remain available.</p>'; }

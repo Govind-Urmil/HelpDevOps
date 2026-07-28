@@ -31,8 +31,9 @@ describe('EP-015 premium operational UX foundation',()=>{
     expect(journey).toContain('aria-live="polite"');
   });
 
-  it('publishes the privacy-oriented footer trust strip',()=>{
+  it('keeps the footer concise without repeating the homepage trust message',()=>{
     const footer=read('src/components/SiteFooter.astro');
-    for(const message of ['Local processing','No automatic uploads','Reviewed guidance'])expect(footer).toContain(message);
+    expect(footer).toContain('A private, browser-first DevOps task workspace.');
+    expect(footer).not.toContain('trust-strip');
   });
 });

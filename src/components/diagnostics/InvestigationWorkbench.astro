@@ -139,8 +139,9 @@ const { journey } = Astro.props;
       localStorage.setItem(storageKey, JSON.stringify(payload)); q('[data-investigation-storage-status]').textContent = 'Investigation saved only in this browser.';
     };
     const copyExport = async format => {
-      const result = buildInvestigationExport({ title: journey.title, timeline, environment: environment(), format });
-      await navigator.clipboard.writeText(result.text); q('[data-investigation-storage-status]').textContent = `Redacted ${format === 'channel' ? 'incident-channel handoff' : 'Markdown report'} copied. Review it before sharing.`;
+      let answers=[],investigationState=null;try{answers=JSON.parse(diagnostic.querySelector('[data-answer-state]').value||'[]');investigationState=JSON.parse(diagnostic.querySelector('[data-investigation-state]').value||'null')}catch{}
+      const result = buildInvestigationExport({ title: journey.title, timeline, environment: environment(), answers, investigationState, currentNodeId:diagnostic.querySelector('[data-current-node]').value, format });
+      try{await navigator.clipboard.writeText(result.text);q('[data-investigation-storage-status]').textContent = `Redacted ${format === 'channel' ? 'incident-channel handoff' : 'Markdown report'} copied. Review it before sharing.`}catch{q('[data-investigation-storage-status]').textContent='Copy unavailable. Your investigation remains in this browser.'}
     };
     q('[data-export-channel]').onclick = () => copyExport('channel');
     q('[data-export-ticket]').onclick = () => copyExport('ticket');
@@ -159,7 +160,6 @@ const { journey } = Astro.props;
       q('[data-investigation-storage-status]').textContent = `Saved investigation available from ${new Date(value.savedAt).toLocaleString()}.`;
     } catch { localStorage.removeItem(storageKey); }
     new MutationObserver(refresh).observe(diagnostic.querySelector('[data-current-node]'), { attributes: true, attributeFilter: ['value'] });
-    diagnostic.addEventListener('click', event => { const choice = event.target.closest('[data-choice-list] button'); if (choice) setTimeout(() => { record('decision', choice.textContent, currentNode().title); refresh(); }, 0); });
     workbench.querySelectorAll('[data-environment]').forEach(input=>input.addEventListener('change',refresh));
     window.addEventListener('helpdevops:timeline',event=>record(event.detail?.type||'observation',event.detail?.summary||'Investigation activity',event.detail?.detail||''));
     renderTimeline(); refresh();

@@ -1,11 +1,10 @@
 import { test, expect } from '@playwright/test';
 
-test('role starts route into existing product surfaces', async ({ page }) => {
+test('homepage presents one primary path and compact platform routes', async ({ page }) => {
   await page.goto('/');
-  const starts = page.locator('[data-role-start]');
-  await expect(starts).toHaveCount(4);
-  await expect(starts.nth(0)).toHaveAttribute('href', /troubleshoot/);
-  await expect(starts.nth(3)).toHaveAttribute('href', /tools/);
+  await expect(page.getByRole('link', { name: 'Analyze evidence' })).toHaveAttribute('href', '#analyze');
+  await expect(page.getByRole('link', { name: 'Start from a symptom' })).toHaveAttribute('href', '#symptoms');
+  await expect(page.locator('.platform-path')).toHaveCount(2);
 });
 
 test('journey supports context, follow-up evidence, progress and prerequisites', async ({ page }) => {
