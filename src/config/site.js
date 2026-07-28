@@ -1,4 +1,4 @@
-const configuredUrl = import.meta.env.PUBLIC_SITE_URL || 'https://helpdevops.example';
+const configuredUrl = import.meta.env.PUBLIC_SITE_URL || 'https://helpdevops.work-on.workers.dev';
 
 export const site = {
   name: 'HelpDevOps',
