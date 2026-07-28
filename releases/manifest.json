@@ -1,56 +1,66 @@
 {
-    "schemaVersion":  1,
-    "releases":  [
-                     {
-                         "version":  "0.13.0",
-                         "ep":  "EP-013",
-                         "status":  "audit-candidate",
-                         "commit":  null,
-                         "zipSha256":  null,
-                         "routeCount":  67,
-                         "workspaceSchemaCompatibility":  "EP-005 onward",
-                         "certified":  false
-                     },
-                     {
-                         "version":  "0.14.0",
-                         "ep":  "EP-014",
-                         "status":  "preview-candidate",
-                         "commit":  null,
-                         "zipSha256":  null,
-                         "routeCount":  67,
-                         "workspaceSchemaCompatibility":  "EP-005 onward",
-                         "certified":  false,
-                         "previewValidated":  false
-                     },
-                     {
-                         "version":  "0.15.0",
-                         "ep":  "EP-015",
-                         "status":  "certification-candidate",
-                         "commit":  null,
-                         "zipSha256":  null,
-                         "routeCount":  67,
-                         "workspaceSchemaCompatibility":  "EP-005 onward",
-                         "certified":  false
-                     },
-                     {
-                         "version":  "0.16.0",
-                         "ep":  "EP-016",
-                         "status":  "certification-candidate",
-                         "commit":  null,
-                         "zipSha256":  null,
-                         "routeCount":  73,
-                         "workspaceSchemaCompatibility":  "EP-005 onward",
-                         "certified":  false
-                     },
-                     {
-                         "version":  "0.19.0",
-                         "ep":  "EP-019",
-                         "status":  "certification-candidate",
-                         "commit":  null,
-                         "zipSha256":  null,
-                         "routeCount":  90,
-                         "workspaceSchemaCompatibility":  "EP-005 onward",
-                         "certified":  false
-                     }
-                 ]
+  "schemaVersion": 1,
+  "releases": [
+    {
+      "version": "0.13.0",
+      "ep": "EP-013",
+      "status": "audit-candidate",
+      "commit": null,
+      "zipSha256": null,
+      "routeCount": 67,
+      "workspaceSchemaCompatibility": "EP-005 onward",
+      "certified": false
+    },
+    {
+      "version": "0.14.0",
+      "ep": "EP-014",
+      "status": "preview-candidate",
+      "commit": null,
+      "zipSha256": null,
+      "routeCount": 67,
+      "workspaceSchemaCompatibility": "EP-005 onward",
+      "certified": false,
+      "previewValidated": false
+    },
+    {
+      "version": "0.15.0",
+      "ep": "EP-015",
+      "status": "certification-candidate",
+      "commit": null,
+      "zipSha256": null,
+      "routeCount": 67,
+      "workspaceSchemaCompatibility": "EP-005 onward",
+      "certified": false
+    },
+    {
+      "version": "0.16.0",
+      "ep": "EP-016",
+      "status": "certification-candidate",
+      "commit": null,
+      "zipSha256": null,
+      "routeCount": 73,
+      "workspaceSchemaCompatibility": "EP-005 onward",
+      "certified": false
+    },
+    {
+      "version": "0.19.0",
+      "ep": "EP-019",
+      "status": "certification-candidate",
+      "commit": null,
+      "zipSha256": null,
+      "routeCount": 90,
+      "workspaceSchemaCompatibility": "EP-005 onward",
+      "certified": false
+    },
+    {
+      "version": "0.20.0",
+      "ep": "EP-020",
+      "status": "certification-candidate",
+      "commit": null,
+      "zipSha256": null,
+      "routeCount": 98,
+      "workspaceSchemaCompatibility": "EP-005 onward",
+      "certified": false
+    }
+  ]
 }

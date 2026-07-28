@@ -7,8 +7,8 @@ const options={riskIds:risks.map(item=>item.id)};
 const clone=value=>JSON.parse(JSON.stringify(value));
 
 describe('EP-010 diagnostic knowledge model',()=>{
-  it('loads thirty reviewed or technical-review journeys',()=>{
-    expect(publishedJourneys).toHaveLength(30);
+  it('loads thirty-seven reviewed or technical-review journeys',()=>{
+    expect(publishedJourneys).toHaveLength(37);
     expect(publishedJourneys.every(item=>['reviewed','technical-review'].includes(item.status))).toBe(true);
   });
   it.each(diagnosticJourneys.map(item=>[item.id,item]))('%s passes semantic validation',(_,journey)=>{

@@ -21,7 +21,7 @@ if(mojibakeErrors.length)throw new Error([...new Set(mojibakeErrors)].join('\n')
 if(secretScanErrors.length)throw new Error(secretScanErrors.join('\n'));
 const pkg=JSON.parse(fs.readFileSync(path.join(root,'package.json')));
 const release=JSON.parse(fs.readFileSync(path.join(root,'release-meta.json')));
-if(pkg.version!==release.version||release.version!=='0.19.0'||release.ep!=='EP-019') throw new Error('Release version metadata is inconsistent.');
+if(pkg.version!==release.version||release.version!=='0.20.0'||release.ep!=='EP-020') throw new Error('Release version metadata is inconsistent.');
 const forbidden=['react','vue','svelte','angular','tailwind','analytics'];
 const dependencies=Object.keys({...pkg.dependencies,...pkg.devDependencies}).join(' ').toLowerCase();
 for(const item of forbidden) if(dependencies.includes(item)) throw new Error(`Forbidden dependency: ${item}`);

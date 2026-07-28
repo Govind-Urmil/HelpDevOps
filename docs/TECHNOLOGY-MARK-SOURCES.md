@@ -17,3 +17,10 @@ These are lightweight HelpDevOps renditions for nominative product identificatio
 | Networking | HelpDevOps blue/cyan generic network glyph | Generic concept mark; no third-party trademark asserted. |
 
 Do not replace these files with hot-linked vendor assets. Re-review vendor guidance before materially changing a mark or using it outside the HelpDevOps interface.
+
+## AWS
+
+- Local asset: `/public/icons/technologies/aws.svg`
+- Source basis: HelpDevOps-authored lightweight representation using the AWS word mark colors for identification.
+- Brand guidance: [AWS trademark guidelines](https://aws.amazon.com/trademark-guidelines/).
+- Use: nominative technology identification only; no affiliation or endorsement is implied.

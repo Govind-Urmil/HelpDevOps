@@ -1382,5 +1382,301 @@
     "path": "/troubleshoot/yaml/parse-error/",
     "nodeCount": 7,
     "referenceCount": 1
+  },
+  {
+    "id": "journey-kubernetes-rollout-stalled",
+    "slug": "rollout-stalled",
+    "domain": "kubernetes",
+    "title": "Kubernetes Deployment rollout stalled",
+    "summary": "Diagnose kubernetes deployment rollout stalled by ranking observed evidence before a scoped change.",
+    "aliases": [
+      "kubernetes rollout stuck",
+      "deployment progress deadline exceeded"
+    ],
+    "exactErrors": [
+      "progressdeadlineexceeded",
+      "deployment does not have minimum availability"
+    ],
+    "status": "technical-review",
+    "entryNodeId": "kubernetes-rollout-stalled-start",
+    "reviewedAt": "2026-07-28",
+    "reviewDue": "2026-10-28",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "KUBERNETES",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current official general guidance"
+      ],
+      "limitations": [
+        "Provider, distribution, version, and local policy details may differ.",
+        "HelpDevOps does not inspect or change a live environment."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not prove one root cause.",
+      "Branch order is an investigation priority, not a probability claim."
+    ],
+    "firstChecks": [
+      "kubectl rollout status deployment/<deployment> -n <namespace> --timeout=10s; kubectl describe deployment <deployment> -n <namespace>"
+    ],
+    "relatedToolIds": [],
+    "path": "/troubleshoot/kubernetes/rollout-stalled/",
+    "nodeCount": 10,
+    "referenceCount": 1
+  },
+  {
+    "id": "journey-docker-daemon-unavailable",
+    "slug": "daemon-unavailable",
+    "domain": "docker",
+    "title": "Docker daemon unavailable",
+    "summary": "Diagnose docker daemon unavailable by ranking observed evidence before a scoped change.",
+    "aliases": [
+      "cannot connect to docker daemon",
+      "docker engine unavailable"
+    ],
+    "exactErrors": [
+      "cannot connect to the docker daemon",
+      "is the docker daemon running"
+    ],
+    "status": "technical-review",
+    "entryNodeId": "docker-daemon-unavailable-start",
+    "reviewedAt": "2026-07-28",
+    "reviewDue": "2026-10-28",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "DOCKER",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current official general guidance"
+      ],
+      "limitations": [
+        "Provider, distribution, version, and local policy details may differ.",
+        "HelpDevOps does not inspect or change a live environment."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not prove one root cause.",
+      "Branch order is an investigation priority, not a probability claim."
+    ],
+    "firstChecks": [
+      "docker context show; docker context inspect; docker info"
+    ],
+    "relatedToolIds": [],
+    "path": "/troubleshoot/docker/daemon-unavailable/",
+    "nodeCount": 10,
+    "referenceCount": 1
+  },
+  {
+    "id": "journey-terraform-apply-authorization",
+    "slug": "apply-authorization",
+    "domain": "terraform",
+    "title": "Terraform provider authorization failure",
+    "summary": "Diagnose terraform provider authorization failure by ranking observed evidence before a scoped change.",
+    "aliases": [
+      "terraform access denied",
+      "terraform apply unauthorized"
+    ],
+    "exactErrors": [
+      "accessdenied",
+      "authorizationfailed",
+      "permission denied terraform provider"
+    ],
+    "status": "technical-review",
+    "entryNodeId": "terraform-apply-authorization-start",
+    "reviewedAt": "2026-07-28",
+    "reviewDue": "2026-10-28",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "TERRAFORM",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current official general guidance"
+      ],
+      "limitations": [
+        "Provider, distribution, version, and local policy details may differ.",
+        "HelpDevOps does not inspect or change a live environment."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not prove one root cause.",
+      "Branch order is an investigation priority, not a probability claim."
+    ],
+    "firstChecks": [
+      "terraform show -json <review-plan> | jq -r \".resource_changes[]?.address\""
+    ],
+    "relatedToolIds": [],
+    "path": "/troubleshoot/terraform/apply-authorization/",
+    "nodeCount": 10,
+    "referenceCount": 1
+  },
+  {
+    "id": "journey-linux-high-load",
+    "slug": "high-load",
+    "domain": "linux",
+    "title": "Linux high load or CPU saturation",
+    "summary": "Diagnose linux high load or cpu saturation by ranking observed evidence before a scoped change.",
+    "aliases": [
+      "linux high cpu",
+      "load average high"
+    ],
+    "exactErrors": [
+      "high load average",
+      "cpu usage 100"
+    ],
+    "status": "technical-review",
+    "entryNodeId": "linux-high-load-start",
+    "reviewedAt": "2026-07-28",
+    "reviewDue": "2026-10-28",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "LINUX",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current official general guidance"
+      ],
+      "limitations": [
+        "Provider, distribution, version, and local policy details may differ.",
+        "HelpDevOps does not inspect or change a live environment."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not prove one root cause.",
+      "Branch order is an investigation priority, not a probability claim."
+    ],
+    "firstChecks": [
+      "uptime; vmstat 1 5; ps -eo pid,ppid,comm,%cpu,%mem --sort=-%cpu | head -15"
+    ],
+    "relatedToolIds": [],
+    "path": "/troubleshoot/linux/high-load/",
+    "nodeCount": 10,
+    "referenceCount": 1
+  },
+  {
+    "id": "journey-git-authentication-failure",
+    "slug": "authentication-failure",
+    "domain": "git",
+    "title": "Git remote authentication failure",
+    "summary": "Diagnose git remote authentication failure by ranking observed evidence before a scoped change.",
+    "aliases": [
+      "git authentication failed",
+      "permission denied publickey git"
+    ],
+    "exactErrors": [
+      "authentication failed for",
+      "permission denied (publickey)"
+    ],
+    "status": "technical-review",
+    "entryNodeId": "git-authentication-failure-start",
+    "reviewedAt": "2026-07-28",
+    "reviewDue": "2026-10-28",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "GIT",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current official general guidance"
+      ],
+      "limitations": [
+        "Provider, distribution, version, and local policy details may differ.",
+        "HelpDevOps does not inspect or change a live environment."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not prove one root cause.",
+      "Branch order is an investigation priority, not a probability claim."
+    ],
+    "firstChecks": [
+      "git remote -v; git config --show-origin --get-regexp \"credential|url\\..*\\.insteadof\""
+    ],
+    "relatedToolIds": [],
+    "path": "/troubleshoot/git/authentication-failure/",
+    "nodeCount": 10,
+    "referenceCount": 1
+  },
+  {
+    "id": "journey-jenkins-pipeline-failure",
+    "slug": "pipeline-failure",
+    "domain": "jenkins",
+    "title": "Jenkins Pipeline stage failure",
+    "summary": "Diagnose jenkins pipeline stage failure by ranking observed evidence before a scoped change.",
+    "aliases": [
+      "jenkins pipeline failed",
+      "jenkins script returned exit code"
+    ],
+    "exactErrors": [
+      "script returned exit code",
+      "finished: failure"
+    ],
+    "status": "technical-review",
+    "entryNodeId": "jenkins-pipeline-failure-start",
+    "reviewedAt": "2026-07-28",
+    "reviewDue": "2026-10-28",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "JENKINS",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current official general guidance"
+      ],
+      "limitations": [
+        "Provider, distribution, version, and local policy details may differ.",
+        "HelpDevOps does not inspect or change a live environment."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not prove one root cause.",
+      "Branch order is an investigation priority, not a probability claim."
+    ],
+    "firstChecks": [
+      "Review the first failing stage log, exit code, agent label, revision, and parameters."
+    ],
+    "relatedToolIds": [],
+    "path": "/troubleshoot/jenkins/pipeline-failure/",
+    "nodeCount": 10,
+    "referenceCount": 1
+  },
+  {
+    "id": "journey-aws-api-throttling",
+    "slug": "api-throttling",
+    "domain": "aws",
+    "title": "AWS API throttling or service quota failure",
+    "summary": "Diagnose aws api throttling or service quota failure by ranking observed evidence before a scoped change.",
+    "aliases": [
+      "aws throttling exception",
+      "aws quota exceeded"
+    ],
+    "exactErrors": [
+      "throttlingexception",
+      "rate exceeded",
+      "servicequotaexceededexception"
+    ],
+    "status": "technical-review",
+    "entryNodeId": "aws-api-throttling-start",
+    "reviewedAt": "2026-07-28",
+    "reviewDue": "2026-10-28",
+    "riskProfile": "read-only-first",
+    "compatibility": {
+      "technology": "AWS",
+      "appliesGenerally": true,
+      "reviewedAgainst": [
+        "Current official general guidance"
+      ],
+      "limitations": [
+        "Provider, distribution, version, and local policy details may differ.",
+        "HelpDevOps does not inspect or change a live environment."
+      ]
+    },
+    "whatItDoesNotProve": [
+      "The symptom alone does not prove one root cause.",
+      "Branch order is an investigation priority, not a probability claim."
+    ],
+    "firstChecks": [
+      "aws sts get-caller-identity; aws configure list"
+    ],
+    "relatedToolIds": [],
+    "path": "/troubleshoot/aws/api-throttling/",
+    "nodeCount": 10,
+    "referenceCount": 1
   }
 ]

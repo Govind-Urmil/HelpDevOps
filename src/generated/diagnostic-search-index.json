@@ -551,5 +551,126 @@
     "path": "/troubleshoot/yaml/parse-error/",
     "status": "technical-review",
     "entryNodeId": "yaml-parse-error-start"
+  },
+  {
+    "id": "journey-kubernetes-rollout-stalled",
+    "title": "Kubernetes Deployment rollout stalled",
+    "aliases": [
+      "kubernetes rollout stuck",
+      "deployment progress deadline exceeded"
+    ],
+    "exactErrors": [
+      "progressdeadlineexceeded",
+      "deployment does not have minimum availability"
+    ],
+    "domain": "kubernetes",
+    "summary": "Diagnose kubernetes deployment rollout stalled by ranking observed evidence before a scoped change.",
+    "path": "/troubleshoot/kubernetes/rollout-stalled/",
+    "status": "technical-review",
+    "entryNodeId": "kubernetes-rollout-stalled-start"
+  },
+  {
+    "id": "journey-docker-daemon-unavailable",
+    "title": "Docker daemon unavailable",
+    "aliases": [
+      "cannot connect to docker daemon",
+      "docker engine unavailable"
+    ],
+    "exactErrors": [
+      "cannot connect to the docker daemon",
+      "is the docker daemon running"
+    ],
+    "domain": "docker",
+    "summary": "Diagnose docker daemon unavailable by ranking observed evidence before a scoped change.",
+    "path": "/troubleshoot/docker/daemon-unavailable/",
+    "status": "technical-review",
+    "entryNodeId": "docker-daemon-unavailable-start"
+  },
+  {
+    "id": "journey-terraform-apply-authorization",
+    "title": "Terraform provider authorization failure",
+    "aliases": [
+      "terraform access denied",
+      "terraform apply unauthorized"
+    ],
+    "exactErrors": [
+      "accessdenied",
+      "authorizationfailed",
+      "permission denied terraform provider"
+    ],
+    "domain": "terraform",
+    "summary": "Diagnose terraform provider authorization failure by ranking observed evidence before a scoped change.",
+    "path": "/troubleshoot/terraform/apply-authorization/",
+    "status": "technical-review",
+    "entryNodeId": "terraform-apply-authorization-start"
+  },
+  {
+    "id": "journey-linux-high-load",
+    "title": "Linux high load or CPU saturation",
+    "aliases": [
+      "linux high cpu",
+      "load average high"
+    ],
+    "exactErrors": [
+      "high load average",
+      "cpu usage 100"
+    ],
+    "domain": "linux",
+    "summary": "Diagnose linux high load or cpu saturation by ranking observed evidence before a scoped change.",
+    "path": "/troubleshoot/linux/high-load/",
+    "status": "technical-review",
+    "entryNodeId": "linux-high-load-start"
+  },
+  {
+    "id": "journey-git-authentication-failure",
+    "title": "Git remote authentication failure",
+    "aliases": [
+      "git authentication failed",
+      "permission denied publickey git"
+    ],
+    "exactErrors": [
+      "authentication failed for",
+      "permission denied (publickey)"
+    ],
+    "domain": "git",
+    "summary": "Diagnose git remote authentication failure by ranking observed evidence before a scoped change.",
+    "path": "/troubleshoot/git/authentication-failure/",
+    "status": "technical-review",
+    "entryNodeId": "git-authentication-failure-start"
+  },
+  {
+    "id": "journey-jenkins-pipeline-failure",
+    "title": "Jenkins Pipeline stage failure",
+    "aliases": [
+      "jenkins pipeline failed",
+      "jenkins script returned exit code"
+    ],
+    "exactErrors": [
+      "script returned exit code",
+      "finished: failure"
+    ],
+    "domain": "jenkins",
+    "summary": "Diagnose jenkins pipeline stage failure by ranking observed evidence before a scoped change.",
+    "path": "/troubleshoot/jenkins/pipeline-failure/",
+    "status": "technical-review",
+    "entryNodeId": "jenkins-pipeline-failure-start"
+  },
+  {
+    "id": "journey-aws-api-throttling",
+    "title": "AWS API throttling or service quota failure",
+    "aliases": [
+      "aws throttling exception",
+      "aws quota exceeded"
+    ],
+    "exactErrors": [
+      "throttlingexception",
+      "rate exceeded",
+      "servicequotaexceededexception"
+    ],
+    "domain": "aws",
+    "summary": "Diagnose aws api throttling or service quota failure by ranking observed evidence before a scoped change.",
+    "path": "/troubleshoot/aws/api-throttling/",
+    "status": "technical-review",
+    "entryNodeId": "aws-api-throttling-start"
   }
 ]

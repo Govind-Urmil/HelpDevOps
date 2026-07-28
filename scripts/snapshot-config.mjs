@@ -1,8 +1,9 @@
-export const snapshotName='HelpDevOps-v0.19.0-EP019-COMMIT-READY.zip';
+export const snapshotName='HelpDevOps-v0.20.0-EP020-COMMIT-READY.zip';
 export const excludedNames=new Set(['node_modules','.astro','dist','test-results','playwright-report','coverage','.tmp','.wrangler','.git','release-health','release-certification']);
 export const excludedPaths=new Set(['evidence']);
 export const excludedFiles=new Set(['dev-out.log','dev-err.log',snapshotName]);
 export const requiredFiles=[
+'docs/EP-020-SPEC.md','docs/EP-020-IMPLEMENTATION-REPORT.md','docs/EP-020-EVIDENCE.md','docs/EP-020-RELEASE-NOTES.md','src/diagnostics/ep020-journeys.js','src/investigations/symptoms.js','src/styles/ep020.css','tests/ep020-product-experience.test.js',
 'scripts/secret-scan-policy.mjs','tests/secret-scan-policy.test.js',
 'docs/EP-017-CAPABILITY-ARCHITECTURE.md','docs/EP-017-RELEASE-NOTES.md','src/core/capability-registry.js','src/investigations/state.js','src/investigations/registry.js','tests/ep017-connected-operations.test.js','tests/e2e/ep017-connected-operations.spec.js',
 'src/pages/knowledge/[technology].astro',
