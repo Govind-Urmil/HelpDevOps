@@ -1,4 +1,5 @@
 # HelpDevOps
+<img width="1866" height="858" alt="image" src="https://github.com/user-attachments/assets/47bc62b5-f4d5-4f1f-9b46-5d975f3a5cc7" />
 
 > A static-first DevOps troubleshooting web application built to explore modern frontend architecture, performance, accessibility, and browser-first engineering.
 
@@ -66,5 +67,8 @@ This project is complete and maintained as a portfolio demonstration of frontend
 ---
 
 ## License
+No reuse license is currently granted for this repository.
 
-MIT
+The source code is publicly available for viewing, learning, and reference purposes. Unless explicitly permitted by the repository owner, no rights are granted to copy, modify, distribute, sublicense, or use the code or project assets.
+
+All rights are reserved by the project owner.MIT
