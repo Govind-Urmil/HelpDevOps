@@ -19,6 +19,7 @@ The implementation baseline was authoritative `main` at `2f7e58205c756b0a004e942
 - Diagnostic maintainability: semantic validation now rejects reachable graph cycles, recognized state-changing commands classified as read-only, and the known generic rollback sentence.
 - Performance certification: the Lighthouse matrix now covers the required homepage, search directory, complex investigation, technology directory, issue page, and 404. Indexable routes retain 95 category floors; the intentionally noindex 404 uses a route-specific SEO floor.
 - Release reliability: the full browser certification command uses two bounded workers, avoiding host saturation while preserving every configured project and test.
+- Browser assertions use a 10-second visibility/state window inside the existing 30-second test cap, preventing slower WebKit rendering from becoming a false release failure.
 
 ## Review inventory
 
