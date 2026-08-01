@@ -1,5 +1,5 @@
 export const pageMetadata = {
-  home: { path: '/', title: 'HelpDevOps — Evidence-first DevOps troubleshooting', description: 'Diagnose supported DevOps issues with private browser-first tools and 30 guided diagnostic journeys.' },
+  home: { path: '/', title: 'HelpDevOps — Evidence-first DevOps troubleshooting', description: 'Diagnose supported DevOps issues with private browser-first tools and evidence-first diagnostic journeys.' },
   tools: { path: '/tools/', title: 'Tools | HelpDevOps', description: 'Use browser-first DevOps tools for Cron, structured data, containers, Kubernetes, networking, Linux, Git, encoding, and hashing with visible evidence and limits.' },
   interpret: { path: '/interpret/', title: 'Interpret | HelpDevOps', description: 'Interpret bounded DevOps command output locally and find the safest next check.' },
   troubleshoot: { path: '/troubleshoot/', title: 'Troubleshoot | HelpDevOps', description: 'Use reviewed, evidence-first DevOps diagnostic journeys.' },

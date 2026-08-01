@@ -18,9 +18,9 @@ export const securityPolicy = Object.freeze({
     'Permissions-Policy': 'camera=(), microphone=(), geolocation=(), payment=(), usb=()'
   }),
   hsts: Object.freeze({
-    enabled: false,
+    enabled: true,
     value: 'max-age=31536000',
     includeSubDomains: false,
-    reason: 'Enable only after the production HTTPS domain and subdomain policy are approved.'
+    reason: 'Production is HTTPS-only; apply to this host without includeSubDomains or preload.'
   })
 });

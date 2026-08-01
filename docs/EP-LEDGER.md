@@ -118,3 +118,7 @@ Deep Operational Knowledge Foundation. Adds HOKS v1.0, 100 reviewed issue famili
 - Ten connected investigation definitions with embedded local checks where useful.
 - Shared browser-local investigation state for Universal Input, Workspace, and Incident Brief.
 - No deployment; release remains owner-controlled.
+
+## EP-023 / v0.23.0
+
+Final production hardening and freeze certification. Corrects confirmed safety, rollback, graph, metadata, smoke, security-header, grammar, search, and parser-regression gaps without adding product scope. Status: implementation candidate pending complete fresh validation and production verification.

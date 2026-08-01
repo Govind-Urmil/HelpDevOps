@@ -9,10 +9,11 @@ fs.mkdirSync(evidence, { recursive: true });
 
 const routes = [
   ['homepage', '/'],
-  ['encoding-hash', '/tools/encoding-hash/'],
-  ['ipv4-cidr', '/tools/ipv4-cidr/'],
-  ['linux-permissions', '/tools/linux-permissions/'],
-  ['git-reference', '/tools/git-reference/']
+  ['search', '/errors/'],
+  ['complex-investigation', '/troubleshoot/kubernetes/pod-pending/'],
+  ['technology', '/troubleshoot/kubernetes/'],
+  ['issue', '/issues/kubernetes-crashloopbackoff/'],
+  ['not-found', '/404.html']
 ];
 
 const thresholds = {
@@ -100,9 +101,11 @@ async function runAudit(name, route, attempt) {
   );
 }
 
-function passes(scores) {
+const minimumFor = (name, category) => name === 'not-found' && category === 'seo' ? 0.65 : thresholds[category];
+
+function passes(name, scores) {
   return Object.entries(thresholds).every(
-    ([category, minimum]) => scores[category] >= minimum
+    ([category]) => scores[category] >= minimumFor(name, category)
   );
 }
 
@@ -117,7 +120,7 @@ try {
   for (const [name, route] of routes) {
     const attempts = [await runAudit(name, route, 1)];
 
-    if (!passes(attempts[0])) {
+    if (!passes(name, attempts[0])) {
       attempts.push(await runAudit(name, route, 2));
       attempts.push(await runAudit(name, route, 3));
     }
@@ -131,7 +134,8 @@ try {
 
     const failures = [];
 
-    for (const [category, minimum] of Object.entries(thresholds)) {
+    for (const category of Object.keys(thresholds)) {
+      const minimum = minimumFor(name, category);
       const score = finalScores[category];
 
       console.log(

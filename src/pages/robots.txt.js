@@ -1,4 +1,3 @@
-import {site} from '../config/site.js';
 export const prerender=true;
 export function GET(){
   const body=`User-agent: *\nAllow: /\n\nSitemap: https://helpdevops.work-on.workers.dev/sitemap-index.xml\n`;

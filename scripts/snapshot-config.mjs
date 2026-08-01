@@ -1,4 +1,4 @@
-export const snapshotName='HelpDevOps-v0.22.0-EP022-COMMIT-READY.zip';
+export const snapshotName='HelpDevOps-v0.23.0-EP023-COMMIT-READY.zip';
 export const excludedNames=new Set(['node_modules','.astro','dist','test-results','playwright-report','coverage','.tmp','.wrangler','.git','release-health','release-certification']);
 export const excludedPaths=new Set(['evidence']);
 export const excludedFiles=new Set(['dev-out.log','dev-err.log',snapshotName]);
@@ -32,4 +32,5 @@ export const requiredFiles=[
 'src/diagnostics/journeys/execution-failure/journey.json','src/diagnostics/journeys/execution-failure/nodes.json',
 'tests/evidence-interpreter.test.js','tests/workspace.test.js','tests/e2e/evidence-interpreter.spec.js','src/workspace/sensitive-content.js','scripts/validate-evidence.mjs','.github/workflows/quality.yml',
 'src/resources/launch-readiness.js','src/components/JourneyTrust.astro','src/pages/issues/methodology.astro','src/pages/issues/index.astro','src/pages/issues/[slug].astro','src/styles/ep022.css','scripts/validate-launch-readiness.mjs','scripts/production-smoke.mjs','tests/ep022-launch-readiness.test.js','tests/e2e/ep022-launch-readiness.spec.js','docs/EP-022-IMPLEMENTATION-REPORT.md','docs/EP-022-DEPTH-AUDIT.md','docs/EP-022-TRUST-SAFETY-PRIVACY-AUDIT.md','docs/EP-022-ACCESSIBILITY-PERFORMANCE-SECURITY.md','docs/EP-022-PRODUCTION-LAUNCH-CHECKLIST.md','docs/EP-022-VALIDATION-EVIDENCE.md','docs/LAUNCH-MEASUREMENT-DECISION.md'
+,'tests/ep023-final-hardening.test.js','docs/EP-023-IMPLEMENTATION-SUMMARY.md','docs/EP-023-VALIDATION-REPORT.md','docs/EP-023-PRODUCTION-VERIFICATION.md','docs/EP-023-FREEZE-CERTIFICATION.md'
 ];

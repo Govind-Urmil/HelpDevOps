@@ -111,9 +111,14 @@
     ],
     "choices": [
       {
-        "id": "different",
-        "label": "The path maps to another full filesystem",
-        "nextNodeId": "linux-start"
+        "id": "different-blocks",
+        "label": "The mapped filesystem has high block usage",
+        "nextNodeId": "linux-blocks"
+      },
+      {
+        "id": "different-inodes",
+        "label": "The mapped filesystem has high inode usage",
+        "nextNodeId": "linux-inodes"
       },
       {
         "id": "same",

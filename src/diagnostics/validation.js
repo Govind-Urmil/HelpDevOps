@@ -3,6 +3,8 @@ import { z } from 'zod';
 const ID=/^[a-z0-9]+(?:-[a-z0-9]+)*$/;
 const allowedNodeKinds=new Set(['question','check','interpretation','action','verification','completion','escalation']);
 const terminalKinds=new Set(['completion','escalation']);
+const stateChangingCommand=/\b(terraform\s+(?:apply|destroy|force-unlock|providers\s+lock)|kubectl\s+(?:apply|delete|patch|scale|rollout\s+(?:restart|undo))|docker\s+(?:rm|rmi|prune|restart|stop)|git\s+push\s+.*--force|systemctl\s+(?:start|stop|restart|enable|disable)|chmod|chown)\b/i;
+const genericRollback='Restore the previous known-good state or configuration. Stop and escalate if impact increases.';
 
 const commandSchema=z.object({command:z.string().min(1),purpose:z.string().min(1)}).strict();
 const choiceSchema=z.object({id:z.string().regex(ID),label:z.string().min(1),nextNodeId:z.string().regex(ID)}).strict();
@@ -33,12 +35,17 @@ export function validateDiagnosticJourney(journey,{riskIds=[]}={}){
     if(!terminalKinds.has(node.nodeKind)&&!Array.isArray(node.choices))errors.push(`${node.id}: non-terminal nodes need choices.`);
     if(node.nodeKind==='question'&&!node.choices?.some(c=>['unknown','unclear','unsafe','none'].includes(c.id)))errors.push(`${node.id}: question needs an unknown/escalation option.`);
     if(node.nodeKind==='action'&&['moderate-risk','high-risk','expert-review-required'].includes(node.risk)&&!node.rollback)errors.push(`${node.id}: modifying higher-risk action requires rollback.`);
+    if(node.nodeKind==='action'&&node.rollback===genericRollback)errors.push(`${node.id}: action requires a specific rollback.`);
+    if(node.risk==='read-only'&&node.commands?.some(item=>stateChangingCommand.test(item.command)))errors.push(`${node.id}: state-changing command cannot be classified read-only.`);
     if(node.nodeKind==='verification'&&!node.verification?.length)errors.push(`${node.id}: verification criteria are required.`);
   }
   if(!nodeMap.has(journey.entryNodeId))errors.push(`${journey.id}: entry node does not exist.`);
   for(const node of nodeMap.values())for(const choice of node.choices||[])if(!nodeMap.has(choice.nextNodeId))errors.push(`${node.id}: broken next node ${choice.nextNodeId}.`);
   const seen=new Set(),stack=[journey.entryNodeId]; while(stack.length){const id=stack.pop();if(seen.has(id))continue;seen.add(id);for(const c of nodeMap.get(id)?.choices||[])stack.push(c.nextNodeId)}
   for(const id of nodeMap.keys())if(!seen.has(id))errors.push(`${journey.id}: unreachable node ${id}.`);
+  const active=new Set(),finished=new Set();
+  const findCycle=id=>{if(active.has(id))return true;if(finished.has(id)||!nodeMap.has(id))return false;active.add(id);for(const choice of nodeMap.get(id).choices||[])if(findCycle(choice.nextNodeId))return true;active.delete(id);finished.add(id);return false};
+  if(findCycle(journey.entryNodeId))errors.push(`${journey.id}: journey graph contains a cycle.`);
   return [...new Set(errors)];
 }
 export function buildDiagnosticSearchIndex(journeys){return journeys.map(j=>({id:j.id,title:j.title,aliases:j.aliases,exactErrors:j.exactErrors,domain:j.domain,summary:j.summary,path:j.path,status:j.status,entryNodeId:j.entryNodeId}))}

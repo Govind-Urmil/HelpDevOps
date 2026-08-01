@@ -4,8 +4,10 @@ import UniversalInput from '../components/UniversalInput.astro';
 import HeroNetwork from '../components/HeroNetwork.astro';
 import {pageMetadata as meta} from '../config/pages.js';
 import {symptomStarts} from '../investigations/symptoms.js';
+import {publishedJourneys} from '../diagnostics/registry.js';
+const homeMeta={...meta.home,description:`Diagnose supported DevOps issues with private browser-first tools and ${publishedJourneys.length} guided diagnostic journeys.`};
 ---
-<BaseLayout {...meta.home}>
+<BaseLayout {...homeMeta}>
   <section class="hero ep021-hero"><div class="container">
     <div class="ep021-hero-grid">
       <div class="hero-copy"><span class="eyebrow">OBSERVE · INVESTIGATE · VERIFY · RECOVER</span><h1>Find the safest next step <span>when DevOps breaks.</span></h1><p>Analyze supported evidence locally, follow transparent branches, and verify recovery without guessing.</p><div class="tool-actions"><a class="button primary" href="#analyze">Analyze Evidence</a><a class="button secondary" href="/troubleshoot/">Browse Investigations</a></div></div>

@@ -22,6 +22,14 @@ describe('EP-010 diagnostic knowledge model',()=>{
     const journey=clone(diagnosticJourneys[0]);journey.nodes.push({id:'orphan-node',nodeKind:'completion',title:'Orphan',risk:'read-only'});
     expect(validateDiagnosticJourney(journey,options).join('\n')).toContain('unreachable node');
   });
+  it('rejects a reachable graph cycle',()=>{
+    const journey=clone(diagnosticJourneys[0]);const node=journey.nodes.find(item=>item.nodeKind==='verification');node.choices[0].nextNodeId=journey.entryNodeId;
+    expect(validateDiagnosticJourney(journey,options).join('\n')).toContain('contains a cycle');
+  });
+  it('rejects a state-changing command classified as read-only',()=>{
+    const journey=clone(diagnosticJourneys[0]);journey.nodes[0].commands=[{command:'terraform providers lock',purpose:'Unsafe test fixture'}];
+    expect(validateDiagnosticJourney(journey,options).join('\n')).toContain('cannot be classified read-only');
+  });
   it('rejects a question without an unclear path',()=>{
     const journey=clone(diagnosticJourneys[0]);journey.nodes[0].choices=journey.nodes[0].choices.filter(item=>item.id!=='unknown');
     expect(validateDiagnosticJourney(journey,options).join('\n')).toContain('unknown/escalation option');

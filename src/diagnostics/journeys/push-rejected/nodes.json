@@ -108,12 +108,12 @@
     "id": "git-rewrite",
     "nodeKind": "action",
     "title": "Guard an intentional history rewrite",
-    "summary": "Use force-with-lease only when the remote history was inspected and collaboration policy permits replacement.",
+    "summary": "Fetch and inspect the remote branch, record its exact tip SHA, and use an explicit lease only when collaboration policy permits replacing that reviewed history.",
     "risk": "high-risk",
     "commands": [
       {
-        "command": "git push --force-with-lease <remote> <branch>",
-        "purpose": "Refuse replacement when the remote changed since it was inspected."
+        "command": "git fetch <remote> <branch> && git rev-parse <remote>/<branch> && git push --force-with-lease=refs/heads/<branch>:<expected-remote-sha> <remote> <branch>",
+        "purpose": "Refresh and review the remote tip, then refuse replacement unless it still equals the explicitly recorded SHA."
       }
     ],
     "choices": [
@@ -130,7 +130,7 @@
     ],
     "prerequisites": [
       "Correct remote and branch confirmed",
-      "Remote history inspected",
+      "Fetched remote history inspected and expected remote tip SHA recorded",
       "Team/branch policy allows rewriting",
       "Collaborators informed where required"
     ],
