@@ -688,7 +688,7 @@
       "oom-kill",
       "cannot allocate memory"
     ],
-    "status": "technical-review",
+    "status": "reviewed",
     "entryNodeId": "linux-memory-pressure-start",
     "reviewedAt": "2026-07-26",
     "reviewDue": "2026-10-26",
@@ -733,7 +733,7 @@
       "operation not permitted",
       "eacces"
     ],
-    "status": "technical-review",
+    "status": "reviewed",
     "entryNodeId": "linux-permission-denied-start",
     "reviewedAt": "2026-07-26",
     "reviewDue": "2026-10-26",
@@ -778,7 +778,7 @@
       "executor failed running",
       "dockerfile parse error"
     ],
-    "status": "technical-review",
+    "status": "reviewed",
     "entryNodeId": "docker-build-failure-start",
     "reviewedAt": "2026-07-26",
     "reviewDue": "2026-10-26",
@@ -823,7 +823,7 @@
       "no route to host docker",
       "temporary failure in name resolution docker"
     ],
-    "status": "technical-review",
+    "status": "reviewed",
     "entryNodeId": "docker-network-connectivity-start",
     "reviewedAt": "2026-07-26",
     "reviewDue": "2026-10-26",
@@ -868,7 +868,7 @@
       "errimagepull",
       "failed to pull image"
     ],
-    "status": "technical-review",
+    "status": "reviewed",
     "entryNodeId": "kubernetes-image-pull-backoff-start",
     "reviewedAt": "2026-07-26",
     "reviewDue": "2026-10-26",
@@ -913,7 +913,7 @@
       "reason: oomkilled",
       "exit code 137"
     ],
-    "status": "technical-review",
+    "status": "reviewed",
     "entryNodeId": "kubernetes-oomkilled-start",
     "reviewedAt": "2026-07-26",
     "reviewDue": "2026-10-26",
@@ -958,7 +958,7 @@
       "connection refused kubernetes service",
       "service unavailable kubernetes"
     ],
-    "status": "technical-review",
+    "status": "reviewed",
     "entryNodeId": "kubernetes-service-unreachable-start",
     "reviewedAt": "2026-07-26",
     "reviewDue": "2026-10-26",
@@ -1003,7 +1003,7 @@
       "failed to query available provider packages",
       "inconsistent dependency lock file"
     ],
-    "status": "technical-review",
+    "status": "reviewed",
     "entryNodeId": "terraform-init-provider-failure-start",
     "reviewedAt": "2026-07-26",
     "reviewDue": "2026-10-26",
@@ -1046,7 +1046,7 @@
       "forces replacement",
       "plan does not match"
     ],
-    "status": "technical-review",
+    "status": "reviewed",
     "entryNodeId": "terraform-plan-drift-start",
     "reviewedAt": "2026-07-26",
     "reviewDue": "2026-10-26",
@@ -1089,7 +1089,7 @@
       "conflict (content)",
       "could not apply"
     ],
-    "status": "technical-review",
+    "status": "reviewed",
     "entryNodeId": "git-merge-conflict-start",
     "reviewedAt": "2026-07-26",
     "reviewDue": "2026-10-26",
@@ -1134,7 +1134,7 @@
       "still waiting to schedule task",
       "paused for input"
     ],
-    "status": "technical-review",
+    "status": "reviewed",
     "entryNodeId": "jenkins-build-stuck-start",
     "reviewedAt": "2026-07-26",
     "reviewDue": "2026-10-26",
@@ -1177,7 +1177,7 @@
       "duplicate scheduled execution",
       "job already running cron"
     ],
-    "status": "technical-review",
+    "status": "reviewed",
     "entryNodeId": "cron-duplicate-execution-start",
     "reviewedAt": "2026-07-26",
     "reviewDue": "2026-10-26",
@@ -1222,7 +1222,7 @@
       "operation timed out",
       "etimedout"
     ],
-    "status": "technical-review",
+    "status": "reviewed",
     "entryNodeId": "networking-connection-timeout-start",
     "reviewedAt": "2026-07-26",
     "reviewDue": "2026-10-26",
@@ -1267,7 +1267,7 @@
       "certificate has expired",
       "hostname mismatch"
     ],
-    "status": "technical-review",
+    "status": "reviewed",
     "entryNodeId": "networking-tls-certificate-start",
     "reviewedAt": "2026-07-26",
     "reviewDue": "2026-10-26",
@@ -1310,7 +1310,7 @@
       "no such file or directory bash",
       "bad interpreter"
     ],
-    "status": "technical-review",
+    "status": "reviewed",
     "entryNodeId": "bash-environment-path-start",
     "reviewedAt": "2026-07-26",
     "reviewDue": "2026-10-26",
@@ -1353,7 +1353,7 @@
       "did not find expected key",
       "found character that cannot start any token"
     ],
-    "status": "technical-review",
+    "status": "reviewed",
     "entryNodeId": "yaml-parse-error-start",
     "reviewedAt": "2026-07-26",
     "reviewDue": "2026-10-26",
@@ -1397,7 +1397,7 @@
       "progressdeadlineexceeded",
       "deployment does not have minimum availability"
     ],
-    "status": "technical-review",
+    "status": "reviewed",
     "entryNodeId": "kubernetes-rollout-stalled-start",
     "reviewedAt": "2026-07-28",
     "reviewDue": "2026-10-28",
@@ -1439,7 +1439,7 @@
       "cannot connect to the docker daemon",
       "is the docker daemon running"
     ],
-    "status": "technical-review",
+    "status": "reviewed",
     "entryNodeId": "docker-daemon-unavailable-start",
     "reviewedAt": "2026-07-28",
     "reviewDue": "2026-10-28",
@@ -1482,7 +1482,7 @@
       "authorizationfailed",
       "permission denied terraform provider"
     ],
-    "status": "technical-review",
+    "status": "reviewed",
     "entryNodeId": "terraform-apply-authorization-start",
     "reviewedAt": "2026-07-28",
     "reviewDue": "2026-10-28",
@@ -1524,7 +1524,7 @@
       "high load average",
       "cpu usage 100"
     ],
-    "status": "technical-review",
+    "status": "reviewed",
     "entryNodeId": "linux-high-load-start",
     "reviewedAt": "2026-07-28",
     "reviewDue": "2026-10-28",
@@ -1566,7 +1566,7 @@
       "authentication failed for",
       "permission denied (publickey)"
     ],
-    "status": "technical-review",
+    "status": "reviewed",
     "entryNodeId": "git-authentication-failure-start",
     "reviewedAt": "2026-07-28",
     "reviewDue": "2026-10-28",
@@ -1608,7 +1608,7 @@
       "script returned exit code",
       "finished: failure"
     ],
-    "status": "technical-review",
+    "status": "reviewed",
     "entryNodeId": "jenkins-pipeline-failure-start",
     "reviewedAt": "2026-07-28",
     "reviewDue": "2026-10-28",
@@ -1651,7 +1651,7 @@
       "rate exceeded",
       "servicequotaexceededexception"
     ],
-    "status": "technical-review",
+    "status": "reviewed",
     "entryNodeId": "aws-api-throttling-start",
     "reviewedAt": "2026-07-28",
     "reviewDue": "2026-10-28",
