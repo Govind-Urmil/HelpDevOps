@@ -279,7 +279,7 @@
     "domain": "linux",
     "summary": "Diagnose linux memory pressure or oom kill with read-only evidence before a scoped change.",
     "path": "/troubleshoot/linux/memory-pressure/",
-    "status": "reviewed",
+    "status": "technical-review",
     "entryNodeId": "linux-memory-pressure-start"
   },
   {
@@ -297,7 +297,7 @@
     "domain": "linux",
     "summary": "Diagnose linux permission denied with read-only evidence before a scoped change.",
     "path": "/troubleshoot/linux/permission-denied/",
-    "status": "reviewed",
+    "status": "technical-review",
     "entryNodeId": "linux-permission-denied-start"
   },
   {
@@ -315,7 +315,7 @@
     "domain": "docker",
     "summary": "Diagnose docker image build failure with read-only evidence before a scoped change.",
     "path": "/troubleshoot/docker/build-failure/",
-    "status": "reviewed",
+    "status": "technical-review",
     "entryNodeId": "docker-build-failure-start"
   },
   {
@@ -333,7 +333,7 @@
     "domain": "docker",
     "summary": "Diagnose docker container network connectivity with read-only evidence before a scoped change.",
     "path": "/troubleshoot/docker/network-connectivity/",
-    "status": "reviewed",
+    "status": "technical-review",
     "entryNodeId": "docker-network-connectivity-start"
   },
   {
@@ -351,7 +351,7 @@
     "domain": "kubernetes",
     "summary": "Diagnose kubernetes imagepullbackoff with read-only evidence before a scoped change.",
     "path": "/troubleshoot/kubernetes/image-pull-backoff/",
-    "status": "reviewed",
+    "status": "technical-review",
     "entryNodeId": "kubernetes-image-pull-backoff-start"
   },
   {
@@ -369,7 +369,7 @@
     "domain": "kubernetes",
     "summary": "Diagnose kubernetes container oomkilled with read-only evidence before a scoped change.",
     "path": "/troubleshoot/kubernetes/oomkilled/",
-    "status": "reviewed",
+    "status": "technical-review",
     "entryNodeId": "kubernetes-oomkilled-start"
   },
   {
@@ -387,7 +387,7 @@
     "domain": "kubernetes",
     "summary": "Diagnose kubernetes service unreachable with read-only evidence before a scoped change.",
     "path": "/troubleshoot/kubernetes/service-unreachable/",
-    "status": "reviewed",
+    "status": "technical-review",
     "entryNodeId": "kubernetes-service-unreachable-start"
   },
   {
@@ -405,7 +405,7 @@
     "domain": "terraform",
     "summary": "Diagnose terraform init or provider installation failure with read-only evidence before a scoped change.",
     "path": "/troubleshoot/terraform/init-provider-failure/",
-    "status": "reviewed",
+    "status": "technical-review",
     "entryNodeId": "terraform-init-provider-failure-start"
   },
   {
@@ -423,7 +423,7 @@
     "domain": "terraform",
     "summary": "Diagnose terraform unexpected plan or drift with read-only evidence before a scoped change.",
     "path": "/troubleshoot/terraform/plan-drift/",
-    "status": "reviewed",
+    "status": "technical-review",
     "entryNodeId": "terraform-plan-drift-start"
   },
   {
@@ -441,7 +441,7 @@
     "domain": "git",
     "summary": "Diagnose git merge or rebase conflict with read-only evidence before a scoped change.",
     "path": "/troubleshoot/git/merge-conflict/",
-    "status": "reviewed",
+    "status": "technical-review",
     "entryNodeId": "git-merge-conflict-start"
   },
   {
@@ -459,7 +459,7 @@
     "domain": "jenkins",
     "summary": "Diagnose jenkins build stuck or waiting with read-only evidence before a scoped change.",
     "path": "/troubleshoot/jenkins/build-stuck/",
-    "status": "reviewed",
+    "status": "technical-review",
     "entryNodeId": "jenkins-build-stuck-start"
   },
   {
@@ -477,7 +477,7 @@
     "domain": "cron",
     "summary": "Diagnose cron job runs twice or overlaps with read-only evidence before a scoped change.",
     "path": "/troubleshoot/cron/duplicate-execution/",
-    "status": "reviewed",
+    "status": "technical-review",
     "entryNodeId": "cron-duplicate-execution-start"
   },
   {
@@ -495,7 +495,7 @@
     "domain": "networking",
     "summary": "Diagnose network connection timeout with read-only evidence before a scoped change.",
     "path": "/troubleshoot/networking/connection-timeout/",
-    "status": "reviewed",
+    "status": "technical-review",
     "entryNodeId": "networking-connection-timeout-start"
   },
   {
@@ -513,7 +513,7 @@
     "domain": "networking",
     "summary": "Diagnose tls certificate verification failure with read-only evidence before a scoped change.",
     "path": "/troubleshoot/networking/tls-certificate/",
-    "status": "reviewed",
+    "status": "technical-review",
     "entryNodeId": "networking-tls-certificate-start"
   },
   {
@@ -531,7 +531,7 @@
     "domain": "bash",
     "summary": "Diagnose shell command not found or wrong executable with read-only evidence before a scoped change.",
     "path": "/troubleshoot/bash/environment-path/",
-    "status": "reviewed",
+    "status": "technical-review",
     "entryNodeId": "bash-environment-path-start"
   },
   {
@@ -549,7 +549,7 @@
     "domain": "yaml",
     "summary": "Diagnose yaml parse or indentation error with read-only evidence before a scoped change.",
     "path": "/troubleshoot/yaml/parse-error/",
-    "status": "reviewed",
+    "status": "technical-review",
     "entryNodeId": "yaml-parse-error-start"
   },
   {
@@ -566,7 +566,7 @@
     "domain": "kubernetes",
     "summary": "Diagnose kubernetes deployment rollout stalled by ranking observed evidence before a scoped change.",
     "path": "/troubleshoot/kubernetes/rollout-stalled/",
-    "status": "reviewed",
+    "status": "technical-review",
     "entryNodeId": "kubernetes-rollout-stalled-start"
   },
   {
@@ -583,7 +583,7 @@
     "domain": "docker",
     "summary": "Diagnose docker daemon unavailable by ranking observed evidence before a scoped change.",
     "path": "/troubleshoot/docker/daemon-unavailable/",
-    "status": "reviewed",
+    "status": "technical-review",
     "entryNodeId": "docker-daemon-unavailable-start"
   },
   {
@@ -601,7 +601,7 @@
     "domain": "terraform",
     "summary": "Diagnose terraform provider authorization failure by ranking observed evidence before a scoped change.",
     "path": "/troubleshoot/terraform/apply-authorization/",
-    "status": "reviewed",
+    "status": "technical-review",
     "entryNodeId": "terraform-apply-authorization-start"
   },
   {
@@ -618,7 +618,7 @@
     "domain": "linux",
     "summary": "Diagnose linux high load or cpu saturation by ranking observed evidence before a scoped change.",
     "path": "/troubleshoot/linux/high-load/",
-    "status": "reviewed",
+    "status": "technical-review",
     "entryNodeId": "linux-high-load-start"
   },
   {
@@ -635,7 +635,7 @@
     "domain": "git",
     "summary": "Diagnose git remote authentication failure by ranking observed evidence before a scoped change.",
     "path": "/troubleshoot/git/authentication-failure/",
-    "status": "reviewed",
+    "status": "technical-review",
     "entryNodeId": "git-authentication-failure-start"
   },
   {
@@ -652,7 +652,7 @@
     "domain": "jenkins",
     "summary": "Diagnose jenkins pipeline stage failure by ranking observed evidence before a scoped change.",
     "path": "/troubleshoot/jenkins/pipeline-failure/",
-    "status": "reviewed",
+    "status": "technical-review",
     "entryNodeId": "jenkins-pipeline-failure-start"
   },
   {
@@ -670,7 +670,7 @@
     "domain": "aws",
     "summary": "Diagnose aws api throttling or service quota failure by ranking observed evidence before a scoped change.",
     "path": "/troubleshoot/aws/api-throttling/",
-    "status": "reviewed",
+    "status": "technical-review",
     "entryNodeId": "aws-api-throttling-start"
   }
 ]

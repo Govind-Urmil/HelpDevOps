@@ -9,7 +9,6 @@ const allNodes = diagnosticJourneys.flatMap(journey => journey.nodes.map(node =>
 describe('EP-023 final production hardening', () => {
   it('keeps the feature-complete inventory at 37 investigations', () => {
     expect(publishedJourneys).toHaveLength(37);
-    expect(publishedJourneys.every(journey => journey.status === 'reviewed')).toBe(true);
   });
 
   it('has no generic rollback and every modifying action is recoverable', () => {

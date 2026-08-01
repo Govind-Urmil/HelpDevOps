@@ -17,7 +17,6 @@ The implementation baseline was authoritative `main` at `2f7e58205c756b0a004e942
 - Search: bounded corrections were added for common technology and operational misspellings. Corrections only normalize to existing indexed terms; the conservative no-result state remains and no approximate destination is fabricated.
 - Parser confidence: existing 64 KB, 5,000-line, and 16 KB-per-line limits remain. New regression coverage certifies ANSI stripping, CRLF/CR normalization, tabs, Unicode preservation, and oversized-input rejection.
 - Diagnostic maintainability: semantic validation now rejects reachable graph cycles, recognized state-changing commands classified as read-only, and the known generic rollback sentence.
-- Review status: the 23 factory-based journeys completed by the EP-023 evidence, command, rollback, verification, graph, and reference review are promoted from `technical-review` to `reviewed`; the production gate now covers all 37 investigations.
 - Performance certification: the Lighthouse matrix now covers the required homepage, search directory, complex investigation, technology directory, issue page, and 404. Indexable routes retain 95 category floors; the intentionally noindex 404 uses a route-specific SEO floor.
 - Release reliability: the full browser certification command uses two bounded workers, avoiding host saturation while preserving every configured project and test.
 

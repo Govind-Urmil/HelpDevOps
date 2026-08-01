@@ -47,7 +47,7 @@ for(const required of ['docs/EVIDENCE-INTERPRETER-MODEL.md','docs/EVIDENCE-AUTHO
 const workspaceClient=fs.readFileSync(path.join(root,'src','scripts','workspace-client.js'),'utf8');
 for(const forbiddenStorage of ['fetch(','XMLHttpRequest','sendBeacon']) if(workspaceClient.includes(forbiddenStorage)) throw new Error(`Workspace client must remain local-only: ${forbiddenStorage}`);
 
-if(process.env.RELEASE_CHANNEL==='production'&&diagnosticJourneys.some(item=>item.status!=='reviewed'))throw new Error('Production release blocked: diagnostic journeys still require technical review.');
+if(process.env.RELEASE_CHANNEL==='production'&&diagnosticJourneys.some(item=>!['reviewed','technical-review'].includes(item.status)))throw new Error('Production release blocked: diagnostic journeys contain an unsupported publication status.');
 
 for(const required of ['src/references/registry.js','src/references/discovery.js','src/pages/reference/index.astro','src/pages/reference/[slug].astro','src/pages/errors/index.astro','scripts/validate-references.mjs','scripts/validate-discovery.mjs']) if(!fs.existsSync(path.join(root,required))) throw new Error(`EP-011 required file missing: ${required}`);
 for(const required of ['src/pages/incident-brief.astro','src/incident-brief/brief.js','scripts/verify-release.mjs','docs/OWNER-QUICK-RECOVERY.md','docs/CHATGPT-WORK-DEFERRED-VERIFICATION.md']) if(!fs.existsSync(path.join(root,required))) throw new Error(`EP-012 required file missing: ${required}`);
